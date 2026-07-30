@@ -105,3 +105,37 @@ Deployed Firefly as an isolated Cloudflare Worker, moved codefromkarl.xyz from m
 ### Next Steps
 
 - None - task complete
+
+
+## Session 4: Book knowledge maps and performance delivery
+
+**Date**: 2026-07-30
+**Task**: Book knowledge maps and performance delivery
+**Branch**: `master`
+
+### Summary
+
+Implemented the book list and explorable knowledge maps, then optimized responsive imagery, Pagefind loading, locale chunks, Swup preload behavior, and immutable hashed-asset caching; validated root and subpath production builds plus browser interactions.
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `f1f008e` | (see git log) |
+| `693df3b` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
