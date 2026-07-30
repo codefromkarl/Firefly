@@ -71,3 +71,37 @@ Initialized GitHub Pages, fixed repository-subpath URL generation across assets,
 ### Next Steps
 
 - None - task complete
+
+
+## Session 3: Switch production domain to Firefly
+
+**Date**: 2026-07-30
+**Task**: Switch production domain to Firefly
+**Branch**: `master`
+
+### Summary
+
+Deployed Firefly as an isolated Cloudflare Worker, moved codefromkarl.xyz from my-blog to firefly, validated pages, feeds, search, assets, redirects and 404s, and preserved the legacy Worker and data resources for rollback.
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `33fa4d1` | (see git log) |
+| `ad2e753` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete

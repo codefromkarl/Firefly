@@ -8,7 +8,7 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 2
+- **Total Sessions**: 3
 - **Last Active**: 2026-07-30
 <!-- @@@/auto:current-status -->
 
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~73 | Active |
+| `journal-1.md` | ~107 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 3 | 2026-07-30 | Switch production domain to Firefly | `33fa4d1`, `ad2e753` | `master` |
 | 2 | 2026-07-30 | Deploy Firefly to GitHub Pages | `5b6e7d3` | `master` |
 | 1 | 2026-07-30 | Migrate CodeFromKarl site to Firefly | `8c23175`, `0656da1` | `master` |
 <!-- @@@/auto:session-history -->
