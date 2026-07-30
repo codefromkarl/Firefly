@@ -7,5 +7,10 @@
   "public:favicon-96x96.png": "2222221919191a1a1a",
   "public:apple-touch-icon.png": "2b2b2b1f1f1f212121",
   "public:images/home-bg.webp": "4e8bb690afbda4b8bf",
-  "public:images/avatar.png": "b6afc1bab5c9b8afba"
+  "public:images/avatar.png": "b6afc1bab5c9b8afba",
+  "src:content/books/thinking-fast-and-slow/cover.webp": "f1eeecf9f8f7f9f8f7",
+  "src:content/books/the-psychology-of-money/cover.webp": "edbfb3edbfb3ee9f92",
+  "src:content/books/the-courage-to-be-disliked/cover.webp": "f1f4f5f6f8f9fbfbfb",
+  "src:content/books/the-art-of-loving/cover.webp": "f9f7f7e5dcddefeced",
+  "src:content/books/the-almanack-of-naval-ravikant/cover.webp": "f3f0e9f3efe9fafafc"
 }

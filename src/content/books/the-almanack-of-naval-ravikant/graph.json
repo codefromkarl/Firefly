@@ -1,0 +1,251 @@
+{
+	"book": "the-almanack-of-naval-ravikant",
+	"title": "《纳瓦尔宝典》预读知识地图",
+	"stage": "preview",
+	"basis": ["metadata", "toc"],
+	"aiAssisted": true,
+	"layout": "circle",
+	"summary": "以财富和幸福两条路径组织专长、杠杆、判断、长期合作、欲望与平静。",
+	"nodes": [
+		{
+			"id": "naval-almanack",
+			"label": "财富与幸福",
+			"kind": "core",
+			"summary": "全书整理的两条主要主题线：创造选择空间与培养内在状态。",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "metadata",
+					"locator": "书名、简介与目录结构"
+				}
+			]
+		},
+		{
+			"id": "wealth",
+			"label": "财富",
+			"kind": "outcome",
+			"summary": "能够持续产生价值和选择空间的资产与能力组合。",
+			"chapter": "财富路径",
+			"anchor": "wealth-path",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：财富路径"
+				}
+			]
+		},
+		{
+			"id": "specific-knowledge",
+			"label": "专长",
+			"kind": "concept",
+			"summary": "由兴趣、经验和长期积累形成、难以标准化复制的能力。",
+			"chapter": "财富路径",
+			"anchor": "wealth-path",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：财富路径"
+				}
+			]
+		},
+		{
+			"id": "leverage",
+			"label": "杠杆",
+			"kind": "model",
+			"summary": "让一次判断或创造能够被资本、代码、媒体或团队放大的机制。",
+			"chapter": "财富路径",
+			"anchor": "wealth-path",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：财富路径"
+				}
+			]
+		},
+		{
+			"id": "judgment",
+			"label": "判断力",
+			"kind": "practice",
+			"summary": "在重要选择中识别长期价值、风险与机会的能力。",
+			"chapter": "财富路径",
+			"anchor": "wealth-path",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：财富路径"
+				}
+			]
+		},
+		{
+			"id": "long-term-games",
+			"label": "长期合作",
+			"kind": "practice",
+			"summary": "与可信的人在可重复关系中积累声誉、信任和复利。",
+			"chapter": "财富路径",
+			"anchor": "wealth-path",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：财富路径"
+				}
+			]
+		},
+		{
+			"id": "accountability",
+			"label": "责任与署名",
+			"kind": "practice",
+			"summary": "公开承担结果能够建立信誉，也要求承受失败风险。",
+			"chapter": "财富路径",
+			"anchor": "wealth-path",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：财富路径"
+				}
+			]
+		},
+		{
+			"id": "happiness",
+			"label": "幸福",
+			"kind": "outcome",
+			"summary": "不完全依赖外部结果、可以通过理解和习惯培养的内在状态。",
+			"chapter": "幸福路径",
+			"anchor": "happiness-path",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：幸福路径"
+				}
+			]
+		},
+		{
+			"id": "desire",
+			"label": "欲望",
+			"kind": "concept",
+			"summary": "对未来结果的强烈条件化期待，可能持续占用注意并制造不满。",
+			"chapter": "幸福路径",
+			"anchor": "happiness-path",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：幸福路径"
+				}
+			]
+		},
+		{
+			"id": "peace",
+			"label": "内在平静",
+			"kind": "practice",
+			"summary": "减少无休止的比较和欲望，把注意带回当下。",
+			"chapter": "幸福路径",
+			"anchor": "happiness-path",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：幸福路径"
+				}
+			]
+		}
+	],
+	"edges": [
+		{
+			"id": "wealth-core",
+			"source": "wealth",
+			"target": "naval-almanack",
+			"relation": "part_of",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "happiness-core",
+			"source": "happiness",
+			"target": "naval-almanack",
+			"relation": "part_of",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "knowledge-wealth",
+			"source": "specific-knowledge",
+			"target": "wealth",
+			"relation": "supports",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "leverage-wealth",
+			"source": "leverage",
+			"target": "wealth",
+			"relation": "supports",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "judgment-leverage",
+			"source": "judgment",
+			"target": "leverage",
+			"relation": "applies_to",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "games-wealth",
+			"source": "long-term-games",
+			"target": "wealth",
+			"relation": "supports",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "accountability-games",
+			"source": "accountability",
+			"target": "long-term-games",
+			"relation": "supports",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "desire-happiness",
+			"source": "desire",
+			"target": "happiness",
+			"relation": "contrasts",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "peace-happiness",
+			"source": "peace",
+			"target": "happiness",
+			"relation": "supports",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "wealth-peace",
+			"source": "wealth",
+			"target": "peace",
+			"relation": "supports",
+			"directed": true,
+			"provenance": "editorial_inference"
+		}
+	]
+}

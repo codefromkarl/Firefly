@@ -1,0 +1,301 @@
+{
+	"book": "the-psychology-of-money",
+	"title": "《金钱心理学》预读知识地图",
+	"stage": "preview",
+	"basis": ["metadata", "toc"],
+	"aiAssisted": true,
+	"layout": "circle",
+	"summary": "从金钱行为出发，连接个人经历、运气与风险、复利、守富、自由和容错空间。",
+	"nodes": [
+		{
+			"id": "money-behavior",
+			"label": "金钱行为",
+			"kind": "core",
+			"summary": "金钱决策不只是计算问题，也受经历、情绪、时间和不确定性影响。",
+			"chapter": "金钱行为",
+			"anchor": "money-behavior",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：金钱行为"
+				}
+			]
+		},
+		{
+			"id": "personal-history",
+			"label": "个人经历",
+			"kind": "concept",
+			"summary": "不同成长环境和时代经验会塑造截然不同的风险直觉。",
+			"chapter": "金钱行为",
+			"anchor": "money-behavior",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：金钱行为"
+				}
+			]
+		},
+		{
+			"id": "luck-risk",
+			"label": "运气与风险",
+			"kind": "concept",
+			"summary": "结果同时包含能力、运气和风险，不能只从成功或失败倒推原因。",
+			"chapter": "金钱行为",
+			"anchor": "money-behavior",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：金钱行为"
+				}
+			]
+		},
+		{
+			"id": "enough",
+			"label": "知足边界",
+			"kind": "practice",
+			"summary": "没有停止条件的比较和追逐会让已经拥有的成果暴露在额外风险中。",
+			"chapter": "金钱行为",
+			"anchor": "money-behavior",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：金钱行为"
+				}
+			]
+		},
+		{
+			"id": "compounding",
+			"label": "复利",
+			"kind": "model",
+			"summary": "小的持续优势在足够长时间中累积，时间本身成为结果的重要来源。",
+			"chapter": "财富的积累与保存",
+			"anchor": "wealth",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：财富的积累与保存"
+				}
+			]
+		},
+		{
+			"id": "getting-rich",
+			"label": "致富",
+			"kind": "concept",
+			"summary": "获得财富可能需要乐观、主动承担风险和抓住少数机会。",
+			"chapter": "财富的积累与保存",
+			"anchor": "wealth",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：财富的积累与保存"
+				}
+			]
+		},
+		{
+			"id": "staying-rich",
+			"label": "守富",
+			"kind": "concept",
+			"summary": "保住财富更依赖谦逊、节制和对极端风险的警惕。",
+			"chapter": "财富的积累与保存",
+			"anchor": "wealth",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：财富的积累与保存"
+				}
+			]
+		},
+		{
+			"id": "tail-events",
+			"label": "尾部事件",
+			"kind": "model",
+			"summary": "少数极端结果可能贡献大部分长期回报。",
+			"chapter": "财富的积累与保存",
+			"anchor": "wealth",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：财富的积累与保存"
+				}
+			]
+		},
+		{
+			"id": "hidden-wealth",
+			"label": "不可见的财富",
+			"kind": "concept",
+			"summary": "尚未消费的资产和选择空间不容易被外界直接观察。",
+			"chapter": "自由与容错空间",
+			"anchor": "freedom",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：自由与容错空间"
+				}
+			]
+		},
+		{
+			"id": "freedom",
+			"label": "时间自主",
+			"kind": "outcome",
+			"summary": "财富可以转化为对时间、工作和生活安排的控制。",
+			"chapter": "自由与容错空间",
+			"anchor": "freedom",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：自由与容错空间"
+				}
+			]
+		},
+		{
+			"id": "saving",
+			"label": "储蓄",
+			"kind": "practice",
+			"summary": "储蓄不仅服务于明确目标，也为未知机会和风险保留选择权。",
+			"chapter": "自由与容错空间",
+			"anchor": "freedom",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：自由与容错空间"
+				}
+			]
+		},
+		{
+			"id": "room-for-error",
+			"label": "容错空间",
+			"kind": "practice",
+			"summary": "计划为预测错误和意外保留余地，才能提高长期存续概率。",
+			"chapter": "自由与容错空间",
+			"anchor": "freedom",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：自由与容错空间"
+				}
+			]
+		}
+	],
+	"edges": [
+		{
+			"id": "history-behavior",
+			"source": "personal-history",
+			"target": "money-behavior",
+			"relation": "explains",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "risk-behavior",
+			"source": "luck-risk",
+			"target": "money-behavior",
+			"relation": "explains",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "enough-behavior",
+			"source": "enough",
+			"target": "money-behavior",
+			"relation": "applies_to",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "compounding-rich",
+			"source": "compounding",
+			"target": "getting-rich",
+			"relation": "supports",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "getting-staying",
+			"source": "getting-rich",
+			"target": "staying-rich",
+			"relation": "contrasts",
+			"directed": false,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "risk-staying",
+			"source": "luck-risk",
+			"target": "staying-rich",
+			"relation": "supports",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "tails-compounding",
+			"source": "tail-events",
+			"target": "compounding",
+			"relation": "supports",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "saving-hidden",
+			"source": "saving",
+			"target": "hidden-wealth",
+			"relation": "leads_to",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "hidden-freedom",
+			"source": "hidden-wealth",
+			"target": "freedom",
+			"relation": "leads_to",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "room-staying",
+			"source": "room-for-error",
+			"target": "staying-rich",
+			"relation": "supports",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "room-freedom",
+			"source": "room-for-error",
+			"target": "freedom",
+			"relation": "supports",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "behavior-freedom",
+			"source": "money-behavior",
+			"target": "freedom",
+			"relation": "leads_to",
+			"directed": true,
+			"provenance": "editorial_inference"
+		}
+	]
+}

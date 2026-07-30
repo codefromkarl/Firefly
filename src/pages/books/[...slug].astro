@@ -1,0 +1,192 @@
+---
+import { getImage, Image } from "astro:assets";
+import { render } from "astro:content";
+import { Icon } from "astro-icon/components";
+import Markdown from "@/components/common/Markdown.astro";
+import BookKnowledgeGraph from "@/components/pages/books/BookKnowledgeGraph.svelte";
+import BookSidebar from "@/components/pages/books/BookSidebar.astro";
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+import {
+	BOOK_GRAPH_STAGE_LABELS,
+	BOOK_SHELF_LABELS,
+	BOOK_STATUS_LABELS,
+} from "@/types/book";
+import {
+	getGraphForBook,
+	getPublishedBooks,
+	toBookDirectoryItems,
+	toBookGraphData,
+} from "@/utils/book-utils";
+
+export async function getStaticPaths() {
+	const books = await getPublishedBooks();
+	return books.map((book) => ({
+		params: { slug: book.id },
+		props: { book },
+	}));
+}
+
+const { book } = Astro.props;
+const graphEntry = await getGraphForBook(book);
+const graph = toBookGraphData(graphEntry);
+const { Content, headings } = await render(book);
+const directoryBooks = toBookDirectoryItems(await getPublishedBooks());
+const optimizedCover = await getImage({
+	src: book.data.cover,
+	width: 720,
+	format: "webp",
+	quality: 82,
+});
+const absoluteCover = new URL(
+	optimizedCover.src,
+	Astro.site ?? Astro.url.origin,
+).toString();
+
+const jsonLd = {
+	"@context": "https://schema.org",
+	"@type": "Book",
+	name: book.data.title,
+	alternateName: book.data.originalTitle,
+	author: book.data.authors.map((name: string) => ({
+		"@type": "Person",
+		name,
+	})),
+	description: book.data.description,
+	inLanguage: book.data.language,
+	isbn: book.data.isbn,
+	image: absoluteCover,
+	url: Astro.url.href,
+};
+---
+
+<MainGridLayout
+	title={book.data.title}
+	description={book.data.description}
+	lang={book.data.language}
+	headings={headings}
+>
+	<BookSidebar
+		slot="left-sidebar"
+		books={directoryBooks}
+		currentBookId={book.id}
+		headings={headings}
+	/>
+
+	<script
+		is:inline
+		slot="head"
+		type="application/ld+json"
+		set:html={JSON.stringify(jsonLd)}
+	/>
+
+	<article data-pagefind-body>
+		<div id="book-overview" class="card-base mb-5 overflow-hidden rounded-(--radius-large)">
+			<div class="grid gap-0 md:grid-cols-[minmax(13rem,0.7fr)_minmax(0,1.8fr)]">
+				<div class="relative min-h-80 overflow-hidden bg-(--btn-regular-bg) md:min-h-[32rem]">
+					<Image
+						src={book.data.cover}
+						alt={`《${book.data.title}》封面`}
+						widths={[360, 540, 720]}
+						sizes="(max-width: 768px) 100vw, 32vw"
+						format="webp"
+						quality={82}
+						loading="eager"
+						fetchpriority="high"
+						decoding="async"
+						class="absolute inset-0 h-full w-full object-cover"
+					/>
+				</div>
+
+				<div class="flex flex-col p-6 md:p-9">
+					<div class="flex flex-wrap gap-2">
+						<span
+							class="rounded-full bg-(--primary) px-3 py-1.5 text-xs font-semibold text-white dark:text-black/80"
+						>
+							{BOOK_STATUS_LABELS[book.data.status]}
+						</span>
+						<span
+							class="rounded-full bg-(--primary)/12 px-3 py-1.5 text-xs font-semibold text-(--primary)"
+						>
+							{BOOK_GRAPH_STAGE_LABELS[book.data.graphStage]}
+						</span>
+						<span
+							class="rounded-full bg-black/5 px-3 py-1.5 text-xs font-semibold text-neutral-600 dark:bg-white/10 dark:text-neutral-300"
+							data-pagefind-filter={`book-shelf:${BOOK_SHELF_LABELS[book.data.shelf]}`}
+						>
+							{BOOK_SHELF_LABELS[book.data.shelf]}
+						</span>
+					</div>
+
+					<h1
+						class="mt-5 text-3xl font-bold leading-tight text-neutral-900 dark:text-neutral-100 md:text-4xl"
+						data-pagefind-meta="title"
+					>
+						{book.data.title}
+					</h1>
+					{book.data.originalTitle && (
+						<p class="mt-2 text-sm text-neutral-400">{book.data.originalTitle}</p>
+					)}
+					<p class="mt-4 text-base text-neutral-600 dark:text-neutral-300">
+						{book.data.authors.join("、")}
+					</p>
+
+					<p class="mt-6 leading-7 text-neutral-600 dark:text-neutral-300">
+						{book.data.description}
+					</p>
+
+					<div class="mt-6 rounded-xl bg-(--btn-regular-bg) p-4">
+						<p class="text-xs font-semibold tracking-wide text-(--primary)">预读关注点</p>
+						<p class="mt-2 leading-7 text-neutral-700 dark:text-neutral-200">
+							{book.data.previewFocus}
+						</p>
+					</div>
+
+					<div class="mt-6 flex flex-wrap gap-2">
+						{book.data.topics.map((topic: string) => (
+							<span
+								class="rounded-full bg-black/5 px-3 py-1.5 text-xs text-neutral-500 dark:bg-white/10 dark:text-neutral-400"
+								data-pagefind-filter={`book-topic:${topic}`}
+							>
+								#{topic}
+							</span>
+						))}
+					</div>
+
+					<div class="mt-auto flex flex-wrap gap-x-6 gap-y-2 pt-7 text-sm text-neutral-500 dark:text-neutral-400">
+						<span class="inline-flex items-center gap-2">
+							<Icon is:inline name="material-symbols:language" class="text-lg" />
+							{book.data.language}
+						</span>
+						{book.data.isbn && (
+							<span class="inline-flex items-center gap-2">
+								<Icon is:inline name="material-symbols:barcode" class="text-lg" />
+								ISBN {book.data.isbn}
+							</span>
+						)}
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="card-base mb-5 rounded-(--radius-large) p-6 md:p-9">
+			<BookKnowledgeGraph graph={graph} client:visible />
+		</div>
+
+		<div id="reading-notes-section" class="card-base rounded-(--radius-large) p-6 md:p-9">
+			<div class="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-(--line-divider) pb-4">
+				<div>
+					<p class="text-xs font-semibold tracking-wide text-(--primary)">READING NOTES</p>
+					<h2 class="mt-1 text-2xl font-bold text-neutral-900 dark:text-neutral-100">
+						预读说明与阅读笔记
+					</h2>
+				</div>
+				<span class="rounded-full bg-amber-500/12 px-3 py-1.5 text-xs font-semibold text-amber-700 dark:text-amber-300">
+					尚未阅读
+				</span>
+			</div>
+			<Markdown class="markdown-content">
+				<Content />
+			</Markdown>
+		</div>
+	</article>
+</MainGridLayout>

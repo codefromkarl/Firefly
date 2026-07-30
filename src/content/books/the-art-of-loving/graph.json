@@ -1,0 +1,418 @@
+{
+	"book": "the-art-of-loving",
+	"title": "《爱的艺术》预读知识地图",
+	"stage": "preview",
+	"basis": ["metadata", "toc"],
+	"aiAssisted": true,
+	"layout": "circle",
+	"summary": "从分离处境出发，把爱理解为由关心、责任、尊重、了解和持续实践构成的能力。",
+	"bookMap": {
+		"archetype": "argumentative_monograph",
+		"coreQuestion": {
+			"text": "爱是一种偶然发生的感觉，还是一门需要理解和练习的艺术？",
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "第一章《爱是一门艺术吗？》"
+				}
+			]
+		},
+		"thesis": {
+			"text": "全书按“提出问题—建立理论—观察社会中的衰亡—转向实践”的顺序，把爱组织为一种需要学习和培养的能力。",
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录：第一章至第四章的编排"
+				}
+			]
+		},
+		"conclusion": {
+			"text": "预读主线最终落在实践：理解爱的理论还不够，仍需通过持续训练把它变成一种成熟能力。",
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "第四章《爱的实践》"
+				}
+			]
+		},
+		"parts": [
+			{
+				"id": "question-love-as-art",
+				"order": 1,
+				"title": "第一章 爱是一门艺术吗？",
+				"role": "pose_problem",
+				"question": "爱主要取决于遇见合适对象，还是取决于人自身是否具备爱的能力？",
+				"thesis": "第一章先改变问题的问法，把注意力从“如何被爱”转向“如何学习爱”。",
+				"inputUnderstanding": "容易把爱看成运气、对象或强烈感觉。",
+				"outputUnderstanding": "开始把爱当作一项需要知识与练习的能力。",
+				"conceptNodeIds": ["art-of-loving"],
+				"provenance": "editorial_inference",
+				"sourceRefs": [
+					{
+						"basis": "toc",
+						"locator": "第一章《爱是一门艺术吗？》"
+					}
+				]
+			},
+			{
+				"id": "theory-of-love",
+				"order": 2,
+				"title": "第二章 爱情的理论",
+				"role": "explain_mechanism",
+				"question": "如果爱是一种能力，它回应了人的什么处境，又包含哪些共同要素？",
+				"thesis": "第二章从人类生存问题、亲子关系和不同爱的对象建立理论框架。",
+				"inputUnderstanding": "已经接受爱需要学习，但还不知道要学习什么。",
+				"outputUnderstanding": "获得理解爱之动机、要素和不同对象的理论框架。",
+				"conceptNodeIds": [
+					"separateness",
+					"care",
+					"responsibility",
+					"respect",
+					"knowledge",
+					"forms-of-love"
+				],
+				"provenance": "editorial_inference",
+				"sourceRefs": [
+					{
+						"basis": "toc",
+						"locator": "第二章《爱情的理论》及三个子节"
+					}
+				]
+			},
+			{
+				"id": "social-decline-of-love",
+				"order": 3,
+				"title": "第三章 爱情及其在当代西方社会的衰亡",
+				"role": "diagnose",
+				"question": "既然爱具有可以说明的理论结构，它为什么仍会在现实社会中衰亡？",
+				"thesis": "第三章把观察尺度从个人和对象扩展到社会，提醒读者爱的困难不只是私人技巧问题。",
+				"inputUnderstanding": "已经知道成熟的爱由什么构成。",
+				"outputUnderstanding": "开始考察社会环境如何使爱的能力难以实现。",
+				"conceptNodeIds": ["social-decline"],
+				"provenance": "editorial_inference",
+				"sourceRefs": [
+					{
+						"basis": "toc",
+						"locator": "第三章《爱情及其在当代西方社会的衰亡》"
+					}
+				]
+			},
+			{
+				"id": "practice-of-love",
+				"order": 4,
+				"title": "第四章 爱的实践",
+				"role": "prescribe",
+				"question": "理解理论和社会障碍之后，个人如何真正培养爱的能力？",
+				"thesis": "第四章把前面的理论与诊断收束到持续实践，并以成熟的爱作为能力发展的方向。",
+				"inputUnderstanding": "已经理解爱的结构及其现实困难。",
+				"outputUnderstanding": "把爱视为需要长期纪律、专注和耐心的生活实践。",
+				"conceptNodeIds": ["discipline", "mature-love"],
+				"provenance": "editorial_inference",
+				"sourceRefs": [
+					{
+						"basis": "toc",
+						"locator": "第四章《爱的实践》"
+					}
+				]
+			}
+		],
+		"transitions": [
+			{
+				"id": "question-to-theory",
+				"source": "question-love-as-art",
+				"target": "theory-of-love",
+				"relation": "motivates",
+				"rationale": "只有先把爱视为一门艺术，才需要进一步建立关于爱之动机、要素和对象的理论。",
+				"provenance": "editorial_inference",
+				"sourceRefs": [
+					{
+						"basis": "toc",
+						"locator": "目录顺序：第一章至第二章"
+					}
+				]
+			},
+			{
+				"id": "theory-to-diagnosis",
+				"source": "theory-of-love",
+				"target": "social-decline-of-love",
+				"relation": "enables",
+				"rationale": "理论框架给出了判断成熟之爱的尺度，下一章才能据此转向现实社会中的衰亡问题。",
+				"provenance": "editorial_inference",
+				"sourceRefs": [
+					{
+						"basis": "toc",
+						"locator": "目录顺序：第二章至第三章"
+					}
+				]
+			},
+			{
+				"id": "diagnosis-to-practice",
+				"source": "social-decline-of-love",
+				"target": "practice-of-love",
+				"relation": "motivates",
+				"rationale": "社会层面的诊断说明仅有观念认同并不足够，因此全书最后转向个人如何持续实践。",
+				"provenance": "editorial_inference",
+				"sourceRefs": [
+					{
+						"basis": "toc",
+						"locator": "目录顺序：第三章至第四章"
+					}
+				]
+			}
+		]
+	},
+	"nodes": [
+		{
+			"id": "art-of-loving",
+			"label": "爱是一门艺术",
+			"kind": "core",
+			"summary": "爱不是偶然发生的情绪，而是需要理解、能力和练习的主动活动。",
+			"chapter": "爱的理论",
+			"anchor": "theory",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：爱的理论"
+				}
+			]
+		},
+		{
+			"id": "separateness",
+			"label": "人的分离感",
+			"kind": "concept",
+			"summary": "个体意识到自身与他人的分离，并持续寻找有意义的连接。",
+			"chapter": "爱的理论",
+			"anchor": "theory",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：爱的理论"
+				}
+			]
+		},
+		{
+			"id": "care",
+			"label": "关心",
+			"kind": "practice",
+			"summary": "主动关注所爱对象的生命与成长。",
+			"chapter": "爱的基本要素",
+			"anchor": "elements",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：爱的基本要素"
+				}
+			]
+		},
+		{
+			"id": "responsibility",
+			"label": "责任",
+			"kind": "practice",
+			"summary": "对他人的需要作出回应，而不是以控制取代回应。",
+			"chapter": "爱的基本要素",
+			"anchor": "elements",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：爱的基本要素"
+				}
+			]
+		},
+		{
+			"id": "respect",
+			"label": "尊重",
+			"kind": "practice",
+			"summary": "看见他人的独立性，并允许其按自身方式成长。",
+			"chapter": "爱的基本要素",
+			"anchor": "elements",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：爱的基本要素"
+				}
+			]
+		},
+		{
+			"id": "knowledge",
+			"label": "了解",
+			"kind": "practice",
+			"summary": "超越表面投射，努力理解他人及自身的真实处境。",
+			"chapter": "爱的基本要素",
+			"anchor": "elements",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：爱的基本要素"
+				}
+			]
+		},
+		{
+			"id": "forms-of-love",
+			"label": "爱的不同对象",
+			"kind": "concept",
+			"summary": "兄弟之爱、母爱、性爱、自爱等对象帮助检验爱的共同结构。",
+			"chapter": "爱的理论",
+			"anchor": "theory",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：爱的理论"
+				}
+			]
+		},
+		{
+			"id": "social-decline",
+			"label": "社会中的爱的衰亡",
+			"kind": "concept",
+			"summary": "全书从爱的理论转向社会现实，考察爱的能力为何会在当代生活中受阻。",
+			"chapter": "爱情及其在当代西方社会的衰亡",
+			"anchor": "social-decline",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "第三章《爱情及其在当代西方社会的衰亡》"
+				}
+			]
+		},
+		{
+			"id": "discipline",
+			"label": "纪律与专注",
+			"kind": "practice",
+			"summary": "能力通过持续、专注和耐心的练习形成。",
+			"chapter": "爱的实践",
+			"anchor": "practice",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：爱的实践"
+				}
+			]
+		},
+		{
+			"id": "mature-love",
+			"label": "成熟的爱",
+			"kind": "outcome",
+			"summary": "在连接中保留双方完整性，并支持彼此成长。",
+			"chapter": "爱的实践",
+			"anchor": "practice",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：爱的实践"
+				}
+			]
+		}
+	],
+	"edges": [
+		{
+			"id": "separation-art",
+			"source": "separateness",
+			"target": "art-of-loving",
+			"relation": "explains",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "care-art",
+			"source": "care",
+			"target": "art-of-loving",
+			"relation": "part_of",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "responsibility-art",
+			"source": "responsibility",
+			"target": "art-of-loving",
+			"relation": "part_of",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "respect-art",
+			"source": "respect",
+			"target": "art-of-loving",
+			"relation": "part_of",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "knowledge-art",
+			"source": "knowledge",
+			"target": "art-of-loving",
+			"relation": "part_of",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "forms-art",
+			"source": "forms-of-love",
+			"target": "art-of-loving",
+			"relation": "applies_to",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "discipline-art",
+			"source": "discipline",
+			"target": "art-of-loving",
+			"relation": "supports",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "social-practice",
+			"source": "social-decline",
+			"target": "discipline",
+			"relation": "leads_to",
+			"directed": true,
+			"summary": "对社会现实中爱的衰亡的诊断，把问题进一步引向爱的实践。",
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录顺序：第三章至第四章"
+				}
+			]
+		},
+		{
+			"id": "art-mature",
+			"source": "art-of-loving",
+			"target": "mature-love",
+			"relation": "leads_to",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "respect-mature",
+			"source": "respect",
+			"target": "mature-love",
+			"relation": "supports",
+			"directed": true,
+			"provenance": "editorial_inference"
+		}
+	]
+}

@@ -1609,6 +1609,17 @@ function disableAnimation() {
   }
 
   // 更新侧边栏组件的可见性
+  function updatePageSpecificLeftSidebarVisibility() {
+    const staticWrapper = document.getElementById("left-sidebar-wrapper");
+    if (!staticWrapper) return;
+
+    const hasPageSidebar = Boolean(
+      document.querySelector("#left-sidebar-dynamic [data-page-left-sidebar]")
+    );
+    staticWrapper.classList.toggle("hidden", hasPageSidebar);
+    staticWrapper.classList.toggle("contents", !hasPageSidebar);
+  }
+
   function updateSidebarComponentsVisibility() {
     const isPostPage = isCurrentPagePost();
 
@@ -1631,6 +1642,9 @@ function disableAnimation() {
     document.querySelectorAll(".widget-hide-on-non-post").forEach((widget) => {
       !isPostPage ? widget.classList.add("hidden") : widget.classList.remove("hidden");
     });
+
+    // 页面自定义目录位于 Swup 动态容器中；存在时替换全局左侧栏。
+    updatePageSpecificLeftSidebarVisibility();
 
     // 组件可见性变化后，立即重算 sticky 间距，避免 swup 切页后残留旧间距
     updateSidebarStickySpacing();

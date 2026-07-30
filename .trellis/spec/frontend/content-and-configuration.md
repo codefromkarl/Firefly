@@ -2,11 +2,14 @@
 
 ## Content Collections
 
-`src/content.config.ts` defines three collections:
+`src/content.config.ts` defines five collections:
 
 - `posts`: Markdown/MDX articles under `src/content/posts/`;
 - `spec`: special Markdown pages such as about, friends, and guestbook;
-- `dynamic`: short Markdown entries under `src/content/dynamic/`.
+- `dynamic`: short Markdown entries under `src/content/dynamic/`;
+- `books`: book metadata and notes in `src/content/books/<slug>/index.md`;
+- `bookGraphs`: adjacent graph data in
+  `src/content/books/<slug>/graph.json`.
 
 Post URLs come from the content entry ID/file path, not merely a `slug`
 frontmatter field. For a stable article URL, use:
@@ -17,6 +20,179 @@ src/content/posts/<stable-slug>/index.md
 
 and keep adjacent article images in that directory. Renaming the path changes
 the generated `/posts/<stable-slug>/` URL and requires a permanent redirect.
+
+## Scenario: Maintain a Book and Its Knowledge Graph
+
+### 1. Scope / Trigger
+
+This contract applies when adding or changing a book, its cover, reading stage,
+notes, graph nodes, or graph relationships.
+
+### 2. Signatures
+
+- Book source: `src/content/books/<slug>/index.{md,mdx}`.
+- Graph source: `src/content/books/<slug>/graph.json`.
+- Cover source: `src/content/books/<slug>/cover.webp`.
+- Route: `/books/<slug>/`.
+- Primary shelf:
+  `shelf: "cognition-and-decisions" | "wealth-and-growth" | "psychology-and-relationships"`.
+- Resolver:
+  `getGraphForBook(book: CollectionEntry<"books">): Promise<CollectionEntry<"bookGraphs">>`.
+- Node evidence:
+  `provenance: "source_summary" | "editorial_inference" | "personal_note"`
+  plus non-empty `sourceRefs`.
+- Source reference:
+  `{ basis: "metadata" | "toc" | "epub" | "notes"; locator: string; quote?: string }`.
+- Optional whole-book spine: `graph.json.bookMap` with `archetype`,
+  `coreQuestion`, `thesis`, `conclusion`, ordered `parts`, and directed
+  `transitions`.
+
+### 3. Contracts
+
+- The directory slug is the stable ID for both entries and the public URL.
+- Every book has exactly one `shelf` from `BOOK_SHELF_VALUES`; `topics` remains
+  a non-empty multi-value list. Directory grouping uses `shelf`, while
+  cross-category discovery uses `topics`.
+- `graph.json.book` references that same `books` entry.
+- Every published book has exactly one adjacent graph; graph ID and book ID
+  match.
+- `book.graphStage` and `graph.stage` match. Upgrade both from `preview` to
+  `reading` or `reviewed` in the same change.
+- Graph node and edge IDs are unique kebab-case values. Every edge endpoint
+  names an existing node, self-edges are rejected, and every graph has a
+  `core` node.
+- A `reviewed` graph includes `notes` in `basis`. An AI-assisted preview states
+  its basis and must not be presented as the author's personal reading
+  conclusion.
+- Every node declares its provenance and at least one source reference.
+  Relationships declare provenance and may add source references when a direct
+  location is known.
+- `source_summary` is a paraphrase grounded in EPUB text or notes.
+  `editorial_inference` is used for AI/editor interpretation from metadata,
+  directory structure, or unverified cross-concept relationships.
+  `personal_note` requires a notes source.
+- A source reference basis must also appear in the graph-level `basis`. The
+  locator describes its real precision: use `目录主题` or `内容分区` when an
+  exact chapter/page is unavailable.
+- Public content is summary-first. A verified quote is optional, collapsed in
+  the UI, and limited to 240 characters; never split long original text across
+  several references to evade the limit.
+- `bookMap` is the author-order orientation layer; `nodes` / `edges` remains
+  the semantic exploration layer. Do not infer the author-order spine from
+  force-graph proximity or concept similarity.
+- Every map part has a unique positive `order`, a controlled argument `role`,
+  entering/leaving understanding, and at least one existing concept node ID.
+  Map transitions have unique IDs, valid part endpoints, no self-reference,
+  move forward in part order, and must make every part reachable from the first
+  ordered part.
+- Whole-book statements, parts, and transitions use the same provenance and
+  source-reference rules as graph nodes. A table-of-contents synthesis stays
+  `editorial_inference`; it does not become `source_summary` without EPUB or
+  notes evidence.
+- EPUB files and full chapter text remain local inputs. Commit only compact
+  metadata, original short summaries, and the optimized cover derivative.
+
+### 4. Validation & Error Matrix
+
+| Condition | Required result |
+| --- | --- |
+| Missing or duplicate graph for a book | Build fails in `getGraphForBook` |
+| Graph reference points to a missing book | Content sync/build fails |
+| Book omits `shelf` or uses an unknown value | Content sync/build fails |
+| Graph and book live under different slugs | Build fails |
+| `graphStage` and `stage` differ | Build fails |
+| Duplicate ID, missing endpoint, self-edge, or no `core` node | Schema validation fails |
+| Node lacks provenance or source references | Schema validation fails |
+| Source reference basis is absent from graph `basis` | Schema validation fails |
+| `source_summary` lacks an EPUB/notes reference | Schema validation fails |
+| `personal_note` lacks a notes reference | Schema validation fails |
+| Source quote exceeds 240 characters | Schema validation fails |
+| `bookMap` part points to a missing concept node | Schema validation fails |
+| Duplicate/unreachable map part or invalid transition endpoint | Schema validation fails |
+| Map transition points backward in part order | Schema validation fails |
+| `stage=reviewed` without notes basis | Schema validation fails |
+| Production book has `draft: true` | Omitted from the book list and routes |
+
+### 5. Good / Base / Bad Cases
+
+- Good: add `index.md`, `graph.json`, and `cover.webp` in one slug directory;
+  assign one stable shelf, keep both stage fields aligned, declare per-node
+  evidence, preserve the author's ordered parts in `bookMap`, and validate the
+  complete build.
+- Base: a preview concept inferred from a table of contents uses
+  `editorial_inference` and a `toc` locator without claiming an exact page.
+- Bad: use a topic label as an ad hoc second shelf, copy a graph between
+  directories without updating `book`, update only one stage field, or label a
+  directory-based inference as `source_summary`. It is also invalid to publish
+  a concept-cluster order as though it were the author's chapter progression.
+
+### 6. Tests Required
+
+```bash
+pnpm exec biome check src/content.config.ts src/content/books
+pnpm check
+pnpm type-check
+pnpm build
+```
+
+Assert that `/books/` and every non-draft `/books/<slug>/` page are emitted,
+each detail has one graph and Book JSON-LD, invalid endpoints stop the build,
+invalid evidence/provenance combinations stop content sync, optional quotes
+stay within the limit, every book renders under exactly one shelf, and a
+subpath build keeps book, cover, and island URLs below its configured base.
+For a graph with `bookMap`, also assert valid part/transition references,
+whole-spine reachability, and unchanged compatibility for graphs without it.
+
+### 7. Wrong vs Correct
+
+```json
+// Wrong: a directory inference is presented as a verified source summary.
+{
+  "basis": ["metadata", "toc"],
+  "nodes": [{
+    "provenance": "source_summary",
+    "sourceRefs": [{ "basis": "toc", "locator": "目录主题：风险" }]
+  }]
+}
+```
+
+```json
+// Correct: the content claim matches the precision of its evidence.
+{
+  "book": "thinking-fast-and-slow",
+  "stage": "preview",
+  "basis": ["metadata", "toc", "epub"],
+  "nodes": [{
+    "provenance": "source_summary",
+    "sourceRefs": [{ "basis": "epub", "locator": "内容分区：两个自我" }]
+  }]
+}
+```
+
+```json
+// Wrong: an ungrounded part order is mixed into the concept network.
+{
+  "nodes": [{ "id": "social-diagnosis", "chapter": "第三章" }],
+  "edges": [{ "source": "social-diagnosis", "target": "practice" }]
+}
+```
+
+```json
+// Correct: the ordered spine is explicit, sourced, and points back to concepts.
+{
+  "bookMap": {
+    "archetype": "argumentative_monograph",
+    "parts": [{
+      "id": "social-diagnosis",
+      "order": 3,
+      "role": "diagnose",
+      "conceptNodeIds": ["social-decline"],
+      "provenance": "editorial_inference",
+      "sourceRefs": [{ "basis": "toc", "locator": "第三章" }]
+    }]
+  }
+}
+```
 
 ## Post Frontmatter
 

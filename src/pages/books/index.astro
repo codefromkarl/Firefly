@@ -1,0 +1,34 @@
+---
+import { getImage } from "astro:assets";
+import BookLibrary from "@/components/pages/books/BookLibrary.svelte";
+import BookSidebar from "@/components/pages/books/BookSidebar.astro";
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+import {
+	getPublishedBooks,
+	toBookCardData,
+	toBookDirectoryItems,
+} from "@/utils/book-utils";
+
+const books = await getPublishedBooks();
+const directoryBooks = toBookDirectoryItems(books);
+const bookCards = await Promise.all(
+	books.map(async (book) => {
+		const cover = await getImage({
+			src: book.data.cover,
+			width: 480,
+			format: "webp",
+			quality: 78,
+		});
+		return toBookCardData(book, cover.src);
+	}),
+);
+---
+
+<MainGridLayout
+	title="书单"
+	description="正在计划阅读的书，以及为每本书整理的可探索预读知识地图"
+>
+	<BookSidebar slot="left-sidebar" books={directoryBooks} />
+
+	<BookLibrary books={bookCards} client:load />
+</MainGridLayout>

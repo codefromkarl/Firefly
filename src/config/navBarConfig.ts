@@ -26,6 +26,11 @@ export const LinkPresets: Record<string, NavBarLink> = {
 		url: "/tags/",
 		icon: "material-symbols:tag-rounded",
 	},
+	Books: {
+		name: "书单",
+		url: "/books/",
+		icon: "material-symbols:menu-book-rounded",
+	},
 	Lab: {
 		name: "实验室",
 		url: "/lab/",
@@ -56,7 +61,12 @@ export const navBarConfig: NavBarConfig = {
 			name: "探索",
 			url: "#",
 			icon: "material-symbols:explore",
-			children: [LinkPresets.Lab, LinkPresets.TechStack, LinkPresets.About],
+			children: [
+				LinkPresets.Books,
+				LinkPresets.Lab,
+				LinkPresets.TechStack,
+				LinkPresets.About,
+			],
 		},
 		{
 			name: "GitHub",

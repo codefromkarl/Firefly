@@ -22,6 +22,7 @@ interface Props {
 	headings?: MarkdownHeading[];
 	encrypted?: boolean;
 	side?: "left" | "right" | "bottom";
+	deprioritizeImages?: boolean;
 }
 
 // 侧边栏位置常量
@@ -158,6 +159,12 @@ const getComponentProps = (
 			...baseProps,
 			headings: Astro.props.headings || [],
 			encrypted: Astro.props.encrypted || false,
+		};
+	}
+	if (config.type === "profile") {
+		return {
+			...baseProps,
+			deprioritizeImages: Astro.props.deprioritizeImages ?? false,
 		};
 	}
 

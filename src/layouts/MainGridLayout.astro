@@ -77,6 +77,7 @@ const {
 	encrypted = false,
 	bannerPostMeta,
 } = Astro.props;
+const hasCustomLeftSidebar = Astro.slots.has("left-sidebar");
 
 // 检查背景壁纸模式和是否允许切换
 const isBannerMode = backgroundWallpaper.mode === "banner";
@@ -213,12 +214,15 @@ const shouldAddLeftSidebar: boolean =
 	shouldShowBothSidebarsOnPostPage && sidebarLayoutConfig.position === "right";
 
 const effectiveIsBothSidebars: boolean =
-	sidebarConfig.isBothSidebars || shouldShowBothSidebarsOnPostPage;
+	sidebarConfig.isBothSidebars ||
+	shouldShowBothSidebarsOnPostPage ||
+	(hasCustomLeftSidebar && sidebarLayoutConfig.position === "right");
 const effectiveHasRightComponents: boolean =
 	sidebarConfig.hasRightComponents ||
 	(shouldAddRightSidebar &&
 		sidebarLayoutConfig.rightComponents.some((comp) => comp.enable));
 const effectiveHasLeftComponents: boolean =
+	hasCustomLeftSidebar ||
 	sidebarConfig.hasLeftComponents ||
 	(shouldAddLeftSidebar &&
 		sidebarLayoutConfig.leftComponents.some((comp) => comp.enable));
@@ -853,25 +857,50 @@ const hasMultipleImages =
             {sidebarLayoutConfig.position !== "right" ? (
                 <>
                     {sidebarLayoutConfig.enable ? (
-                        <div id="left-sidebar-wrapper" class="contents" data-hide-sidebar-on-post={hideSidebarOnPostPage ? "true" : "false"} style="contain: layout style paint;">
+                        <div
+                            id="left-sidebar-wrapper"
+                            class:list={[hasCustomLeftSidebar ? "hidden" : "contents"]}
+                            data-hide-sidebar-on-post={hideSidebarOnPostPage ? "true" : "false"}
+                            style="contain: layout style paint;"
+                        >
                             {effectiveHasLeftComponents && (
                                 <SideBar
                                     side={effectiveIsBothSidebars ? "left" : undefined}
                                     class={sidebarClass}
                                     headings={headings}
                                     encrypted={encrypted}
+                                    deprioritizeImages={hasCustomLeftSidebar}
                                 />
                             )}
                         </div>
                     ) : (
                         <div id="left-sidebar-wrapper" class="hidden"></div>
                     )}
-                    <div id="left-sidebar-dynamic" class="hidden transition-swup-fade"></div>
+                    <div id="left-sidebar-dynamic" class="contents transition-swup-fade">
+                        {hasCustomLeftSidebar && (
+                            <aside
+                                data-page-left-sidebar
+                                class={sidebarClass}
+                            >
+                                <div class="sticky top-4 flex w-full flex-col gap-4">
+                                    <slot name="left-sidebar"></slot>
+                                </div>
+                            </aside>
+                        )}
+                    </div>
                 </>
             ) : (
                 <div id="left-sidebar-dynamic" class="contents transition-swup-fade">
-                    {effectiveIsBothSidebars && effectiveHasLeftComponents && (
-						<SideBar side="left" class={sidebarClass} headings={headings} encrypted={encrypted}></SideBar>
+                    {hasCustomLeftSidebar ? (
+                        <aside data-page-left-sidebar class={sidebarClass}>
+                            <div class="sticky top-4 flex w-full flex-col gap-4">
+                                <slot name="left-sidebar"></slot>
+                            </div>
+                        </aside>
+                    ) : (
+                        effectiveIsBothSidebars && effectiveHasLeftComponents && (
+                            <SideBar side="left" class={sidebarClass} headings={headings} encrypted={encrypted}></SideBar>
+                        )
                     )}
                 </div>
             )}

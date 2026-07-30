@@ -49,6 +49,7 @@
     "astro-expressive-code": "^0.44.1",
     "astro-icon": "^1.1.5",
     "ci-info": "^4.4.0",
+    "cytoscape": "^3.34.0",
     "dayjs": "^1.11.21",
     "ec-lang-logo": "^1.0.5",
     "expressive-code-collapsible": "^0.1.0",

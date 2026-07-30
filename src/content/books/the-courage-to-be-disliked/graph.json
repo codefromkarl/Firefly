@@ -1,0 +1,299 @@
+{
+	"book": "the-courage-to-be-disliked",
+	"title": "《被讨厌的勇气》预读知识地图",
+	"stage": "preview",
+	"basis": ["metadata", "toc"],
+	"aiAssisted": true,
+	"layout": "breadthfirst",
+	"summary": "从阿德勒心理学出发，串联目的论、人际关系、课题分离、共同体感觉与自由。",
+	"nodes": [
+		{
+			"id": "adlerian-psychology",
+			"label": "阿德勒心理学",
+			"kind": "core",
+			"summary": "本书对话所围绕的心理学与生活哲学框架。",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "metadata",
+					"locator": "书名、简介与目录结构"
+				}
+			]
+		},
+		{
+			"id": "teleology",
+			"label": "目的论",
+			"kind": "model",
+			"summary": "从行为当前服务的目的理解选择与改变。",
+			"chapter": "目的论",
+			"anchor": "teleology",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：目的论"
+				}
+			]
+		},
+		{
+			"id": "etiology",
+			"label": "原因论",
+			"kind": "model",
+			"summary": "从过去原因解释现在行为的路径，是书中用来对照的框架。",
+			"chapter": "目的论",
+			"anchor": "teleology",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：目的论"
+				}
+			]
+		},
+		{
+			"id": "change",
+			"label": "改变的可能",
+			"kind": "outcome",
+			"summary": "如果行为并非完全由过去决定，当前选择就可能打开改变空间。",
+			"chapter": "目的论",
+			"anchor": "teleology",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：目的论"
+				}
+			]
+		},
+		{
+			"id": "interpersonal-relations",
+			"label": "人际关系",
+			"kind": "concept",
+			"summary": "书中将许多烦恼放到人与他人的关系中重新解释。",
+			"chapter": "人际关系",
+			"anchor": "relationships",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：人际关系"
+				}
+			]
+		},
+		{
+			"id": "inferiority",
+			"label": "自卑感",
+			"kind": "concept",
+			"summary": "对自身不足的主观判断，可能推动成长，也可能被固化为借口。",
+			"chapter": "人际关系",
+			"anchor": "relationships",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：人际关系"
+				}
+			]
+		},
+		{
+			"id": "recognition",
+			"label": "认可需求",
+			"kind": "concept",
+			"summary": "把自我价值交给他人评价，会限制行动自由。",
+			"chapter": "人际关系",
+			"anchor": "relationships",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：人际关系"
+				}
+			]
+		},
+		{
+			"id": "separation-tasks",
+			"label": "课题分离",
+			"kind": "practice",
+			"summary": "区分谁承担某项选择的最终结果，以明确责任边界。",
+			"chapter": "人际关系",
+			"anchor": "relationships",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：人际关系"
+				}
+			]
+		},
+		{
+			"id": "horizontal-relations",
+			"label": "横向关系",
+			"kind": "practice",
+			"summary": "以合作和尊重替代高低评价与控制。",
+			"chapter": "共同体与勇气",
+			"anchor": "community",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：共同体与勇气"
+				}
+			]
+		},
+		{
+			"id": "community-feeling",
+			"label": "共同体感觉",
+			"kind": "concept",
+			"summary": "把自己理解为共同体的一部分，并在连接与贡献中寻找位置。",
+			"chapter": "共同体与勇气",
+			"anchor": "community",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：共同体与勇气"
+				}
+			]
+		},
+		{
+			"id": "courage",
+			"label": "勇气",
+			"kind": "practice",
+			"summary": "面对不确定评价仍选择承担自己的生活课题。",
+			"chapter": "共同体与勇气",
+			"anchor": "community",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：共同体与勇气"
+				}
+			]
+		},
+		{
+			"id": "freedom",
+			"label": "自由",
+			"kind": "outcome",
+			"summary": "不再把行动完全绑定于他者认可，意味着也要承担被否定的可能。",
+			"chapter": "共同体与勇气",
+			"anchor": "community",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "toc",
+					"locator": "目录主题：共同体与勇气"
+				}
+			]
+		}
+	],
+	"edges": [
+		{
+			"id": "teleology-adler",
+			"source": "teleology",
+			"target": "adlerian-psychology",
+			"relation": "part_of",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "etiology-teleology",
+			"source": "etiology",
+			"target": "teleology",
+			"relation": "contrasts",
+			"directed": false,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "teleology-change",
+			"source": "teleology",
+			"target": "change",
+			"relation": "leads_to",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "relations-adler",
+			"source": "interpersonal-relations",
+			"target": "adlerian-psychology",
+			"relation": "part_of",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "inferiority-relations",
+			"source": "inferiority",
+			"target": "interpersonal-relations",
+			"relation": "part_of",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "recognition-relations",
+			"source": "recognition",
+			"target": "interpersonal-relations",
+			"relation": "part_of",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "separation-recognition",
+			"source": "separation-tasks",
+			"target": "recognition",
+			"relation": "contrasts",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "separation-freedom",
+			"source": "separation-tasks",
+			"target": "freedom",
+			"relation": "supports",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "horizontal-community",
+			"source": "horizontal-relations",
+			"target": "community-feeling",
+			"relation": "supports",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "community-courage",
+			"source": "community-feeling",
+			"target": "courage",
+			"relation": "supports",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "courage-freedom",
+			"source": "courage",
+			"target": "freedom",
+			"relation": "leads_to",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "freedom-change",
+			"source": "freedom",
+			"target": "change",
+			"relation": "supports",
+			"directed": true,
+			"provenance": "editorial_inference"
+		}
+	]
+}

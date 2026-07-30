@@ -1,0 +1,293 @@
+---
+import type { MarkdownHeading } from "astro";
+import WidgetLayout from "@/components/common/WidgetLayout.astro";
+import {
+	BOOK_SHELF_LABELS,
+	BOOK_SHELF_VALUES,
+	type BookDirectoryItem,
+} from "@/types/book";
+import { computeTocItems } from "@/utils/toc-shared";
+import { url } from "@/utils/url-utils";
+
+import "@/styles/toc.css";
+
+interface Props {
+	books: BookDirectoryItem[];
+	currentBookId?: string;
+	headings?: MarkdownHeading[];
+}
+
+const { books, currentBookId, headings = [] } = Astro.props;
+const isLibraryPage = !currentBookId;
+const libraryUrl = url("/books/");
+const shelves = BOOK_SHELF_VALUES.map((shelf) => ({
+	id: shelf,
+	label: BOOK_SHELF_LABELS[shelf],
+	books: books.filter((book) => book.shelf === shelf),
+})).filter((shelf) => shelf.books.length > 0);
+const currentBook = books.find((book) => book.id === currentBookId);
+const chapterItems = computeTocItems(headings, { maxLevel: 2 }).filter(
+	(item) => item.text !== "阅读笔记",
+);
+
+const pageSections = [
+	{ href: "#book-overview", label: "书籍概览" },
+	{ href: "#book-graph-heading", label: "知识图谱" },
+	{ href: "#reading-notes-section", label: "预读说明与阅读笔记" },
+];
+---
+
+<WidgetLayout id="book-list-directory" name="书单目录">
+	<nav aria-label="书单目录" class="toc-content">
+		<a
+			href={libraryUrl}
+			class:list={[
+				"toc-item toc-level-0 book-directory-root",
+				isLibraryPage && "book-directory-root-active",
+			]}
+			aria-current={isLibraryPage ? "page" : undefined}
+			data-book-library-root
+		>
+			<span class="book-directory-icon" aria-hidden="true">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+					<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v17H6.5A2.5 2.5 0 0 0 4 22V5.5Z"></path>
+					<path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H13v17h4.5A2.5 2.5 0 0 1 20 22V5.5Z"></path>
+				</svg>
+			</span>
+			<span class="toc-label toc-label-primary">全部书籍</span>
+			<span class="book-directory-count">{books.length}</span>
+		</a>
+
+		{shelves.map((shelf) => (
+			<details
+				class:list={[
+					"book-shelf-group",
+					currentBook?.shelf === shelf.id && "book-shelf-current",
+				]}
+				open={currentBook?.shelf === shelf.id}
+				data-book-shelf-group={shelf.id}
+			>
+				<summary class="book-shelf-summary">
+					<span class="book-shelf-chevron" aria-hidden="true">
+						<svg viewBox="0 0 20 20" fill="none" stroke="currentColor">
+							<path d="m7.5 5 5 5-5 5"></path>
+						</svg>
+					</span>
+					<span class="toc-label toc-label-primary">{shelf.label}</span>
+					<span class="book-directory-count">{shelf.books.length}</span>
+				</summary>
+
+				<div class="book-shelf-items">
+					{shelf.books.map((book) => {
+						const isCurrent = book.id === currentBookId;
+						return (
+							<a
+								href={book.url}
+								class:list={[
+									"toc-item toc-level-1 book-directory-item",
+									isCurrent && "visible book-directory-current",
+								]}
+								aria-current={isCurrent ? "page" : undefined}
+								title={`《${book.title}》`}
+							>
+								<span class="book-directory-dot" aria-hidden="true"></span>
+								<span class="toc-label toc-label-secondary">
+									{book.title}
+								</span>
+							</a>
+						);
+					})}
+				</div>
+			</details>
+		))}
+	</nav>
+</WidgetLayout>
+
+{currentBookId && (
+	<WidgetLayout id="book-page-directory" name="本页目录">
+		<nav aria-label="本页目录" class="toc-content">
+			{pageSections.map((section, index) => (
+				<a href={section.href} class="toc-item toc-level-0">
+					<span class="toc-badge toc-badge-index" aria-hidden="true">
+						{index + 1}
+					</span>
+					<span class="toc-label toc-label-primary">{section.label}</span>
+				</a>
+			))}
+
+			{chapterItems.map((item) => (
+				<a
+					href={item.href}
+					class="toc-item toc-level-1"
+					title={item.text}
+				>
+					<span class="toc-badge" aria-hidden="true">
+						<span class="toc-badge-dot"></span>
+					</span>
+					<span class="toc-label toc-label-secondary">{item.text}</span>
+				</a>
+			))}
+		</nav>
+	</WidgetLayout>
+)}
+
+<style>
+	.book-directory-root {
+		min-height: 2.5rem;
+	}
+
+	.book-directory-root-active {
+		background: color-mix(in oklab, var(--primary) 11%, transparent);
+		color: var(--primary);
+	}
+
+	.book-directory-icon {
+		display: inline-flex;
+		width: 1rem;
+		height: 1rem;
+		flex-shrink: 0;
+		align-items: center;
+		justify-content: center;
+		color: var(--content-meta);
+	}
+
+	.book-directory-icon svg {
+		width: 100%;
+		height: 100%;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		stroke-width: 1.65;
+	}
+
+	.book-directory-root-active .book-directory-icon,
+	.book-directory-root-active .toc-label {
+		color: var(--primary);
+	}
+
+	.book-directory-count {
+		display: inline-flex;
+		min-width: 1.45rem;
+		height: 1.25rem;
+		flex-shrink: 0;
+		align-items: center;
+		justify-content: center;
+		border-radius: 999px;
+		background: var(--btn-regular-bg);
+		padding: 0 0.35rem;
+		font-size: 0.72rem;
+		color: var(--content-meta);
+	}
+
+	.book-shelf-group {
+		margin-top: 0.2rem;
+	}
+
+	.book-shelf-summary {
+		display: flex;
+		min-height: 2.5rem;
+		cursor: pointer;
+		list-style: none;
+		align-items: center;
+		gap: 0.55rem;
+		border-radius: 0.75rem;
+		padding: 0.45rem 0.6rem;
+		color: var(--content-meta);
+		transition: background-color 0.15s ease, color 0.15s ease;
+	}
+
+	.book-shelf-summary::-webkit-details-marker {
+		display: none;
+	}
+
+	.book-shelf-summary:hover {
+		background: var(--btn-regular-bg);
+	}
+
+	.book-shelf-summary:focus-visible {
+		outline: 2px solid var(--primary);
+		outline-offset: 2px;
+	}
+
+	.book-shelf-chevron {
+		display: inline-flex;
+		width: 1rem;
+		height: 1rem;
+		flex-shrink: 0;
+		align-items: center;
+		justify-content: center;
+		transition: transform 0.15s ease;
+	}
+
+	.book-shelf-chevron svg {
+		width: 100%;
+		height: 100%;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		stroke-width: 1.8;
+	}
+
+	.book-shelf-group[open] > .book-shelf-summary .book-shelf-chevron {
+		transform: rotate(90deg);
+	}
+
+	.book-shelf-filtered > .book-shelf-summary {
+		background: color-mix(in oklab, var(--primary) 7%, transparent);
+		box-shadow: inset 0 0 0 1px
+			color-mix(in oklab, var(--primary) 28%, transparent);
+	}
+
+	.book-shelf-current > .book-shelf-summary {
+		color: var(--primary);
+	}
+
+	.book-shelf-items {
+		display: flex;
+		flex-direction: column;
+		gap: 0.08rem;
+		padding: 0.15rem 0 0.2rem;
+	}
+
+	.book-directory-item {
+		position: relative;
+		display: flex;
+		min-height: 2.25rem;
+		align-items: center;
+		gap: 0.55rem;
+		padding-left: 1.1rem;
+	}
+
+	.book-directory-dot {
+		width: 0.32rem;
+		height: 0.32rem;
+		flex-shrink: 0;
+		border-radius: 999px;
+		background: color-mix(in oklab, var(--content-meta) 55%, transparent);
+	}
+
+	.book-directory-current {
+		background: color-mix(in oklab, var(--primary) 13%, transparent);
+		color: var(--primary);
+	}
+
+	.book-directory-current::before {
+		position: absolute;
+		top: 0.45rem;
+		bottom: 0.45rem;
+		left: 0.15rem;
+		width: 0.18rem;
+		border-radius: 999px;
+		background: var(--primary);
+		content: "";
+	}
+
+	.book-directory-current .book-directory-dot {
+		background: var(--primary);
+		box-shadow: 0 0 0 0.2rem
+			color-mix(in oklab, var(--primary) 15%, transparent);
+	}
+
+	.book-directory-current .toc-label {
+		color: var(--primary);
+		font-weight: 600;
+	}
+</style>

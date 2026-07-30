@@ -1,0 +1,867 @@
+{
+	"book": "thinking-fast-and-slow",
+	"title": "《思考，快与慢》预读知识地图",
+	"stage": "preview",
+	"basis": ["metadata", "toc", "epub"],
+	"aiAssisted": true,
+	"layout": "cose",
+	"summary": "以双系统为入口，连接启发式与偏差、预测中的过度自信、风险选择以及体验自我与记忆自我。",
+	"nodes": [
+		{
+			"id": "decision-making",
+			"label": "判断与决策",
+			"kind": "core",
+			"summary": "全书的中心问题：人在有限注意与不确定环境中如何形成判断并作出选择。",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "metadata",
+					"locator": "书名、简介与目录结构"
+				}
+			]
+		},
+		{
+			"id": "systems",
+			"label": "双系统框架",
+			"kind": "chapter",
+			"summary": "用系统 1 和系统 2 的分工解释直觉、努力、注意与自我控制。",
+			"chapter": "系统 1 与系统 2",
+			"anchor": "systems",
+			"importance": 3,
+			"provenance": "source_summary",
+			"sourceRefs": [
+				{
+					"basis": "epub",
+					"locator": "内容分区：系统 1 与系统 2"
+				}
+			]
+		},
+		{
+			"id": "system-one",
+			"label": "系统 1",
+			"kind": "model",
+			"summary": "快速、自动、联想式地运行，能立即形成印象和行动倾向。",
+			"chapter": "系统 1 与系统 2",
+			"anchor": "systems",
+			"importance": 3,
+			"provenance": "source_summary",
+			"sourceRefs": [
+				{
+					"basis": "epub",
+					"locator": "内容分区：系统 1 与系统 2"
+				}
+			]
+		},
+		{
+			"id": "system-two",
+			"label": "系统 2",
+			"kind": "model",
+			"summary": "缓慢而费力，负责需要注意的计算、规则检查和自我控制。",
+			"chapter": "系统 1 与系统 2",
+			"anchor": "systems",
+			"importance": 3,
+			"provenance": "source_summary",
+			"sourceRefs": [
+				{
+					"basis": "epub",
+					"locator": "内容分区：系统 1 与系统 2"
+				}
+			]
+		},
+		{
+			"id": "attention",
+			"label": "有限注意",
+			"kind": "concept",
+			"summary": "审慎加工依赖有限的注意资源；任务竞争会降低觉察和控制能力。",
+			"chapter": "系统 1 与系统 2",
+			"anchor": "systems",
+			"importance": 2,
+			"provenance": "source_summary",
+			"sourceRefs": [
+				{
+					"basis": "epub",
+					"locator": "内容分区：系统 1 与系统 2"
+				}
+			]
+		},
+		{
+			"id": "associative-memory",
+			"label": "联想记忆",
+			"kind": "concept",
+			"summary": "概念会相互激活，使直觉迅速形成连贯解释与预期。",
+			"chapter": "系统 1 与系统 2",
+			"anchor": "systems",
+			"importance": 2,
+			"provenance": "source_summary",
+			"sourceRefs": [
+				{
+					"basis": "epub",
+					"locator": "内容分区：系统 1 与系统 2"
+				}
+			]
+		},
+		{
+			"id": "cognitive-ease",
+			"label": "认知放松",
+			"kind": "concept",
+			"summary": "熟悉、清晰或重复的信息更容易被处理，也更容易被感觉为真实和安全。",
+			"chapter": "系统 1 与系统 2",
+			"anchor": "systems",
+			"importance": 2,
+			"provenance": "source_summary",
+			"sourceRefs": [
+				{
+					"basis": "epub",
+					"locator": "内容分区：系统 1 与系统 2"
+				}
+			]
+		},
+		{
+			"id": "wysiati",
+			"label": "眼见即为事实",
+			"kind": "bias",
+			"summary": "判断倾向于依赖当前可见的信息，并忽略缺失证据和未知条件。",
+			"chapter": "系统 1 与系统 2",
+			"anchor": "systems",
+			"importance": 3,
+			"provenance": "source_summary",
+			"sourceRefs": [
+				{
+					"basis": "epub",
+					"locator": "内容分区：系统 1 与系统 2"
+				}
+			]
+		},
+		{
+			"id": "heuristics",
+			"label": "启发式与偏差",
+			"kind": "chapter",
+			"summary": "直觉以简化规则快速回答困难问题，同时产生可预测的系统误差。",
+			"chapter": "启发式与偏差",
+			"anchor": "heuristics",
+			"importance": 3,
+			"provenance": "source_summary",
+			"sourceRefs": [
+				{
+					"basis": "epub",
+					"locator": "内容分区：启发式与偏差"
+				}
+			]
+		},
+		{
+			"id": "substitution",
+			"label": "问题替代",
+			"kind": "model",
+			"summary": "难题缺少立即答案时，系统 1 会悄悄回答一个更容易的问题。",
+			"chapter": "启发式与偏差",
+			"anchor": "heuristics",
+			"importance": 3,
+			"provenance": "source_summary",
+			"sourceRefs": [
+				{
+					"basis": "epub",
+					"locator": "内容分区：启发式与偏差"
+				}
+			]
+		},
+		{
+			"id": "anchoring",
+			"label": "锚定效应",
+			"kind": "bias",
+			"summary": "先出现的数字或参照会限制后续估计，即使锚本身信息价值很低。",
+			"chapter": "启发式与偏差",
+			"anchor": "heuristics",
+			"importance": 2,
+			"provenance": "source_summary",
+			"sourceRefs": [
+				{
+					"basis": "epub",
+					"locator": "内容分区：启发式与偏差"
+				}
+			]
+		},
+		{
+			"id": "availability",
+			"label": "可得性启发",
+			"kind": "bias",
+			"summary": "越容易回忆或想象的事件，越容易被判断为常见或重要。",
+			"chapter": "启发式与偏差",
+			"anchor": "heuristics",
+			"importance": 2,
+			"provenance": "source_summary",
+			"sourceRefs": [
+				{
+					"basis": "epub",
+					"locator": "内容分区：启发式与偏差"
+				}
+			]
+		},
+		{
+			"id": "representativeness",
+			"label": "代表性启发",
+			"kind": "bias",
+			"summary": "依据对象与原型的相似程度作判断，可能忽略统计基础概率。",
+			"chapter": "启发式与偏差",
+			"anchor": "heuristics",
+			"importance": 2,
+			"provenance": "source_summary",
+			"sourceRefs": [
+				{
+					"basis": "epub",
+					"locator": "内容分区：启发式与偏差"
+				}
+			]
+		},
+		{
+			"id": "base-rate-neglect",
+			"label": "忽视基础概率",
+			"kind": "bias",
+			"summary": "生动的个案描述会压过总体分布信息，使概率判断失真。",
+			"chapter": "启发式与偏差",
+			"anchor": "heuristics",
+			"importance": 2,
+			"provenance": "source_summary",
+			"sourceRefs": [
+				{
+					"basis": "epub",
+					"locator": "内容分区：启发式与偏差"
+				}
+			]
+		},
+		{
+			"id": "small-numbers",
+			"label": "小数定律",
+			"kind": "bias",
+			"summary": "人们容易高估小样本的代表性，低估随机波动。",
+			"chapter": "启发式与偏差",
+			"anchor": "heuristics",
+			"importance": 2,
+			"provenance": "source_summary",
+			"sourceRefs": [
+				{
+					"basis": "epub",
+					"locator": "内容分区：启发式与偏差"
+				}
+			]
+		},
+		{
+			"id": "regression-mean",
+			"label": "回归平均值",
+			"kind": "concept",
+			"summary": "极端观察之后往往出现更接近平均水平的结果，不必然意味着干预有效。",
+			"chapter": "启发式与偏差",
+			"anchor": "heuristics",
+			"importance": 2,
+			"provenance": "source_summary",
+			"sourceRefs": [
+				{
+					"basis": "epub",
+					"locator": "内容分区：启发式与偏差"
+				}
+			]
+		},
+		{
+			"id": "confidence",
+			"label": "过度自信与预测",
+			"kind": "chapter",
+			"summary": "连贯故事与事后解释如何制造可预测性和理解感。",
+			"chapter": "过度自信与预测",
+			"anchor": "confidence",
+			"importance": 3,
+			"provenance": "source_summary",
+			"sourceRefs": [
+				{
+					"basis": "epub",
+					"locator": "内容分区：过度自信与预测"
+				}
+			]
+		},
+		{
+			"id": "hindsight",
+			"label": "事后聪明",
+			"kind": "bias",
+			"summary": "知道结果后，人会重写自己对过去的记忆并高估事件的可预测性。",
+			"chapter": "过度自信与预测",
+			"anchor": "confidence",
+			"importance": 2,
+			"provenance": "source_summary",
+			"sourceRefs": [
+				{
+					"basis": "epub",
+					"locator": "内容分区：过度自信与预测"
+				}
+			]
+		},
+		{
+			"id": "planning-fallacy",
+			"label": "规划谬误",
+			"kind": "bias",
+			"summary": "计划者聚焦当前方案的最佳叙事，低估成本、时长和失败概率。",
+			"chapter": "过度自信与预测",
+			"anchor": "confidence",
+			"importance": 3,
+			"provenance": "source_summary",
+			"sourceRefs": [
+				{
+					"basis": "epub",
+					"locator": "内容分区：过度自信与预测"
+				}
+			]
+		},
+		{
+			"id": "outside-view",
+			"label": "外部视角",
+			"kind": "practice",
+			"summary": "先参考相似案例的统计分布，再调整当前项目的特殊信息。",
+			"chapter": "过度自信与预测",
+			"anchor": "confidence",
+			"importance": 3,
+			"provenance": "source_summary",
+			"sourceRefs": [
+				{
+					"basis": "epub",
+					"locator": "内容分区：过度自信与预测"
+				}
+			]
+		},
+		{
+			"id": "expert-intuition",
+			"label": "专家直觉",
+			"kind": "concept",
+			"summary": "只有在环境规律稳定且反馈充分时，长期经验才较可能形成可靠直觉。",
+			"chapter": "过度自信与预测",
+			"anchor": "confidence",
+			"importance": 2,
+			"provenance": "source_summary",
+			"sourceRefs": [
+				{
+					"basis": "epub",
+					"locator": "内容分区：过度自信与预测"
+				}
+			]
+		},
+		{
+			"id": "choices",
+			"label": "选择与风险",
+			"kind": "chapter",
+			"summary": "从参照点、损失厌恶和框架理解人在风险下的选择。",
+			"chapter": "选择与风险",
+			"anchor": "choices",
+			"importance": 3,
+			"provenance": "source_summary",
+			"sourceRefs": [
+				{
+					"basis": "epub",
+					"locator": "内容分区：选择与风险"
+				}
+			]
+		},
+		{
+			"id": "prospect-theory",
+			"label": "前景理论",
+			"kind": "model",
+			"summary": "用相对于参照点的收益与损失解释风险选择，而不是只看最终财富。",
+			"chapter": "选择与风险",
+			"anchor": "choices",
+			"importance": 3,
+			"provenance": "source_summary",
+			"sourceRefs": [
+				{
+					"basis": "epub",
+					"locator": "内容分区：选择与风险"
+				}
+			]
+		},
+		{
+			"id": "reference-point",
+			"label": "参照点",
+			"kind": "concept",
+			"summary": "同一结果被体验为收益还是损失，取决于比较基准。",
+			"chapter": "选择与风险",
+			"anchor": "choices",
+			"importance": 2,
+			"provenance": "source_summary",
+			"sourceRefs": [
+				{
+					"basis": "epub",
+					"locator": "内容分区：选择与风险"
+				}
+			]
+		},
+		{
+			"id": "loss-aversion",
+			"label": "损失厌恶",
+			"kind": "bias",
+			"summary": "等量损失带来的心理影响通常强于等量收益。",
+			"chapter": "选择与风险",
+			"anchor": "choices",
+			"importance": 3,
+			"provenance": "source_summary",
+			"sourceRefs": [
+				{
+					"basis": "epub",
+					"locator": "内容分区：选择与风险"
+				}
+			]
+		},
+		{
+			"id": "diminishing-sensitivity",
+			"label": "敏感度递减",
+			"kind": "concept",
+			"summary": "离参照点越远，同样大小的增量带来的主观变化越小。",
+			"chapter": "选择与风险",
+			"anchor": "choices",
+			"importance": 2,
+			"provenance": "source_summary",
+			"sourceRefs": [
+				{
+					"basis": "epub",
+					"locator": "内容分区：选择与风险"
+				}
+			]
+		},
+		{
+			"id": "framing",
+			"label": "框架效应",
+			"kind": "bias",
+			"summary": "表达方式改变参照与注意焦点，可能反转对同一结果的偏好。",
+			"chapter": "选择与风险",
+			"anchor": "choices",
+			"importance": 2,
+			"provenance": "source_summary",
+			"sourceRefs": [
+				{
+					"basis": "epub",
+					"locator": "内容分区：选择与风险"
+				}
+			]
+		},
+		{
+			"id": "mental-accounting",
+			"label": "心理账户",
+			"kind": "model",
+			"summary": "人们把结果分配到不同心理账户中分别评估，而非始终整合计算。",
+			"chapter": "选择与风险",
+			"anchor": "choices",
+			"importance": 2,
+			"provenance": "source_summary",
+			"sourceRefs": [
+				{
+					"basis": "epub",
+					"locator": "内容分区：选择与风险"
+				}
+			]
+		},
+		{
+			"id": "selves",
+			"label": "两个自我",
+			"kind": "chapter",
+			"summary": "区分当下经历与事后记忆，重新审视幸福和选择。",
+			"chapter": "两个自我",
+			"anchor": "selves",
+			"importance": 3,
+			"provenance": "source_summary",
+			"sourceRefs": [
+				{
+					"basis": "epub",
+					"locator": "内容分区：两个自我"
+				}
+			]
+		},
+		{
+			"id": "experiencing-self",
+			"label": "体验自我",
+			"kind": "model",
+			"summary": "逐时经历当下感受，关心此刻是否愉快或痛苦。",
+			"chapter": "两个自我",
+			"anchor": "selves",
+			"importance": 2,
+			"provenance": "source_summary",
+			"sourceRefs": [
+				{
+					"basis": "epub",
+					"locator": "内容分区：两个自我"
+				}
+			]
+		},
+		{
+			"id": "remembering-self",
+			"label": "记忆自我",
+			"kind": "model",
+			"summary": "压缩并重构过去，负责讲述经历并影响未来选择。",
+			"chapter": "两个自我",
+			"anchor": "selves",
+			"importance": 2,
+			"provenance": "source_summary",
+			"sourceRefs": [
+				{
+					"basis": "epub",
+					"locator": "内容分区：两个自我"
+				}
+			]
+		},
+		{
+			"id": "peak-end",
+			"label": "峰终定律",
+			"kind": "bias",
+			"summary": "对经历的回顾容易由最强烈时刻与结尾主导，而忽略完整时长。",
+			"chapter": "两个自我",
+			"anchor": "selves",
+			"importance": 2,
+			"provenance": "source_summary",
+			"sourceRefs": [
+				{
+					"basis": "epub",
+					"locator": "内容分区：两个自我"
+				}
+			]
+		},
+		{
+			"id": "duration-neglect",
+			"label": "过程忽视",
+			"kind": "bias",
+			"summary": "记忆评估可能低估经历持续时间对总体体验的影响。",
+			"chapter": "两个自我",
+			"anchor": "selves",
+			"importance": 2,
+			"provenance": "source_summary",
+			"sourceRefs": [
+				{
+					"basis": "epub",
+					"locator": "内容分区：两个自我"
+				}
+			]
+		},
+		{
+			"id": "focusing-illusion",
+			"label": "聚焦错觉",
+			"kind": "bias",
+			"summary": "当注意力集中在生活某一方面时，会夸大它对整体幸福的作用。",
+			"chapter": "两个自我",
+			"anchor": "selves",
+			"importance": 2,
+			"provenance": "source_summary",
+			"sourceRefs": [
+				{
+					"basis": "epub",
+					"locator": "内容分区：两个自我"
+				}
+			]
+		}
+	],
+	"edges": [
+		{
+			"id": "decision-systems",
+			"source": "systems",
+			"target": "decision-making",
+			"relation": "part_of",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "decision-heuristics",
+			"source": "heuristics",
+			"target": "decision-making",
+			"relation": "part_of",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "decision-confidence",
+			"source": "confidence",
+			"target": "decision-making",
+			"relation": "part_of",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "decision-choices",
+			"source": "choices",
+			"target": "decision-making",
+			"relation": "part_of",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "decision-selves",
+			"source": "selves",
+			"target": "decision-making",
+			"relation": "part_of",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "systems-one",
+			"source": "system-one",
+			"target": "systems",
+			"relation": "part_of",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "systems-two",
+			"source": "system-two",
+			"target": "systems",
+			"relation": "part_of",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "one-two",
+			"source": "system-one",
+			"target": "system-two",
+			"relation": "contrasts",
+			"directed": false,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "attention-two",
+			"source": "attention",
+			"target": "system-two",
+			"relation": "supports",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "association-one",
+			"source": "associative-memory",
+			"target": "system-one",
+			"relation": "supports",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "ease-one",
+			"source": "cognitive-ease",
+			"target": "system-one",
+			"relation": "supports",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "wysiati-one",
+			"source": "system-one",
+			"target": "wysiati",
+			"relation": "leads_to",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "substitution-heuristics",
+			"source": "substitution",
+			"target": "heuristics",
+			"relation": "explains",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "one-substitution",
+			"source": "system-one",
+			"target": "substitution",
+			"relation": "supports",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "heuristics-anchoring",
+			"source": "anchoring",
+			"target": "heuristics",
+			"relation": "part_of",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "heuristics-availability",
+			"source": "availability",
+			"target": "heuristics",
+			"relation": "part_of",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "heuristics-representative",
+			"source": "representativeness",
+			"target": "heuristics",
+			"relation": "part_of",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "representative-base-rate",
+			"source": "representativeness",
+			"target": "base-rate-neglect",
+			"relation": "leads_to",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "small-numbers-regression",
+			"source": "small-numbers",
+			"target": "regression-mean",
+			"relation": "contrasts",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "wysiati-confidence",
+			"source": "wysiati",
+			"target": "confidence",
+			"relation": "leads_to",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "hindsight-confidence",
+			"source": "hindsight",
+			"target": "confidence",
+			"relation": "part_of",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "planning-confidence",
+			"source": "planning-fallacy",
+			"target": "confidence",
+			"relation": "part_of",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "outside-planning",
+			"source": "outside-view",
+			"target": "planning-fallacy",
+			"relation": "contrasts",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "expert-environment",
+			"source": "expert-intuition",
+			"target": "system-one",
+			"relation": "explains",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "prospect-choices",
+			"source": "prospect-theory",
+			"target": "choices",
+			"relation": "part_of",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "reference-prospect",
+			"source": "reference-point",
+			"target": "prospect-theory",
+			"relation": "explains",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "loss-prospect",
+			"source": "loss-aversion",
+			"target": "prospect-theory",
+			"relation": "explains",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "sensitivity-prospect",
+			"source": "diminishing-sensitivity",
+			"target": "prospect-theory",
+			"relation": "explains",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "framing-reference",
+			"source": "framing",
+			"target": "reference-point",
+			"relation": "applies_to",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "accounts-framing",
+			"source": "mental-accounting",
+			"target": "framing",
+			"relation": "supports",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "selves-experiencing",
+			"source": "experiencing-self",
+			"target": "selves",
+			"relation": "part_of",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "selves-remembering",
+			"source": "remembering-self",
+			"target": "selves",
+			"relation": "part_of",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "experience-memory",
+			"source": "experiencing-self",
+			"target": "remembering-self",
+			"relation": "contrasts",
+			"directed": false,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "peak-memory",
+			"source": "peak-end",
+			"target": "remembering-self",
+			"relation": "explains",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "duration-memory",
+			"source": "duration-neglect",
+			"target": "remembering-self",
+			"relation": "explains",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "focus-selves",
+			"source": "focusing-illusion",
+			"target": "selves",
+			"relation": "applies_to",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "system-one-framing",
+			"source": "system-one",
+			"target": "framing",
+			"relation": "supports",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "attention-focusing",
+			"source": "attention",
+			"target": "focusing-illusion",
+			"relation": "causes",
+			"directed": true,
+			"provenance": "editorial_inference"
+		},
+		{
+			"id": "outside-decisions",
+			"source": "outside-view",
+			"target": "decision-making",
+			"relation": "supports",
+			"directed": true,
+			"provenance": "editorial_inference"
+		}
+	]
+}
