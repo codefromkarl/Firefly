@@ -4,8 +4,8 @@ export const backgroundWallpaper: BackgroundWallpaperConfig = {
 	mode: "banner",
 	playerEnable: false,
 	src: {
-		desktop: "/images/home-bg.webp",
-		mobile: "/images/home-bg.webp",
+		desktop: "assets/images/home-bg.webp",
+		mobile: "assets/images/home-bg.webp",
 	},
 	common: {
 		dimOpacity: 0.3,

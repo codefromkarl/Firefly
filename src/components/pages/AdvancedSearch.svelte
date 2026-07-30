@@ -3,7 +3,8 @@ import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import { onMount } from "svelte";
 import Icon from "@/components/common/Icon.svelte";
-import type { SearchResult } from "@/global";
+import type { SearchResult } from "@/types/pagefind";
+import { loadPagefind } from "@/utils/pagefind-loader";
 import { url as formatUrl } from "@/utils/url-utils";
 
 // --- Props ---
@@ -89,16 +90,14 @@ onMount(() => {
 
 	// 开发环境直接初始化
 	if (import.meta.env.DEV) {
-		initialize();
+		void initialize();
 	} else {
-		// 生产环境等待 Pagefind 加载
-		if (window.pagefind) {
-			initialize();
-		} else {
-			document.addEventListener("pagefindready", initialize, {
-				once: true,
+		void loadPagefind()
+			.then(initialize)
+			.catch((error: unknown) => {
+				console.warn("Pagefind script not found or failed to load.", error);
+				initialized = true;
 			});
-		}
 	}
 });
 

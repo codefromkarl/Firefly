@@ -305,6 +305,13 @@ const bannerCarouselEffect =
 	backgroundWallpaper.common?.carousel?.transitionEffect ?? "fade";
 const hasMultipleImages =
 	backgroundImages.desktop.length > 1 || backgroundImages.mobile.length > 1;
+const hasSharedSingleBackground =
+	!hasMultipleImages &&
+	backgroundImages.mobile.length === 1 &&
+	backgroundImages.desktop.length === 1 &&
+	backgroundImages.mobile[0] === backgroundImages.desktop[0];
+const primaryBannerLoading = isHomePageCheck ? "eager" : "lazy";
+const primaryBannerFetchPriority = isHomePageCheck ? "high" : "auto";
 ---
 
 <Layout title={title} banner={banner} description={description} lang={lang} setOGTypeArticle={setOGTypeArticle} postSlug={postSlug}>
@@ -371,8 +378,8 @@ const hasMultipleImages =
                     position={backgroundWallpaper.banner?.position}
                     widths={[640, 1080]}
                     sizes="100vw"
-                    loading={index === 0 ? "eager" : "lazy"}
-                    fetchpriority={index === 0 ? "high" : undefined}
+                    loading={index === 0 ? primaryBannerLoading : "lazy"}
+                    fetchpriority={index === 0 ? primaryBannerFetchPriority : undefined}
                     quality={mobileQuality}
                 />
             </div>
@@ -387,8 +394,8 @@ const hasMultipleImages =
                     position={backgroundWallpaper.banner?.position}
                     widths={[1280, 1920]}
                     sizes="100vw"
-                    loading={index === 0 ? "eager" : "lazy"}
-                    fetchpriority={index === 0 ? "high" : undefined}
+                    loading={index === 0 ? primaryBannerLoading : "lazy"}
+                    fetchpriority={index === 0 ? primaryBannerFetchPriority : undefined}
                     quality={configQuality}
                 />
             </div>
@@ -397,7 +404,20 @@ const hasMultipleImages =
     ) : (
     /* 单图模式 */
     <div class="relative h-full w-full" id="banner-images-container">
-        {backgroundImages.mobile.length > 0 && (
+        {hasSharedSingleBackground ? (
+            <ImageWrapper
+                id="banner"
+                alt="Background image of the blog"
+                class="object-cover h-full w-full"
+                src={backgroundImages.mobile[0]}
+                position={backgroundWallpaper.banner?.position}
+                widths={[640, 1080, 1280, 1920]}
+                sizes="100vw"
+                loading={primaryBannerLoading}
+                fetchpriority={primaryBannerFetchPriority}
+                quality={configQuality}
+            />
+        ) : backgroundImages.mobile.length > 0 && (
             <div class="banner-image-slot-mobile absolute inset-0 block lg:hidden">
                 <ImageWrapper
                     alt="Mobile background image of the blog"
@@ -406,13 +426,13 @@ const hasMultipleImages =
                     position={backgroundWallpaper.banner?.position}
                     widths={[640, 1080]}
                     sizes="100vw"
-                    loading="eager"
-                    fetchpriority="high"
+                    loading={primaryBannerLoading}
+                    fetchpriority={primaryBannerFetchPriority}
                     quality={mobileQuality}
                 />
             </div>
         )}
-        {backgroundImages.desktop.length > 0 && (
+        {!hasSharedSingleBackground && backgroundImages.desktop.length > 0 && (
             <div class="banner-image-slot-desktop absolute inset-0 hidden lg:block">
                 <ImageWrapper
                     id="banner"
@@ -422,8 +442,8 @@ const hasMultipleImages =
                     position={backgroundWallpaper.banner?.position}
                     widths={[1280, 1920]}
                     sizes="100vw"
-                    loading="eager"
-                    fetchpriority="high"
+                    loading={primaryBannerLoading}
+                    fetchpriority={primaryBannerFetchPriority}
                     quality={configQuality}
                 />
             </div>

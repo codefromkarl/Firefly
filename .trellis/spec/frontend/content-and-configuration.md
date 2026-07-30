@@ -221,6 +221,34 @@ by `src/utils/content-utils.ts`.
 References: `src/components/common/ImageWrapper.astro`,
 `src/components/common/CoverImage.astro`, and `src/utils/image-utils.ts`.
 
+### Convention: Render a Shared Wallpaper Once
+
+When the mobile and desktop wallpaper config points to the same local image,
+keep that source in `src/assets/` and render one `ImageWrapper` with a combined
+responsive width set. Do not render separate hidden mobile and desktop image
+branches for the same source: preload discovery can fetch both candidates
+before responsive CSS hides one of them.
+
+```astro
+<!-- Wrong: the browser can discover and download both eager images. -->
+<div class="lg:hidden"><ImageWrapper src={sharedSrc} loading="eager" /></div>
+<div class="hidden lg:block"><ImageWrapper src={sharedSrc} loading="eager" /></div>
+
+<!-- Correct: one responsive image owns source selection. -->
+<ImageWrapper
+	src={sharedSrc}
+	widths={[640, 1080, 1280, 1920]}
+	sizes="100vw"
+	loading={isHomePage ? "eager" : "lazy"}
+	fetchpriority={isHomePage ? "high" : "auto"}
+/>
+```
+
+Keep separate mobile and desktop branches only when their configured source
+images differ. The home route may prioritize its visual banner; non-home
+routes must lazy-load the decorative banner so it cannot compete with page
+content for initial bandwidth.
+
 ## Site Configuration
 
 All user-editable site behavior is split by feature in `src/config/`.
@@ -235,6 +263,22 @@ All user-editable site behavior is split by feature in `src/config/`.
 
 Configuration is bundled into the static site. Never place secrets in these
 files.
+
+### Convention: Load Only the Active Locale and Fallbacks
+
+`src/i18n/translation.ts` uses `import.meta.glob` so language files remain
+separate client chunks. At module initialization it loads the configured
+`siteConfig.lang`, English as the final fallback, and Chinese only when needed
+for the existing missing-key fallback policy.
+
+- Normalize configured language aliases before choosing a module.
+- Keep locale lookup failures explicit; do not silently substitute an empty
+  translation object.
+- Adding a language means adding its file and alias mapping. Do not restore
+  eager static imports of every locale, because global UI islands are present
+  on nearly every route.
+- Browser validation must confirm an ordinary page does not request unrelated
+  locale chunks.
 
 ## Personalization Checklist
 
@@ -417,6 +461,7 @@ belongs to another Worker.
 - Production Worker: `firefly`.
 - Custom Domain: `codefromkarl.xyz`.
 - Asset binding: `assets.directory: "./dist"`.
+- Browser-cache rules: `public/_headers`, copied to `dist/_headers`.
 
 ### 3. Contracts
 
@@ -432,6 +477,9 @@ belongs to another Worker.
   procedure before switching.
 - Treat live HTTP acceptance, not a successful upload, as the production
   completion signal.
+- Apply `Cache-Control: public, max-age=31556952, immutable` only to
+  `/_astro/*`, whose filenames are content-hashed. Keep HTML, Pagefind, and
+  unversioned `public/` assets outside this immutable rule.
 
 ### 4. Validation & Error Matrix
 
@@ -442,6 +490,8 @@ belongs to another Worker.
 | Custom Domain attachment fails | Keep the previous Worker active |
 | Any production HTTP acceptance check fails | Restore the domain to the previous Worker |
 | Previous Worker or bound data resource is missing after cutover | Cutover failure |
+| A content-hashed `/_astro/*` response lacks the immutable one-year policy | Static-cache contract failure |
+| HTML, Pagefind, or an unversioned asset receives the immutable one-year policy | Stop; stale content can no longer be corrected promptly |
 
 ### 5. Good / Base / Bad Cases
 
@@ -452,6 +502,8 @@ belongs to another Worker.
   configuration without a restoration step.
 - Bad: deploy static assets into the legacy Worker name, which can replace
   script/binding expectations and weaken rollback isolation.
+- Bad: apply the immutable rule to `/*`; route HTML and mutable search indexes
+  can remain stale after a deployment.
 
 ### 6. Tests Required
 
@@ -466,6 +518,9 @@ pnpm exec wrangler deploy --dry-run --outdir <temporary-directory>
 On both preview and production, assert every sitemap URL, RSS, Pagefind,
 `api/allPostMeta.json`, and a hashed asset return 200; legacy routes return the
 exact expected 301 destinations; removed comment/admin/API routes return 404.
+Assert a representative `/_astro/*` response has the immutable one-year
+browser-cache policy, while `/`, `/pagefind/pagefind.js`, and an unversioned
+public asset do not.
 After cutover, also confirm the legacy Worker and its data resources still
 exist.
 
@@ -484,4 +539,14 @@ exist.
 	"routes": [{ "pattern": "codefromkarl.xyz", "custom_domain": true }],
 	"assets": { "directory": "./dist" }
 }
+```
+
+```text
+# Wrong: immutable caching covers mutable routes and indexes.
+/*
+  Cache-Control: public, max-age=31556952, immutable
+
+# Correct: only Astro's content-hashed asset namespace is immutable.
+/_astro/*
+  Cache-Control: public, max-age=31556952, immutable
 ```

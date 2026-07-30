@@ -46,6 +46,33 @@ must tolerate repeated page transitions:
 - use the established `astro:page-load`, `swup:enable`, or Swup hook patterns
   when behavior must be restored after navigation.
 
+### Convention: Load Pagefind on Search Intent
+
+Global navigation may render a search island on every route, but it must not
+download Pagefind during an ordinary page view. Use the shared
+`loadPagefind(): Promise<PagefindApi>` loader from
+`src/utils/pagefind-loader.ts`; it deduplicates concurrent calls and stores the
+initialized API on `window.pagefind`.
+
+- The navbar search starts loading on focus, mobile panel open, or the first
+  non-empty query.
+- The dedicated `/search/` island starts loading in `onMount` because search is
+  the page's primary purpose.
+- Browser globals and DOM access stay behind `onMount` or an interaction
+  callback so static rendering cannot execute them.
+- A load failure leaves search empty and retryable; do not install a fake
+  production API on `window`.
+
+```typescript
+// Wrong: every page downloads the search engine during initial HTML parsing.
+loadPagefind();
+
+// Correct: an interaction owns the optional dependency.
+const handleSearchFocus = () => {
+	void loadPagefind();
+};
+```
+
 ## Scenario: Replace the Global Left Sidebar for One Page Family
 
 ### 1. Scope / Trigger

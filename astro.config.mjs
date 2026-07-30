@@ -133,7 +133,8 @@ export default defineConfig({
 			],
 			smoothScrolling: false,
 			cache: true,
-			preload: true,
+			// Avoid fetching the current document again during every initial mount.
+			preload: false,
 			accessibility: true,
 			updateHead: true,
 			updateBodyClass: false,

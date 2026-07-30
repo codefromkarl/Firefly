@@ -204,3 +204,22 @@ pnpm build
   - 生产构建：19 个静态页面、Pagefind 索引成功；
   - 浏览器：默认“全书主线”，桌面和 390px 无横向溢出，封面加载成功；
   - 切换“关系探索”后 Cytoscape chunk 才加载，画布约 623 × 704，无页面错误。
+
+## 14. 首屏与按需加载优化
+
+- [x] 禁用 Swup 全局预加载，避免首页重复预取当前文档。
+- [x] Pagefind 统一通过共享 loader 在搜索意图或搜索页挂载时加载。
+- [x] Cytoscape 保持在用户打开“关系探索”后才动态加载。
+- [x] 非首页背景和被上下文目录替代的 Profile 图片使用懒加载。
+- [x] 将首页壁纸移入 `src/assets`，同源移动/桌面背景合并为一个响应式图片节点。
+- [x] 详情页主封面和书单首张可见封面使用首屏加载优先级，其余封面懒加载。
+- [x] 将六种语言的静态全集导入改为当前语言与回退语言的动态分块加载。
+- [x] 为内容哈希的 `/_astro/*` 增加一年 immutable 浏览器缓存策略。
+- [x] 在 390 × 844、DPR 3、4× CPU、约 1.6 Mbps / 150 ms 延迟下复测：
+  - 首页约 318 KB / 40 requests，FCP 1.04 s，LCP 2.44 s，CLS 0；
+  - 《爱的艺术》详情约 215 KB / 36 requests，FCP/LCP 约 0.80 s；
+  - 普通首屏不请求 Pagefind 或 Cytoscape，只请求 `zh_CN` 与 `en` 语言块。
+- [x] 验证搜索、图谱、Swup 往返和上下文侧栏无回归，浏览器控制台无错误。
+- [x] 根路径与 `/Firefly` 子路径均完成生产构建；抽样 37 个子路径资源引用均映射到真实产物。
+- [x] 运行全 `src` Biome check、`pnpm type-check`、`pnpm check`、
+  `pnpm build` 和 `git diff --check`。
