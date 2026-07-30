@@ -233,25 +233,28 @@ export default defineConfig({
 				// 根据页面开关配置过滤sitemap
 				const url = new URL(page);
 				const pathname = url.pathname;
-				if (pathname === "/dynamic/" && !siteConfig.pages.dynamic) {
+				if (pathname === "/about/") {
 					return false;
 				}
-				if (pathname === "/friends/" && !siteConfig.pages.friends) {
+				if (pathname.startsWith("/dynamic/") && !siteConfig.pages.dynamic) {
 					return false;
 				}
-				if (pathname === "/sponsor/" && !siteConfig.pages.sponsor) {
+				if (pathname.startsWith("/friends/") && !siteConfig.pages.friends) {
 					return false;
 				}
-				if (pathname === "/guestbook/" && !siteConfig.pages.guestbook) {
+				if (pathname.startsWith("/sponsor/") && !siteConfig.pages.sponsor) {
 					return false;
 				}
-				if (pathname === "/bangumi/" && !siteConfig.pages.bangumi) {
+				if (pathname.startsWith("/guestbook/") && !siteConfig.pages.guestbook) {
 					return false;
 				}
-				if (pathname === "/gallery/" && !siteConfig.pages.gallery) {
+				if (pathname.startsWith("/bangumi/") && !siteConfig.pages.bangumi) {
 					return false;
 				}
-				if (pathname === "/anime/" && !siteConfig.pages.anime) {
+				if (pathname.startsWith("/gallery/") && !siteConfig.pages.gallery) {
+					return false;
+				}
+				if (pathname.startsWith("/anime/") && !siteConfig.pages.anime) {
 					return false;
 				}
 

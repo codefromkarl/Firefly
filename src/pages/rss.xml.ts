@@ -5,13 +5,11 @@ import rss, { type RSSFeedItem } from "@astrojs/rss";
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import { getSortedPosts } from "@utils/content-utils";
-import { formatDateI18nWithTime } from "@utils/date-utils";
 import { url } from "@utils/url-utils";
 import type { APIContext } from "astro";
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import sanitizeHtml from "sanitize-html";
 import { siteConfig } from "@/config";
-import pkg from "../../package.json";
 
 function stripInvalidXmlChars(str: string): string {
 	return str.replace(
@@ -53,11 +51,7 @@ export async function GET(context: APIContext): Promise<Response> {
 	return rss({
 		title: siteConfig.title,
 		description: siteConfig.subtitle || "No description",
-		site: context.site ?? "https://firefly.cuteleaf.cn",
-		customData: `<templateTheme>Firefly</templateTheme>
-		<templateThemeVersion>${pkg.version}</templateThemeVersion>
-		<templateThemeUrl>https://github.com/CuteLeaf/Firefly</templateThemeUrl>
-		<lastBuildDate>${formatDateI18nWithTime(new Date())}</lastBuildDate>`,
+		site: context.site ?? "https://codefromkarl.xyz",
 		items: feedItems,
 	});
 }

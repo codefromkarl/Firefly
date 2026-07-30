@@ -1,0 +1,5 @@
+/posts /archive/ 301
+/friend-links /lab/ 301
+/friends /lab/ 301
+/about /lab/ 301
+/post/* /posts/:splat/ 301
