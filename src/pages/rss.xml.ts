@@ -51,7 +51,7 @@ export async function GET(context: APIContext): Promise<Response> {
 	return rss({
 		title: siteConfig.title,
 		description: siteConfig.subtitle || "No description",
-		site: context.site ?? "https://codefromkarl.xyz",
+		site: new URL(url("/"), context.site ?? siteConfig.site_url),
 		items: feedItems,
 	});
 }

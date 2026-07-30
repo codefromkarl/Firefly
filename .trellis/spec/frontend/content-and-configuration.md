@@ -152,3 +152,74 @@ if (!siteConfig.pages.gallery) return Astro.redirect("/404/");
 # Correct for a deliberately removed static feature:
 # no src/pages/gallery route entry; reusable gallery components may remain.
 ```
+
+## Scenario: Deploy Below a Hosting Subpath
+
+### 1. Scope / Trigger
+
+This contract applies when the same static build can be published either at a
+custom-domain root or below a repository path such as GitHub Pages
+`/Firefly/`.
+
+### 2. Signatures
+
+- Build origin: optional `ASTRO_SITE_URL`.
+- Build base path: optional `ASTRO_BASE_PATH`.
+- Internal path resolver: `url(path: string): string` in
+  `src/utils/url-utils.ts`.
+
+### 3. Contracts
+
+- `astro.config.mjs` falls back to `siteConfig.site_url` and `/` when the
+  deployment variables are absent.
+- A subpath workflow sets both variables together; changing only `base` leaves
+  canonical URLs, RSS, or sitemap output inconsistent.
+- Components and generated feeds pass local paths through `url()`. To create an
+  absolute URL, use `new URL(url(path), Astro.site)`.
+- Markdown pages use base-independent relative links for local navigation.
+- External `http:`, `https:`, and protocol-relative URLs pass through `url()`
+  unchanged.
+
+### 4. Validation & Error Matrix
+
+| Condition | Required result |
+| --- | --- |
+| No deployment variables | Root paths and `siteConfig.site_url` canonicals |
+| Both variables set | Assets, navigation, RSS, and sitemap include the base |
+| `href="/..."` in subpath output | Validation failure |
+| Generated asset URL has no matching `dist/` file after removing the base | Validation failure |
+| GitHub workflow succeeds but a required asset returns 404 | Deployment failure |
+
+### 5. Good / Base / Bad Cases
+
+- Good: GitHub Pages injects both variables and production URLs under
+  `/Firefly/` return 200.
+- Base: a root build continues to target `codefromkarl.xyz` without any
+  deployment environment.
+- Bad: hard-code `/rss.xml` in a component or change `base` globally for every
+  hosting target.
+
+### 6. Tests Required
+
+```bash
+pnpm check
+pnpm type-check
+pnpm build
+ASTRO_SITE_URL=https://codefromkarl.github.io \
+  ASTRO_BASE_PATH=/Firefly \
+  pnpm build
+```
+
+Inspect the subpath build for root-absolute `href`/`src` values, verify that
+referenced assets exist in `dist/`, and after deployment request the homepage,
+archive, search, RSS, migrated posts, and at least one hashed asset.
+
+### 7. Wrong vs Correct
+
+```astro
+<!-- Wrong: bypasses the deployment base. -->
+<a href="/rss.xml">RSS</a>
+
+<!-- Correct: preserves root and subpath deployments. -->
+<a href={url("/rss.xml")}>RSS</a>
+```

@@ -63,11 +63,14 @@ const adapter = process.env.CF_WORKERS
 		})
 	: undefined;
 
+const deploymentSite = process.env.ASTRO_SITE_URL ?? siteConfig.site_url;
+const deploymentBase = process.env.ASTRO_BASE_PATH ?? "/";
+
 // https://astro.build/config
 export default defineConfig({
-	site: siteConfig.site_url,
+	site: deploymentSite,
 
-	base: "/",
+	base: deploymentBase,
 	trailingSlash: "always",
 
 	// 字体配置 - 只加载实际使用的字体，跳过未引用的以加快构建

@@ -10,6 +10,6 @@
 
 - GitHub：[codefromkarl](https://github.com/codefromkarl)
 - Email：[1069123094@qq.com](mailto:1069123094@qq.com)
-- RSS：[订阅文章](/rss.xml)
+- RSS：[订阅文章](../rss.xml)
 
-也可以继续查看我的[实验室](/lab/)和[技术栈](/tech-stack/)。
+也可以继续查看我的[实验室](../lab/)和[技术栈](../tech-stack/)。

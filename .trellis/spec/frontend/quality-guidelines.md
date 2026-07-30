@@ -21,6 +21,9 @@ for visual and interaction review.
 - Interactive or visual work: inspect with `pnpm dev` or `pnpm preview` at
   relevant desktop and mobile widths.
 - Navigation changes: exercise a second Swup navigation, not only first load.
+- Alternate hosting targets: build with the target origin/base environment,
+  inspect generated links and asset paths, then verify representative live
+  URLs. A successful upload/deploy job is not proof that the site is usable.
 
 ## Generated Files
 

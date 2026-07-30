@@ -16,6 +16,10 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 
+env:
+  ASTRO_SITE_URL: https://codefromkarl.github.io
+  ASTRO_BASE_PATH: /Firefly
+
 jobs:
   build:
     runs-on: ubuntu-latest
