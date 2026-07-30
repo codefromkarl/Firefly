@@ -29,11 +29,11 @@ new static Firefly site with a verified preview and an immediate rollback path.
 - [x] `pnpm check`, `pnpm type-check`, and the root production build pass.
 - [x] A Firefly `workers.dev` preview serves the homepage, all sitemap pages,
       RSS, Pagefind, hashed assets, and expected 404 routes.
-- [ ] `codefromkarl.xyz` is associated with the `firefly` Worker.
-- [ ] The apex homepage, all three migrated posts, RSS, search, sitemap, assets,
+- [x] `codefromkarl.xyz` is associated with the `firefly` Worker.
+- [x] The apex homepage, all three migrated posts, RSS, search, sitemap, assets,
       legacy redirects, and disabled-route 404 behavior pass live HTTP checks.
-- [ ] The legacy data resources and `my-blog` Worker still exist.
-- [ ] The production configuration and cutover evidence are committed and
+- [x] The legacy data resources and `my-blog` Worker still exist.
+- [x] The production configuration and cutover evidence are committed and
       pushed.
 
 ## Notes

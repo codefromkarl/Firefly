@@ -72,3 +72,20 @@ If the Custom Domain has already moved to `firefly`, rerun the legacy
 repository's deploy workflow so its `custom_domain` trigger reattaches the
 domain to `my-blog`; a version rollback alone does not change domain
 association.
+
+## Production cutover evidence
+
+- Production deployment:
+  `6dab0dbc-b7d4-445e-b4f2-0273c69a67b0`.
+- Production version:
+  `2b29fbdf-67fb-4bc0-8fb6-26a023905036` at 100% traffic.
+- The Cloudflare Custom Domain record maps `codefromkarl.xyz` to service
+  `firefly` in the production environment.
+- The production homepage identifies Astro 7.1.3, and all sitemap pages, RSS,
+  Pagefind, post metadata, and a hashed JavaScript asset return HTTP 200.
+- Legacy route sources return the exact expected HTTP 301 destinations.
+- Removed `/comments/`, `/admin/`, and `/api/posts` routes return HTTP 404.
+- The preview-only `firefly.1069123094.workers.dev` route returns HTTP 404 after
+  applying the production configuration.
+- Worker `my-blog`, D1 `blog-db`, R2 `blog-assets`, KV `blog-kv`, and Queue
+  `blog-queue` remain present.

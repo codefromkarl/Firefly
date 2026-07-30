@@ -11,11 +11,11 @@
       its URL.
 - [x] Validate preview sitemap pages, RSS, search assets, redirects, and 404s.
 - [x] Run `trellis-check` and update deployment specs if needed.
-- [ ] Commit and push production configuration before cutover.
-- [ ] Deploy `firefly` with the apex Custom Domain.
-- [ ] Validate apex HTTP behavior and confirm legacy resources still exist.
-- [ ] If validation fails, trigger the legacy `my-blog` deployment immediately.
-- [ ] Disable the temporary `workers.dev` route through the production deploy.
+- [x] Commit and push production configuration before cutover.
+- [x] Deploy `firefly` with the apex Custom Domain.
+- [x] Validate apex HTTP behavior and confirm legacy resources still exist.
+- [x] Keep the legacy `my-blog` deployment ready; rollback was not required.
+- [x] Disable the temporary `workers.dev` route through the production deploy.
 - [ ] Archive the task and record the production session.
 
 ## Validation commands
