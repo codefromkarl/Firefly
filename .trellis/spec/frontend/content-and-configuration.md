@@ -223,3 +223,89 @@ archive, search, RSS, migrated posts, and at least one hashed asset.
 <!-- Correct: preserves root and subpath deployments. -->
 <a href={url("/rss.xml")}>RSS</a>
 ```
+
+## Scenario: Cut Over the Production Domain to a Static Worker
+
+### 1. Scope / Trigger
+
+This contract applies when publishing the root-domain Firefly build through
+Cloudflare Workers Static Assets, especially when the Custom Domain already
+belongs to another Worker.
+
+### 2. Signatures
+
+- Root build: `pnpm build`.
+- Preview deploy: `wrangler deploy --config <route-free-config>`.
+- Production deploy: `wrangler deploy` using the checked-in
+  `wrangler.jsonc`.
+- Production Worker: `firefly`.
+- Custom Domain: `codefromkarl.xyz`.
+- Asset binding: `assets.directory: "./dist"`.
+
+### 3. Contracts
+
+- Preview the actual `firefly` Worker on `workers.dev` without a route before
+  attaching the Custom Domain.
+- The checked-in production config declares the Custom Domain and disables
+  `workers.dev`; the route-free preview config is temporary and must not
+  become the production source of truth.
+- A cutover changes only the domain association. Do not overwrite or delete
+  the previous Worker or its D1, R2, KV, Queue, Workflow, or Durable Object
+  resources.
+- Record the previous Worker deployment/version and a domain-restoration
+  procedure before switching.
+- Treat live HTTP acceptance, not a successful upload, as the production
+  completion signal.
+
+### 4. Validation & Error Matrix
+
+| Condition | Required result |
+| --- | --- |
+| Root build contains a deployment base path | Stop before deploy |
+| Preview page, feed, search, asset, redirect, or 404 check fails | Stop before cutover |
+| Custom Domain attachment fails | Keep the previous Worker active |
+| Any production HTTP acceptance check fails | Restore the domain to the previous Worker |
+| Previous Worker or bound data resource is missing after cutover | Cutover failure |
+
+### 5. Good / Base / Bad Cases
+
+- Good: deploy the root `dist/` without a route, validate every sitemap path,
+  commit and push `wrangler.jsonc`, then attach the Custom Domain and repeat
+  live validation.
+- Base: a new domain with no legacy service can use the same production
+  configuration without a restoration step.
+- Bad: deploy static assets into the legacy Worker name, which can replace
+  script/binding expectations and weaken rollback isolation.
+
+### 6. Tests Required
+
+```bash
+pnpm exec biome check wrangler.jsonc
+pnpm check
+pnpm type-check
+pnpm build
+pnpm exec wrangler deploy --dry-run --outdir <temporary-directory>
+```
+
+On both preview and production, assert every sitemap URL, RSS, Pagefind,
+`api/allPostMeta.json`, and a hashed asset return 200; legacy routes return the
+exact expected 301 destinations; removed comment/admin/API routes return 404.
+After cutover, also confirm the legacy Worker and its data resources still
+exist.
+
+### 7. Wrong vs Correct
+
+```jsonc
+// Wrong: replace the stateful legacy service with the static artifact.
+{ "name": "my-blog", "assets": { "directory": "./dist" } }
+```
+
+```jsonc
+// Correct: isolate the new static service and move only the Custom Domain.
+{
+	"name": "firefly",
+	"workers_dev": false,
+	"routes": [{ "pattern": "codefromkarl.xyz", "custom_domain": true }],
+	"assets": { "directory": "./dist" }
+}
+```
