@@ -21,10 +21,10 @@ deployments.
 - [x] A normal `pnpm build` emits root-based URLs for `codefromkarl.xyz`.
 - [x] A GitHub Pages build emits assets and internal links below `/Firefly/`.
 - [x] `pnpm check`, `pnpm type-check`, and both build modes pass.
-- [ ] The GitHub Pages workflow succeeds for the patch commit.
-- [ ] The deployed homepage, archive, search, RSS, and all three migrated posts
+- [x] The GitHub Pages workflow succeeds for the patch commit.
+- [x] The deployed homepage, archive, search, RSS, and all three migrated posts
       return HTTP 200 with required assets available.
-- [ ] Disabled routes return 404 on the deployed site.
+- [x] Disabled routes return 404 on the deployed site.
 
 ## Notes
 
