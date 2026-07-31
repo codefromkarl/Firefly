@@ -1,10 +1,6 @@
 <script lang="ts">
 import type { BookCardData } from "@/types/book";
-import {
-	BOOK_GRAPH_STAGE_LABELS,
-	BOOK_SHELF_LABELS,
-	BOOK_STATUS_LABELS,
-} from "@/types/book";
+import { BOOK_SHELF_LABELS, BOOK_STATUS_LABELS } from "@/types/book";
 
 interface Props {
 	book: BookCardData;
@@ -20,7 +16,7 @@ const { book, priority = false }: Props = $props();
 	<a
 		href={book.url}
 		class="flex h-full flex-col focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--primary)"
-		aria-label={`查看《${book.title}》的${BOOK_GRAPH_STAGE_LABELS[book.graphStage]}`}
+		aria-label={`查看《${book.title}》的书籍介绍`}
 	>
 		<div class="relative aspect-2/3 overflow-hidden bg-(--btn-regular-bg)">
 			<img
@@ -43,11 +39,6 @@ const { book, priority = false }: Props = $props();
 				>
 					{BOOK_STATUS_LABELS[book.status]}
 				</span>
-				<span
-					class="rounded-full bg-black/55 px-2.5 py-1 text-xs font-medium text-white backdrop-blur-sm"
-				>
-					{BOOK_GRAPH_STAGE_LABELS[book.graphStage]}
-				</span>
 			</div>
 		</div>
 
@@ -67,7 +58,7 @@ const { book, priority = false }: Props = $props();
 			</p>
 
 			<p class="mt-4 line-clamp-3 text-sm leading-6 text-neutral-600 dark:text-neutral-300">
-				{book.previewFocus}
+				{book.sourceIntroduction}
 			</p>
 
 			<div class="mt-auto flex flex-wrap gap-1.5 pt-5">

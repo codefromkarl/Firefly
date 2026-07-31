@@ -754,6 +754,13 @@ const siteLang = lang.replace("_", "-");
   } from "@/constants/constants";
   import { backgroundWallpaper, expressiveCodeConfig, siteConfig } from "@/config";
 
+  type SwupVisit = {
+    to: { url: string; document?: Document };
+    animation: { animate: boolean };
+    scroll: { reset: boolean };
+    meta: Record<string, unknown>;
+  };
+
   /* Preload fonts */
   // (async function() {
   // 	try {
@@ -947,9 +954,15 @@ function disableAnimation() {
 		}
 	})
 */
-    window.swup.hooks.on("link:click", (_visit: any, { el }: { el: HTMLAnchorElement }) => {
+    window.swup.hooks.on("link:click", (visit: SwupVisit, { el }: { el: HTMLAnchorElement }) => {
       // Remove the delay for the first time page load
       document.documentElement.style.setProperty("--content-delay", "0ms");
+
+      // 从书单目录切换书籍时保留当前阅读高度。
+      if (el.hasAttribute("data-book-directory-navigation")) {
+        visit.scroll.reset = false;
+        visit.meta.preserveWindowScroll = true;
+      }
 
       // 同页链接点击不需要过渡保护
       const targetHref = el.getAttribute("href") || "";
@@ -978,6 +991,12 @@ function disableAnimation() {
           navbar.classList.add("navbar-hidden");
         }
       }
+    });
+    window.swup.hooks.before("content:replace", (visit: SwupVisit) => {
+      // 首屏动画只属于真实文档加载；Swup 插入新 DOM 时禁止重播，避免嵌套闪白。
+      visit.to.document
+        ?.querySelectorAll(".onload-animation")
+        .forEach((element) => element.classList.remove("onload-animation"));
     });
     window.swup.hooks.on("content:replace", () => {
       const isHome = pathsEqual(window.location.pathname, url("/"));
@@ -1058,7 +1077,10 @@ function disableAnimation() {
       }
 
     });
-    window.swup.hooks.on("visit:start", (visit: { to: { url: string } }) => {
+    window.swup.hooks.on("visit:start", (visit: SwupVisit) => {
+      // 全站客户端导航使用不透明的原子替换，避免多容器依次淡出造成白屏。
+      visit.animation.animate = false;
+
       // Start progress bar
       const progressBar = document.getElementById("progress-bar");
       if (progressBar) {
@@ -1224,7 +1246,8 @@ function disableAnimation() {
       // 全屏壁纸模式非首页跳过此处回顶，由 scroll:top 钩子统一处理滚动到 #main-grid
       const shouldUseSmoothScroll = window.innerWidth >= 768;
       const isFullscreenNonHome = document.documentElement.getAttribute("data-wallpaper-mode") === "fullscreen" && !isHomePage;
-      if (shouldUseSmoothScroll && !isFullscreenNonHome) {
+      const preserveWindowScroll = visit.meta.preserveWindowScroll === true;
+      if (shouldUseSmoothScroll && !isFullscreenNonHome && !preserveWindowScroll) {
         window.scrollTo({
           top: 0,
           behavior: "auto",

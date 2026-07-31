@@ -1,12 +1,10 @@
 ---
-import type { MarkdownHeading } from "astro";
 import WidgetLayout from "@/components/common/WidgetLayout.astro";
 import {
 	BOOK_SHELF_LABELS,
 	BOOK_SHELF_VALUES,
 	type BookDirectoryItem,
 } from "@/types/book";
-import { computeTocItems } from "@/utils/toc-shared";
 import { url } from "@/utils/url-utils";
 
 import "@/styles/toc.css";
@@ -14,10 +12,9 @@ import "@/styles/toc.css";
 interface Props {
 	books: BookDirectoryItem[];
 	currentBookId?: string;
-	headings?: MarkdownHeading[];
 }
 
-const { books, currentBookId, headings = [] } = Astro.props;
+const { books, currentBookId } = Astro.props;
 const isLibraryPage = !currentBookId;
 const libraryUrl = url("/books/");
 const shelves = BOOK_SHELF_VALUES.map((shelf) => ({
@@ -26,14 +23,11 @@ const shelves = BOOK_SHELF_VALUES.map((shelf) => ({
 	books: books.filter((book) => book.shelf === shelf),
 })).filter((shelf) => shelf.books.length > 0);
 const currentBook = books.find((book) => book.id === currentBookId);
-const chapterItems = computeTocItems(headings, { maxLevel: 2 }).filter(
-	(item) => item.text !== "阅读笔记",
-);
 
 const pageSections = [
-	{ href: "#book-overview", label: "书籍概览" },
-	{ href: "#book-graph-heading", label: "知识图谱" },
-	{ href: "#reading-notes-section", label: "预读说明与阅读笔记" },
+	{ href: "#book-introduction", label: "整本书介绍" },
+	{ href: "#why-read", label: "这本书值得看的地方" },
+	{ href: "#classic-excerpts", label: "经典摘抄" },
 ];
 ---
 
@@ -89,6 +83,7 @@ const pageSections = [
 								]}
 								aria-current={isCurrent ? "page" : undefined}
 								title={`《${book.title}》`}
+								data-book-directory-navigation
 							>
 								<span class="book-directory-dot" aria-hidden="true"></span>
 								<span class="toc-label toc-label-secondary">
@@ -115,18 +110,6 @@ const pageSections = [
 				</a>
 			))}
 
-			{chapterItems.map((item) => (
-				<a
-					href={item.href}
-					class="toc-item toc-level-1"
-					title={item.text}
-				>
-					<span class="toc-badge" aria-hidden="true">
-						<span class="toc-badge-dot"></span>
-					</span>
-					<span class="toc-label toc-label-secondary">{item.text}</span>
-				</a>
-			))}
 		</nav>
 	</WidgetLayout>
 )}
