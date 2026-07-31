@@ -100,6 +100,24 @@ create one owner for:
 
 Rendering code may format fields, but it must not redefine the payload contract.
 
+### Mistake 5: Checking Only The Outer Transition Container
+
+**Bad**: Disable a router's outer fade, sample only the router container, and
+declare a visual transition fixed while incoming children still replay
+initial-load keyframes.
+
+**Good**: Map the complete paint lifecycle:
+
+```text
+interaction → router visit → outgoing container state → DOM replacement
+            → incoming initial-load classes → scroll/layout reconciliation
+```
+
+Assign one owner to client-navigation animation, keep initial-load animation
+separate, and sample both parent and incoming content roots on animation frames.
+Hook completion and a parent opacity of `1` do not prove that a nested element
+never painted at `opacity: 0`.
+
 ---
 
 ## Checklist for Cross-Layer Features
@@ -120,6 +138,8 @@ After implementation:
       casting payload fields locally
 - [ ] Checked that derived state points back to the source event identifier
       (`seq`, `id`, `version`) instead of inventing a second cursor
+- [ ] For visual navigation, identified every animation and scroll owner and
+      sampled both outer containers and incoming content roots across replace
 
 ---
 

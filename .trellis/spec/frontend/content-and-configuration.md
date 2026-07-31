@@ -21,21 +21,243 @@ src/content/posts/<stable-slug>/index.md
 and keep adjacent article images in that directory. Renaming the path changes
 the generated `/posts/<stable-slug>/` URL and requires a permanent redirect.
 
-## Scenario: Maintain a Book and Its Knowledge Graph
+## Scenario: Maintain the Public Three-Section Book Detail
 
 ### 1. Scope / Trigger
 
-This contract applies when adding or changing a book, its cover, reading stage,
-notes, graph nodes, or graph relationships.
+This contract applies when adding or changing a public book card, book detail,
+cover, introduction, reading rationale, or verified excerpt.
+
+### 2. Signatures
+
+- Book source: `src/content/books/<slug>/index.{md,mdx}`.
+- Cover source: `src/content/books/<slug>/cover.webp`.
+- List route: `/books/`.
+- Detail route: `/books/<slug>/`.
+- Public sourced fields:
+  `introductions: BookSourceCitation[]`,
+  `readingReasons: BookReadingReason[]`,
+  `endorsements: BookSourceCitation[]`, and
+  `excerpts: Array<{ text: string; source: string; url?: string }>`.
+- Source citation:
+  `{ text: string; source: string; url: string }`.
+- Reading reason:
+  `{ title: string; kind: BookReadingReasonKind; text: string; source: string; url: string }`.
+- Detail section IDs, in order:
+  `book-introduction`, `why-read`, `classic-excerpts`.
+- Primary shelf:
+  `shelf: "cognition-and-decisions" | "wealth-and-growth" | "psychology-and-relationships" | "literature-and-life"`.
+
+### 3. Contracts
+
+- The directory slug is the stable ID for the content entry and public URL.
+- The schema accepts at least one introduction, two to four reading reasons,
+  and zero to three endorsements. Reading-reason kinds are unique within a
+  book. The card preview and detail introduction use the same first
+  `introductions` entry; public components do not consume an unsourced
+  `whyRead` field.
+- A curated public-library entry targets three complementary introductions:
+  the book's core question or premise, its main scope or structure, and its
+  conclusion or practical destination. Repeating one abstract summary three
+  ways does not satisfy this editorial coverage audit.
+- Public detail pages contain exactly three first-level content sections:
+  whole-book introduction, places worth reading, and classic excerpts.
+- The introduction section renders publisher, author-site, official-book-site,
+  or authoritative-catalog citations. Prefer recognizable first-party and
+  established book sources such as Macmillan, Penguin Random House,
+  Simon & Schuster, Bloomsbury, author/work official sites, or an established
+  Chinese catalog such as Douban. Do not use unattributed search snippets or
+  generic aggregation copy as the visible book introduction.
+- Introduction entries form one coherent book description on the detail page:
+  premise, scope/structure, then destination or use. Their source names and
+  URLs remain visible below the prose; repeated use of one official page does
+  not require repeating the same source link after every paragraph.
+- The why-read section is reader decision support, not a praise wall. Every
+  `readingReasons` item answers a concrete question about insight, scope,
+  perspective, readability, application, or boundary, using a publisher,
+  official-book-site, media, professional-review, or named-reviewer source.
+  An editorial `title` may summarize the value, but `text` must stay within the
+  linked source's claim.
+- A generic “great author”, “important book”, or “must-read” quotation belongs
+  only in optional `endorsements`. It cannot satisfy the two-reason minimum or
+  appear as the sole explanation of why a whole book is worth the reader's
+  time.
+- Each source citation contains no more than 240 characters of text, a
+  non-empty attribution no longer than 120 characters, and a valid URL.
+- A translated citation says `据英文原文译` or `据意译` in its attribution.
+  Do not present a site translation as text from a Chinese edition.
+- Translate for natural Chinese reading order while staying within the source's
+  actual claim. Prefer concrete subjects and short sentences; avoid repetitive
+  editorial scaffolding such as “从……出发、围绕……讨论、形成……闭环”.
+  Smoothing a translation does not authorize adding a conclusion that the
+  publisher or reviewer did not make.
+- Keep the selected text short and link to the original page. Record the
+  research choice under the active task's `research/` directory so future
+  editors can distinguish a sourced quotation/translation from AI copy.
+- The page directory is a fixed three-item navigation derived from those
+  section IDs, not from the unused Markdown body.
+- Each excerpt contains no more than 240 characters and names a non-empty,
+  version-aware source no longer than 120 characters. `url` is optional and,
+  when present, must be a valid URL to the public text used for verification.
+- A curated public-library entry targets at least three short excerpts from
+  distinct chapters or argument stages, normally covering the opening problem,
+  a central mechanism, and a later synthesis or conclusion. Do not split
+  adjacent sentences from one paragraph to manufacture coverage.
+- Prefer a checked local EPUB/PDF and record its chapter or section. When no
+  local edition is available, use only an author, publisher, work-estate, or
+  reliable publication page that exposes the quoted text; mark a translation
+  explicitly and store that public URL. When neither path exists, keep
+  `excerpts: []` and render an honest pending state; never ask AI to imitate or
+  reconstruct a likely quotation.
+- Three excerpts are a coverage floor, not permission to reproduce continuous
+  prose. Keep every selection independently short and make sure their combined
+  effect does not substitute for the original book.
+- Book cards and public detail pages do not display knowledge-map names,
+  maturity/stage labels, graph nodes, graph relationships, or graph notes.
+- `src/pages/books/[...slug].astro` remains server-rendered and must not fetch a
+  `bookGraphs` entry or mount `BookKnowledgeGraph`. Public book navigation must
+  not load Cytoscape or other graph runtime resources.
+- Existing `graph.json`, graph types, components, and generation documentation
+  are retained as unpublished historical/internal work. Their presence does not
+  make them part of the public book-detail contract.
+- The Markdown body beneath book frontmatter is also unpublished historical
+  material. Public book copy comes only from `introductions`,
+  `readingReasons`, `endorsements`, and `excerpts`; `description` remains
+  SEO/JSON-LD metadata.
+- Every book has exactly one `shelf` from `BOOK_SHELF_VALUES`; `topics` remains
+  a non-empty multi-value list. Directory grouping uses `shelf`, while
+  cross-category discovery uses `topics`.
+- EPUB/PDF files and full chapters remain local inputs. Commit only metadata,
+  independently written summaries, verified short excerpts, and optimized
+  cover derivatives.
+
+### 4. Validation & Error Matrix
+
+| Condition | Required result |
+| --- | --- |
+| `introductions` is missing/empty | Content sync/build fails |
+| `readingReasons` has fewer than two or more than four entries | Content sync/build fails |
+| Two reading reasons reuse the same `kind` | Content sync/build fails |
+| `endorsements` has more than three entries | Content sync/build fails |
+| Source citation text exceeds 240 characters | Content sync/build fails |
+| Source attribution is empty or exceeds 120 characters | Content sync/build fails |
+| Source URL is invalid | Content sync/build fails |
+| Translated citation lacks a translation marker | Research/review audit fails |
+| Excerpt text exceeds 240 characters | Content sync/build fails |
+| Excerpt source is empty or exceeds 120 characters | Content sync/build fails |
+| Optional excerpt URL is invalid | Content sync/build fails |
+| Curated entry has fewer than three introductions/excerpts | Editorial content audit fails; schema still supports an honest incomplete base state |
+| Three introductions restate one claim, or excerpts come from one adjacent passage | Editorial review fails |
+| Introduction comes from an unattributed search snippet | Research/editorial review fails |
+| Public foreign-language excerpt lacks translation marker or verification URL | Research/review audit fails |
+| No verified excerpt is available | Page renders the explicit pending/no-fabrication state |
+| Public detail imports a graph component or resolver | Review/static audit fails |
+| Public output contains graph headings or stage labels | Browser/build artifact audit fails |
+| Public navigation loads Cytoscape | Browser resource audit fails |
+| Book omits `shelf` or uses an unknown value | Content sync/build fails |
+| Production book has `draft: true` | Omitted from the book list and routes |
+
+### 5. Good / Base / Bad Cases
+
+- Good: build three sourced introduction facets, provide at least two distinct
+  source-backed reading values, demote generic prestige praise to
+  `endorsements`, and select at least three short, non-adjacent,
+  source-labeled excerpts checked against a local edition or a public
+  authoritative text. Present the introduction facets as one coherent book
+  description and list each unique source URL once.
+- Base: publish sourced introduction/reason cards plus an explicit
+  “尚未添加经原文核对的摘抄” state while original-text verification is pending.
+- Bad: treat “the author is brilliant” as a reading reason, write an AI
+  recommendation without a source, call a translated review a Chinese-edition
+  quotation, repeat source chrome after every summary paragraph, use a search
+  result snippet as the book description, turn every citation into the same
+  abstract-summary sentence pattern, render a graph because `graph.json`
+  exists, expose stale Markdown notes, or generate famous-sounding author
+  quotations.
+
+### 6. Tests Required
+
+```bash
+pnpm exec biome check src/content.config.ts src/types/book.ts \
+  src/utils/book-utils.ts src/components/pages/books src/pages/books
+pnpm check
+pnpm type-check
+pnpm build
+```
+
+Assert that `/books/` and every non-draft `/books/<slug>/` page are emitted,
+every detail contains exactly the three required IDs in order, every sidebar
+contains the matching three links, and no public book output includes graph
+labels or graph runtime references. Also assert that all books have at least one
+introduction, two to four reading reasons with unique kinds, every citation
+exposes its attribution and HTTPS URL, and no public consumer references
+`whyRead` or `reviews`. For the curated library, audit exactly three
+introductions and at least three unique excerpts per book; reject missing source
+text, generic praise used as a reason, invalid optional excerpt URLs, and
+repeated excerpt text. In a real browser, cover one page with three reasons and
+an endorsement, one local-edition excerpt page, one page with public excerpt
+links, and the pending-state base case when it exists at desktop and 390px
+widths; assert visible sources, no root horizontal overflow, no console error,
+no Cytoscape request, working filters, and working Swup navigation.
+
+### 7. Wrong vs Correct
+
+```yaml
+# Wrong: an unsourced AI recommendation has no audit trail.
+whyRead: "这本书将彻底改变你的思维。"
+readingReasons:
+  - title: "名人说它很好"
+    kind: "insight"
+    text: "一部必读经典。"
+    source: "网络评价"
+    url: "not-a-url"
+```
+
+```yaml
+# Correct: public claims link back to named sources; excerpts stay separate.
+introductions:
+  - text: "出版社介绍的短译文。"
+    source: "Example Press（据英文原文译）"
+    url: "https://example.com/book"
+readingReasons:
+  - title: "看懂一个具体问题"
+    kind: "insight"
+    text: "具名评论对本书独特解释价值的短译文。"
+    source: "Example Review（据英文原文译）"
+    url: "https://example.com/review"
+  - title: "知道全书覆盖到哪里"
+    kind: "scope"
+    text: "出版社对本书范围和结构的短译文。"
+    source: "Example Press（据英文原文译）"
+    url: "https://example.com/book"
+endorsements:
+  - text: "作者是杰出的写作者。"
+    source: "Named Reviewer（据英文原文译）"
+    url: "https://example.com/review"
+excerpts:
+  - text: "经本地版本逐字核对的短摘抄。"
+    source: "本地 EPUB，第一章"
+  - text: "无本地版本时，从作品官网核对的短译文。"
+    source: "作品官网英文摘录（据译）"
+    url: "https://example.com/book/excerpt"
+```
+
+## Scenario: Maintain Internal Book Knowledge-Graph Data
+
+### 1. Scope / Trigger
+
+This contract applies only when intentionally maintaining the unpublished
+knowledge-graph dataset, its candidate-generation workflow, graph nodes, or
+graph relationships. It does not authorize mounting graph UI on public routes.
 
 ### 2. Signatures
 
 - Book source: `src/content/books/<slug>/index.{md,mdx}`.
 - Graph source: `src/content/books/<slug>/graph.json`.
 - Cover source: `src/content/books/<slug>/cover.webp`.
-- Route: `/books/<slug>/`.
+- Historical graph components remain internal and are not routed publicly.
 - Primary shelf:
-  `shelf: "cognition-and-decisions" | "wealth-and-growth" | "psychology-and-relationships"`.
+  `shelf: "cognition-and-decisions" | "wealth-and-growth" | "psychology-and-relationships" | "literature-and-life"`.
 - Resolver:
   `getGraphForBook(book: CollectionEntry<"books">): Promise<CollectionEntry<"bookGraphs">>`.
 - Node evidence:
@@ -46,6 +268,11 @@ notes, graph nodes, or graph relationships.
 - Optional whole-book spine: `graph.json.bookMap` with `archetype`,
   `coreQuestion`, `thesis`, `conclusion`, ordered `parts`, and directed
   `transitions`.
+- Optional part detail:
+  `maturity: "outline" | "developing" | "developed"` and
+  `argumentCards: BookArgumentCard[]`.
+- Candidate validator:
+  `pnpm validate:book-map -- <kebab-case-slug>`.
 
 ### 3. Contracts
 
@@ -54,8 +281,8 @@ notes, graph nodes, or graph relationships.
   a non-empty multi-value list. Directory grouping uses `shelf`, while
   cross-category discovery uses `topics`.
 - `graph.json.book` references that same `books` entry.
-- Every published book has exactly one adjacent graph; graph ID and book ID
-  match.
+- The current internal dataset keeps one adjacent graph per book; graph ID and
+  book ID match.
 - `book.graphStage` and `graph.stage` match. Upgrade both from `preview` to
   `reading` or `reviewed` in the same change.
 - Graph node and edge IDs are unique kebab-case values. Every edge endpoint
@@ -74,9 +301,9 @@ notes, graph nodes, or graph relationships.
 - A source reference basis must also appear in the graph-level `basis`. The
   locator describes its real precision: use `目录主题` or `内容分区` when an
   exact chapter/page is unavailable.
-- Public content is summary-first. A verified quote is optional, collapsed in
-  the UI, and limited to 240 characters; never split long original text across
-  several references to evade the limit.
+- Graph evidence is summary-first. A verified quote is optional and limited to
+  240 characters; never split long original text across several references to
+  evade the limit.
 - `bookMap` is the author-order orientation layer; `nodes` / `edges` remains
   the semantic exploration layer. Do not infer the author-order spine from
   force-graph proximity or concept similarity.
@@ -89,14 +316,37 @@ notes, graph nodes, or graph relationships.
   source-reference rules as graph nodes. A table-of-contents synthesis stays
   `editorial_inference`; it does not become `source_summary` without EPUB or
   notes evidence.
+- `maturity` defaults to `developed` and `argumentCards` defaults to `[]` so
+  existing maps remain valid without migration. An `outline` part must have no
+  cards. A newly authored `developing` or `developed` part should contain useful
+  cards, but the schema must not reject legacy `developed + []` data created by
+  those compatibility defaults.
+- Argument-card IDs are unique across the whole map. Each card references at
+  least one existing graph node, passes the normal provenance/source checks,
+  and declares both a detail kind (`mechanism | evidence | manifestation |
+  practice | boundary`) and a content context (`book_argument |
+  external_research | cross_book | personal_reflection`).
+- Reading order and detail cards are different layers: parts retain the
+  canonical “question → answer → transition” spine, while cards hold the
+  mechanism/evidence/manifestation/practice/boundary detail. Do not duplicate
+  the part question or transition as cards.
+- If an internal review tool renders map copy, it remains stage-aware:
+  `preview` does not prove the site owner read or endorses the book; `reading`
+  says the structure is still being revised; `reviewed` preserves the source
+  caveat.
+- AI generation writes a candidate artifact first. It must infer the book
+  archetype and whole-book spine before part cards and concept relationships;
+  validation never publishes or overwrites `src/content/books`.
 - EPUB files and full chapter text remain local inputs. Commit only compact
   metadata, original short summaries, and the optimized cover derivative.
+  Deduplicate imports by work as well as file hash, and do not treat short work
+  materials or personal-note PDFs as books.
 
 ### 4. Validation & Error Matrix
 
 | Condition | Required result |
 | --- | --- |
-| Missing or duplicate graph for a book | Build fails in `getGraphForBook` |
+| Missing or duplicate graph for a book | Graph-specific `getGraphForBook` validation fails; the public detail route does not call it |
 | Graph reference points to a missing book | Content sync/build fails |
 | Book omits `shelf` or uses an unknown value | Content sync/build fails |
 | Graph and book live under different slugs | Build fails |
@@ -108,6 +358,9 @@ notes, graph nodes, or graph relationships.
 | `personal_note` lacks a notes reference | Schema validation fails |
 | Source quote exceeds 240 characters | Schema validation fails |
 | `bookMap` part points to a missing concept node | Schema validation fails |
+| Duplicate argument-card ID or missing card concept node | Schema validation fails |
+| Argument card lacks source evidence | Schema validation fails |
+| `outline` part contains argument cards | Schema validation fails |
 | Duplicate/unreachable map part or invalid transition endpoint | Schema validation fails |
 | Map transition points backward in part order | Schema validation fails |
 | `stage=reviewed` without notes basis | Schema validation fails |
@@ -117,31 +370,39 @@ notes, graph nodes, or graph relationships.
 
 - Good: add `index.md`, `graph.json`, and `cover.webp` in one slug directory;
   assign one stable shelf, keep both stage fields aligned, declare per-node
-  evidence, preserve the author's ordered parts in `bookMap`, and validate the
+  evidence, preserve the author's ordered parts in `bookMap`, keep unexpanded
+  parts as `outline`, generate AI output as a candidate, and validate the
   complete build.
 - Base: a preview concept inferred from a table of contents uses
-  `editorial_inference` and a `toc` locator without claiming an exact page.
+  `editorial_inference` and a `toc` locator without claiming an exact page. An
+  old map without cards continues to build through schema defaults.
 - Bad: use a topic label as an ad hoc second shelf, copy a graph between
   directories without updating `book`, update only one stage field, or label a
   directory-based inference as `source_summary`. It is also invalid to publish
-  a concept-cluster order as though it were the author's chapter progression.
+  a concept-cluster order as though it were the author's chapter progression,
+  fill an `outline` part with invented cards, or copy raw EPUB/PDF files into
+  the public content tree.
 
 ### 6. Tests Required
 
 ```bash
 pnpm exec biome check src/content.config.ts src/content/books
+pnpm validate:book-map -- <slug>
 pnpm check
 pnpm type-check
 pnpm build
 ```
 
-Assert that `/books/` and every non-draft `/books/<slug>/` page are emitted,
-each detail has one graph and Book JSON-LD, invalid endpoints stop the build,
-invalid evidence/provenance combinations stop content sync, optional quotes
-stay within the limit, every book renders under exactly one shelf, and a
-subpath build keeps book, cover, and island URLs below its configured base.
+Assert that graph-specific validation rejects invalid endpoints and
+evidence/provenance combinations, optional graph quotes stay within the limit,
+and candidate path traversal such as `../outside` is rejected. Separately
+assert that the public book detail neither resolves nor renders these graphs.
 For a graph with `bookMap`, also assert valid part/transition references,
-whole-spine reachability, and unchanged compatibility for graphs without it.
+whole-spine reachability, globally unique card IDs, valid card-to-node
+references, rejection of cards inside `outline` parts, and unchanged
+compatibility for graphs without cards. Also reject path-like candidate slugs
+such as `../outside`, and verify no EPUB/PDF is emitted under the public book
+content or production output.
 
 ### 7. Wrong vs Correct
 
@@ -191,6 +452,25 @@ whole-spine reachability, and unchanged compatibility for graphs without it.
       "sourceRefs": [{ "basis": "toc", "locator": "第三章" }]
     }]
   }
+}
+```
+
+```json
+// Wrong: a placeholder part claims detail it does not yet have.
+{
+  "maturity": "outline",
+  "argumentCards": [{
+    "id": "generated-claim",
+    "kind": "evidence"
+  }]
+}
+```
+
+```json
+// Correct: preserve the honest gap, or promote it only with sourced cards.
+{
+  "maturity": "outline",
+  "argumentCards": []
 }
 ```
 
