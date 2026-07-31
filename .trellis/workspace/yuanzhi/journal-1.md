@@ -139,3 +139,38 @@ Implemented the book list and explorable knowledge maps, then optimized responsi
 ### Next Steps
 
 - None - task complete
+
+
+## Session 5: 完善书单内容与阅读体验
+
+**Date**: 2026-07-31
+**Task**: 完善书单内容与阅读体验
+**Branch**: `master`
+
+### Summary
+
+扩充至 17 本来源化书单，收敛为三段式详情，分离阅读价值与声望背书，修复导航连续性和封面裁切，并将书籍简介改为知名来源的连续正文。
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `5aa4c34` | (see git log) |
+| `c5ddb46` | (see git log) |
+| `7deca83` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
