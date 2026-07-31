@@ -1,0 +1,51 @@
+{
+	"book": "the-little-prince",
+	"title": "《小王子》基础知识地图",
+	"stage": "preview",
+	"basis": ["metadata"],
+	"aiAssisted": true,
+	"layout": "circle",
+	"summary": "沿星球旅行和关系学习两条线索，重访成人世界、友谊与责任。",
+	"nodes": [
+		{
+			"id": "little-prince-journey",
+			"label": "星球旅行",
+			"kind": "core",
+			"summary": "旅行通过一组相遇展示成人世界中被放大的单一价值。",
+			"chapter": "星球旅行",
+			"anchor": "journey",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{ "basis": "metadata", "locator": "官方作品梗概与书籍元数据" }
+			]
+		},
+		{
+			"id": "taming-and-responsibility",
+			"label": "驯养与责任",
+			"kind": "concept",
+			"summary": "关系因投入时间而变得独特，也由此产生责任和失去的风险。",
+			"chapter": "驯养、责任与失去",
+			"anchor": "relationships",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{ "basis": "metadata", "locator": "官方作品梗概：玫瑰、狐狸与飞行员" }
+			]
+		}
+	],
+	"edges": [
+		{
+			"id": "journey-leads-to-responsibility",
+			"source": "little-prince-journey",
+			"target": "taming-and-responsibility",
+			"relation": "leads_to",
+			"directed": true,
+			"summary": "一连串相遇把观察成人世界推进为对关系责任的理解。",
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{ "basis": "metadata", "locator": "公开梗概的叙事顺序整理" }
+			]
+		}
+	]
+}

@@ -23,6 +23,12 @@ const { graph }: Props = $props();
 
 type GraphView = "overview" | "relations" | "list";
 
+const stageDisclosure = {
+	preview: "这是预读地图，不代表站长已读或认同书中观点。",
+	reading: "这是阅读中地图，内容与结构会随阅读和来源复核继续调整。",
+	reviewed: "这是复核后的正式知识图谱，仍应结合页面标注的来源理解。",
+} satisfies Record<BookGraphData["stage"], string>;
+
 let graphContainer: HTMLDivElement;
 let cy: Core | undefined;
 let startGraphInitialization: (() => Promise<void>) | undefined;
@@ -414,7 +420,7 @@ onMount(() => {
 			<strong class="text-neutral-800 dark:text-neutral-100">内容依据：</strong>
 			{graph.basis.map((basis) => BOOK_GRAPH_BASIS_LABELS[basis]).join("、")}。
 			页面以重新组织的短总结为主；来源位置用于复核，原文只在存在经核对的短摘录时按需展开。
-			这是预读地图，不代表站长已读或认同书中观点。
+			{stageDisclosure[graph.stage]}
 		</p>
 	</div>
 

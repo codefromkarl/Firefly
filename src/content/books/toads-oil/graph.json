@@ -1,0 +1,47 @@
+{
+	"book": "toads-oil",
+	"title": "《蛤蟆的油》预读知识地图",
+	"stage": "preview",
+	"basis": ["metadata", "toc"],
+	"aiAssisted": true,
+	"layout": "breadthfirst",
+	"summary": "沿个人记忆与电影创作两条线索，预读黑泽明的自我叙述。",
+	"nodes": [
+		{
+			"id": "creative-memory",
+			"label": "创作记忆",
+			"kind": "core",
+			"summary": "回忆并非事件清单，而是创作者理解自身经验的一种组织方式。",
+			"chapter": "记忆与成长",
+			"anchor": "memory",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{ "basis": "toc", "locator": "第一章《酥糖与剑道》及后续人生章节" }
+			]
+		},
+		{
+			"id": "life-to-cinema",
+			"label": "生活进入电影",
+			"kind": "concept",
+			"summary": "个人观察、师友关系与挫折逐渐转化为电影创作的材料和判断。",
+			"chapter": "生活如何进入电影",
+			"anchor": "filmmaking",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "toc", "locator": "目录：成长经历与电影生涯" }]
+		}
+	],
+	"edges": [
+		{
+			"id": "memory-leads-to-cinema",
+			"source": "creative-memory",
+			"target": "life-to-cinema",
+			"relation": "leads_to",
+			"directed": true,
+			"summary": "被重新理解的生活经验成为创作实践的材料。",
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "toc", "locator": "目录主题整理" }]
+		}
+	]
+}

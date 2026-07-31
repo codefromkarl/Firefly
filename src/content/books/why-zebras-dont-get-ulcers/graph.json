@@ -1,0 +1,45 @@
+{
+	"book": "why-zebras-dont-get-ulcers",
+	"title": "《解压手册：斑马为什么不得胃溃疡》预读知识地图",
+	"stage": "preview",
+	"basis": ["metadata", "toc"],
+	"aiAssisted": true,
+	"layout": "breadthfirst",
+	"summary": "区分短期应激与慢性压力，预读压力反应如何影响身心。",
+	"nodes": [
+		{
+			"id": "stress-response",
+			"label": "压力反应",
+			"kind": "core",
+			"summary": "应激系统为短期威胁调动资源，但长期反复启动会产生额外代价。",
+			"chapter": "压力反应",
+			"anchor": "stress-response",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "metadata", "locator": "书名与主题元数据" }]
+		},
+		{
+			"id": "chronic-stress-cost",
+			"label": "慢性压力代价",
+			"kind": "outcome",
+			"summary": "持续压力可能通过多个身体系统积累负担，具体健康问题仍需专业评估。",
+			"chapter": "慢性压力的代价",
+			"anchor": "chronic-cost",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "toc", "locator": "目录主题：压力与身心系统" }]
+		}
+	],
+	"edges": [
+		{
+			"id": "stress-to-chronic-cost",
+			"source": "stress-response",
+			"target": "chronic-stress-cost",
+			"relation": "causes",
+			"directed": true,
+			"summary": "长期反复启动压力反应可能积累生理与心理负担。",
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "toc", "locator": "目录主题整理" }]
+		}
+	]
+}

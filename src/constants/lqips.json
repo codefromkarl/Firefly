@@ -12,5 +12,17 @@
   "src:content/books/the-courage-to-be-disliked/cover.webp": "f1f4f5f6f8f9fbfbfb",
   "src:content/books/the-art-of-loving/cover.webp": "f9f7f7e5dcddefeced",
   "src:content/books/the-almanack-of-naval-ravikant/cover.webp": "f3f0e9f3efe9fafafc",
-  "src:assets/images/home-bg.webp": "4e8bb690afbda4b8bf"
+  "src:assets/images/home-bg.webp": "4e8bb690afbda4b8bf",
+  "src:content/books/wind-sand-and-stars/cover.webp": "00172c0315252d3636",
+  "src:content/books/why-zebras-dont-get-ulcers/cover.webp": "e7e5e6ebe8ea8f976b",
+  "src:content/books/what-life-could-mean-to-you/cover.webp": "f2f1edf0f0f0d2d0cd",
+  "src:content/books/toads-oil/cover.webp": "6c625469625a6c6762",
+  "src:content/books/the-little-prince/cover.webp": "010f1f000f1e3c342c",
+  "src:content/books/the-happiness-hypothesis/cover.webp": "6e664ebca267424c46",
+  "src:content/books/poor-charlies-almanack/cover.webp": "b9b0a6bab2a8a29b93",
+  "src:content/books/man-and-his-symbols/cover.webp": "3a2623322924443a34",
+  "src:content/books/made-in-america/cover.webp": "7c5c4e8768584f473d",
+  "src:content/books/emotional/cover.webp": "9f826a6e5542cdb8a6",
+  "src:content/books/chu-shijian-biography/cover.webp": "706766705e5faf947e",
+  "src:content/books/basic-economics/cover.webp": "d9d1d1e2dcdcdad6d3"
 }

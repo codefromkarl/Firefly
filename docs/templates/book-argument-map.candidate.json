@@ -1,0 +1,134 @@
+{
+	"book": "replace-with-book-slug",
+	"title": "《示例书》候选论证地图",
+	"stage": "reading",
+	"basis": ["notes"],
+	"aiAssisted": true,
+	"layout": "breadthfirst",
+	"summary": "用一句话说明整书认知推进与当前材料范围。",
+	"bookMap": {
+		"archetype": "argumentative_monograph",
+		"coreQuestion": {
+			"text": "这本书试图解决什么核心问题？",
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "notes", "locator": "整书总纲" }]
+		},
+		"thesis": {
+			"text": "作者或当前笔记给出的全书回答是什么？",
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "notes", "locator": "整书总纲" }]
+		},
+		"conclusion": {
+			"text": "当前材料能够支持的阶段性结论是什么？",
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "notes", "locator": "整书小结" }]
+		},
+		"parts": [
+			{
+				"id": "developed-part",
+				"order": 1,
+				"title": "已展开部分",
+				"role": "explain_mechanism",
+				"maturity": "developed",
+				"question": "本部分回答什么？",
+				"thesis": "本部分的阶段性回答。",
+				"inputUnderstanding": "进入前的理解。",
+				"outputUnderstanding": "离开后的理解。",
+				"conceptNodeIds": ["core-concept", "supporting-mechanism"],
+				"argumentCards": [
+					{
+						"id": "mechanism-card",
+						"kind": "mechanism",
+						"title": "机制卡标题",
+						"summary": "只写来源能够支持的短总结。",
+						"context": "book_argument",
+						"conceptNodeIds": ["supporting-mechanism"],
+						"provenance": "editorial_inference",
+						"sourceRefs": [
+							{ "basis": "notes", "locator": "第一部分：机制笔记" }
+						]
+					}
+				],
+				"provenance": "editorial_inference",
+				"sourceRefs": [{ "basis": "notes", "locator": "第一部分" }]
+			},
+			{
+				"id": "outline-part",
+				"order": 2,
+				"title": "待补充部分",
+				"role": "conclude",
+				"maturity": "outline",
+				"question": "后续需要回答什么？",
+				"thesis": "当前材料不足，不生成结论。",
+				"inputUnderstanding": "从前一部分带来的理解。",
+				"outputUnderstanding": "待继续阅读后补充。",
+				"conceptNodeIds": ["future-question"],
+				"argumentCards": [],
+				"provenance": "editorial_inference",
+				"sourceRefs": [{ "basis": "notes", "locator": "整书总纲：后续部分" }]
+			}
+		],
+		"transitions": [
+			{
+				"id": "developed-to-outline",
+				"source": "developed-part",
+				"target": "outline-part",
+				"relation": "motivates",
+				"rationale": "说明为什么前一部分会引出后一部分。",
+				"provenance": "editorial_inference",
+				"sourceRefs": [{ "basis": "notes", "locator": "两部分交接" }]
+			}
+		]
+	},
+	"nodes": [
+		{
+			"id": "core-concept",
+			"label": "核心概念",
+			"kind": "core",
+			"summary": "整书核心概念的短总结。",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "notes", "locator": "整书总纲" }]
+		},
+		{
+			"id": "supporting-mechanism",
+			"label": "支撑机制",
+			"kind": "model",
+			"summary": "用于解释核心概念的机制。",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "notes", "locator": "第一部分" }]
+		},
+		{
+			"id": "future-question",
+			"label": "后续问题",
+			"kind": "chapter",
+			"summary": "材料不足时保留的真实问题。",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "notes", "locator": "后续部分总纲" }]
+		}
+	],
+	"edges": [
+		{
+			"id": "mechanism-supports-core",
+			"source": "supporting-mechanism",
+			"target": "core-concept",
+			"relation": "supports",
+			"directed": true,
+			"summary": "支撑机制与核心概念之间的关系。",
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "notes", "locator": "第一部分" }]
+		},
+		{
+			"id": "core-leads-to-question",
+			"source": "core-concept",
+			"target": "future-question",
+			"relation": "leads_to",
+			"directed": true,
+			"summary": "当前理解继续引出待补充问题。",
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "notes", "locator": "整书交接" }]
+		}
+	]
+}

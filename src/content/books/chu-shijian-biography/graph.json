@@ -1,0 +1,47 @@
+{
+	"book": "chu-shijian-biography",
+	"title": "《褚时健传》预读知识地图",
+	"stage": "preview",
+	"basis": ["metadata", "toc"],
+	"aiAssisted": true,
+	"layout": "breadthfirst",
+	"summary": "从人生阶段切入，预读个人选择、企业经营与时代处境之间的关系。",
+	"nodes": [
+		{
+			"id": "chu-life-trajectory",
+			"label": "人生轨迹",
+			"kind": "core",
+			"summary": "传记按时间展开褚时健在不同人生阶段中的处境与选择。",
+			"chapter": "人生阶段",
+			"anchor": "life-stages",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "toc", "locator": "目录：按年代编排的各篇章" }]
+		},
+		{
+			"id": "management-responsibility",
+			"label": "经营责任",
+			"kind": "concept",
+			"summary": "企业经营既包含增长判断，也包含对组织、制度和后果的责任。",
+			"chapter": "经营与选择",
+			"anchor": "management",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{ "basis": "toc", "locator": "目录主题：企业经营与再创业" }
+			]
+		}
+	],
+	"edges": [
+		{
+			"id": "trajectory-to-management",
+			"source": "chu-life-trajectory",
+			"target": "management-responsibility",
+			"relation": "explains",
+			"directed": true,
+			"summary": "人生阶段为理解具体经营选择提供处境背景。",
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "toc", "locator": "目录顺序与主题整理" }]
+		}
+	]
+}

@@ -1,0 +1,47 @@
+{
+	"book": "what-life-could-mean-to-you",
+	"title": "《自卑与超越》预读知识地图",
+	"stage": "preview",
+	"basis": ["metadata", "toc"],
+	"aiAssisted": true,
+	"layout": "breadthfirst",
+	"summary": "从自卑感出发，预读生活目标、成长环境与社会合作之间的关系。",
+	"nodes": [
+		{
+			"id": "inferiority-and-striving",
+			"label": "自卑与追求",
+			"kind": "core",
+			"summary": "自卑体验可能推动个体寻找补偿、优越与生活方向。",
+			"chapter": "自卑与追求",
+			"anchor": "inferiority",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "toc", "locator": "第三章《自卑感和优越感》" }]
+		},
+		{
+			"id": "social-cooperation",
+			"label": "社会合作",
+			"kind": "practice",
+			"summary": "个人生活风格需要在家庭、学校和更广泛的社会关系中接受检验。",
+			"chapter": "个人成长与社会合作",
+			"anchor": "social-interest",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{ "basis": "toc", "locator": "目录：家庭、学校、青春期与社会问题" }
+			]
+		}
+	],
+	"edges": [
+		{
+			"id": "striving-tested-by-cooperation",
+			"source": "inferiority-and-striving",
+			"target": "social-cooperation",
+			"relation": "applies_to",
+			"directed": true,
+			"summary": "追求优越的方向需要放到社会合作中理解。",
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "toc", "locator": "目录主题整理" }]
+		}
+	]
+}

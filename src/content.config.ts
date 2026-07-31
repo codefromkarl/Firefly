@@ -3,6 +3,8 @@ import type { CollectionConfig, SchemaContext } from "astro/content/config";
 import { glob } from "astro/loaders";
 import { type ZodType, z } from "astro/zod";
 import {
+	BOOK_ARGUMENT_CARD_KIND_VALUES,
+	BOOK_ARGUMENT_CONTEXT_VALUES,
 	BOOK_GRAPH_BASIS_VALUES,
 	BOOK_GRAPH_LAYOUT_VALUES,
 	BOOK_GRAPH_NODE_KIND_VALUES,
@@ -10,15 +12,20 @@ import {
 	BOOK_GRAPH_RELATION_VALUES,
 	BOOK_GRAPH_STAGE_VALUES,
 	BOOK_MAP_ARCHETYPE_VALUES,
+	BOOK_MAP_PART_MATURITY_VALUES,
 	BOOK_MAP_PART_ROLE_VALUES,
 	BOOK_MAP_TRANSITION_RELATION_VALUES,
+	BOOK_READING_REASON_KIND_VALUES,
 	BOOK_SHELF_VALUES,
 	BOOK_STATUS_VALUES,
+	type BookExcerpt,
 	type BookGraphData,
 	type BookGraphProvenance,
 	type BookGraphSourceRef,
 	type BookGraphStage,
+	type BookReadingReason,
 	type BookShelf,
+	type BookSourceCitation,
 	type BookStatus,
 } from "@/types/book";
 
@@ -57,7 +64,10 @@ type BookData = {
 	originalTitle?: string;
 	authors: string[];
 	description: string;
-	previewFocus: string;
+	introductions: BookSourceCitation[];
+	readingReasons: BookReadingReason[];
+	endorsements: BookSourceCitation[];
+	excerpts: BookExcerpt[];
 	status: BookStatus;
 	shelf: BookShelf;
 	topics: string[];
@@ -137,7 +147,56 @@ const bookSchema = ({ image }: SchemaContext): ZodType<BookData> =>
 		originalTitle: z.string().min(1).optional(),
 		authors: z.array(z.string().min(1)).min(1),
 		description: z.string().min(1),
-		previewFocus: z.string().min(1),
+		introductions: z
+			.array(
+				z.object({
+					text: z.string().min(1).max(240),
+					source: z.string().min(1).max(120),
+					url: z.url(),
+				}),
+			)
+			.min(1),
+		readingReasons: z
+			.array(
+				z.object({
+					title: z.string().min(1).max(60),
+					kind: z.enum(BOOK_READING_REASON_KIND_VALUES),
+					text: z.string().min(1).max(240),
+					source: z.string().min(1).max(120),
+					url: z.url(),
+				}),
+			)
+			.min(2)
+			.max(4)
+			.superRefine((reasons, context) => {
+				const kinds = new Set(reasons.map((reason) => reason.kind));
+				if (kinds.size !== reasons.length) {
+					context.addIssue({
+						code: "custom",
+						message:
+							"readingReasons must cover distinct reader-value dimensions",
+					});
+				}
+			}),
+		endorsements: z
+			.array(
+				z.object({
+					text: z.string().min(1).max(240),
+					source: z.string().min(1).max(120),
+					url: z.url(),
+				}),
+			)
+			.max(3)
+			.default([]),
+		excerpts: z
+			.array(
+				z.object({
+					text: z.string().min(1).max(240),
+					source: z.string().min(1).max(120),
+					url: z.url().optional(),
+				}),
+			)
+			.default([]),
 		status: z.enum(BOOK_STATUS_VALUES),
 		shelf: z.enum(BOOK_SHELF_VALUES),
 		topics: z.array(z.string().min(1)).min(1),
@@ -196,16 +255,29 @@ const bookMapStatementSchema = z.object({
 	sourceRefs: z.array(graphSourceRefSchema).min(1),
 });
 
+const bookArgumentCardSchema = z.object({
+	id: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+	kind: z.enum(BOOK_ARGUMENT_CARD_KIND_VALUES),
+	title: z.string().min(1),
+	summary: z.string().min(1),
+	context: z.enum(BOOK_ARGUMENT_CONTEXT_VALUES),
+	conceptNodeIds: z.array(z.string().min(1)).min(1),
+	provenance: z.enum(BOOK_GRAPH_PROVENANCE_VALUES),
+	sourceRefs: z.array(graphSourceRefSchema).min(1),
+});
+
 const bookMapPartSchema = z.object({
 	id: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
 	order: z.number().int().positive(),
 	title: z.string().min(1),
 	role: z.enum(BOOK_MAP_PART_ROLE_VALUES),
+	maturity: z.enum(BOOK_MAP_PART_MATURITY_VALUES).default("developed"),
 	question: z.string().min(1),
 	thesis: z.string().min(1),
 	inputUnderstanding: z.string().min(1),
 	outputUnderstanding: z.string().min(1),
 	conceptNodeIds: z.array(z.string().min(1)).min(1),
+	argumentCards: z.array(bookArgumentCardSchema).default([]),
 	provenance: z.enum(BOOK_GRAPH_PROVENANCE_VALUES),
 	sourceRefs: z.array(graphSourceRefSchema).min(1),
 });
@@ -346,6 +418,7 @@ const bookGraphSchema: ZodType<BookGraphEntryData> = z
 
 			const partIds = new Set<string>();
 			const partOrders = new Set<number>();
+			const argumentCardIds = new Set<string>();
 			const partById = new Map<string, (typeof graph.bookMap.parts)[number]>();
 			for (const [index, part] of graph.bookMap.parts.entries()) {
 				if (partIds.has(part.id)) {
@@ -375,6 +448,56 @@ const bookGraphSchema: ZodType<BookGraphEntryData> = z
 							path: ["bookMap", "parts", index, "conceptNodeIds", nodeIndex],
 						});
 					}
+				}
+
+				if (part.maturity === "outline" && part.argumentCards.length > 0) {
+					context.addIssue({
+						code: "custom",
+						message: "an outline book map part cannot contain argument cards",
+						path: ["bookMap", "parts", index, "argumentCards"],
+					});
+				}
+				for (const [cardIndex, card] of part.argumentCards.entries()) {
+					if (argumentCardIds.has(card.id)) {
+						context.addIssue({
+							code: "custom",
+							message: `duplicate book argument card id: ${card.id}`,
+							path: [
+								"bookMap",
+								"parts",
+								index,
+								"argumentCards",
+								cardIndex,
+								"id",
+							],
+						});
+					}
+					argumentCardIds.add(card.id);
+
+					for (const [cardNodeIndex, nodeId] of card.conceptNodeIds.entries()) {
+						if (!nodeIds.has(nodeId)) {
+							context.addIssue({
+								code: "custom",
+								message: `book argument card concept node does not exist: ${nodeId}`,
+								path: [
+									"bookMap",
+									"parts",
+									index,
+									"argumentCards",
+									cardIndex,
+									"conceptNodeIds",
+									cardNodeIndex,
+								],
+							});
+						}
+					}
+					validateEvidence(card, [
+						"bookMap",
+						"parts",
+						index,
+						"argumentCards",
+						cardIndex,
+					]);
 				}
 				validateEvidence(part, ["bookMap", "parts", index]);
 			}

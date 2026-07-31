@@ -1,0 +1,821 @@
+{
+	"book": "the-happiness-hypothesis",
+	"title": "《象与骑象人：幸福的假设》阅读中知识地图",
+	"stage": "reading",
+	"basis": ["notes"],
+	"aiAssisted": true,
+	"layout": "breadthfirst",
+	"summary": "从内部协调走向社会互动，再把问题推进到幸福来源与精神超越；前两部分依据个人笔记展开，后两部分保留总纲。",
+	"bookMap": {
+		"archetype": "argumentative_monograph",
+		"coreQuestion": {
+			"text": "当直觉、情绪和理性并不总是同向时，人如何协调自身并在关系与意义中追寻幸福？",
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "notes",
+					"locator": "整书总纲：协调“象与骑象人”的过程也是追寻幸福的过程"
+				}
+			]
+		},
+		"thesis": {
+			"text": "先理解解释、偏好与情绪如何塑造内部经验，再看互惠和自我辩护如何塑造社会关系，才有条件继续讨论幸福的来源与更高层次的超越。",
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "notes",
+					"locator": "四段主线：内部协调、社会互动、追寻幸福、精神与超越"
+				}
+			]
+		},
+		"conclusion": {
+			"text": "当前阶段可以确认：认识心智可被协调，并看见互惠与自以为是的社会本能，是迈向幸福的踏实一步；完整幸福方程式与精神超越仍待后续阅读。",
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "notes",
+					"locator": "小结：认识内部可协调与社会本性，是迈向幸福的踏实一步"
+				}
+			]
+		},
+		"parts": [
+			{
+				"id": "internal-coordination",
+				"order": 1,
+				"title": "内部协调：改变心智",
+				"role": "explain_mechanism",
+				"maturity": "developed",
+				"question": "个人能在认知上为追寻幸福做什么准备，为什么心智能够被改变？",
+				"thesis": "情绪与行动取决于心智如何解释事件；看见自动评价、负面偏好与遗传差异后，可以通过实际训练和专业支持改变部分自动化模式。",
+				"inputUnderstanding": "感受似乎由外部事件直接造成，改变主要依赖意志力。",
+				"outputUnderstanding": "解释、情绪和认知形成反馈循环；改变需要识别机制并选择合适的实践路径。",
+				"conceptNodeIds": [
+					"interpretation-shapes-experience",
+					"affective-priming",
+					"negativity-bias",
+					"emotion-cognition-loop",
+					"meditation-practice",
+					"cognitive-therapy",
+					"treatment-boundary"
+				],
+				"argumentCards": [
+					{
+						"id": "interpretation-as-control",
+						"kind": "mechanism",
+						"title": "解释参与塑造世界",
+						"summary": "同一事件进入既有认知框架后会得到不同解释，解释再影响情绪与行为；改变框架可能打开新的行动空间。",
+						"context": "book_argument",
+						"conceptNodeIds": ["interpretation-shapes-experience"],
+						"provenance": "editorial_inference",
+						"sourceRefs": [
+							{
+								"basis": "notes",
+								"locator": "2.1 掌控解释：事件本身不决定感受"
+							}
+						]
+					},
+					{
+						"id": "automatic-negative-filter",
+						"kind": "manifestation",
+						"title": "自动评价与负面过滤",
+						"summary": "刺激会触发快速好坏评价，而威胁信息通常获得更强注意和记忆；负面情绪主导过滤器时，认知与情绪可能形成自我强化循环。",
+						"context": "book_argument",
+						"conceptNodeIds": [
+							"affective-priming",
+							"negativity-bias",
+							"emotion-cognition-loop"
+						],
+						"provenance": "editorial_inference",
+						"sourceRefs": [
+							{
+								"basis": "notes",
+								"locator": "2.1 情感启动效应、负面偏好与情绪—认知循环"
+							}
+						]
+					},
+					{
+						"id": "twin-study-signal",
+						"kind": "evidence",
+						"title": "遗传差异是一条限制线索",
+						"summary": "笔记引用双胞胎研究说明日常愉悦程度存在显著遗传关联，但这并不等于个体完全不可改变；具体比例与研究边界仍需核验原始文献。",
+						"context": "external_research",
+						"conceptNodeIds": ["genetic-disposition"],
+						"provenance": "editorial_inference",
+						"sourceRefs": [
+							{
+								"basis": "notes",
+								"locator": "2.1 遗传基因：双胞胎研究线索"
+							}
+						]
+					},
+					{
+						"id": "meditation-as-training",
+						"kind": "practice",
+						"title": "用注意训练松动自动化思考",
+						"summary": "冥想通过有意识地调节注意、观察杂念和降低消极依恋，训练骑象人不被大象的每次冲动立即带走。",
+						"context": "book_argument",
+						"conceptNodeIds": ["meditation-practice"],
+						"provenance": "editorial_inference",
+						"sourceRefs": [
+							{
+								"basis": "notes",
+								"locator": "2.1 改变思维方式：冥想"
+							}
+						]
+					},
+					{
+						"id": "meditation-personal-observation",
+						"kind": "evidence",
+						"title": "个人练习仍只是个案观察",
+						"summary": "个人入门练习对起床、午休与睡眠有所帮助，但这只能作为继续实践和记录的理由，不能替代一般性疗效证据。",
+						"context": "personal_reflection",
+						"conceptNodeIds": ["meditation-practice"],
+						"provenance": "personal_note",
+						"sourceRefs": [
+							{
+								"basis": "notes",
+								"locator": "2.1 冥想：个人实践观察"
+							}
+						]
+					},
+					{
+						"id": "cognitive-therapy-tools",
+						"kind": "practice",
+						"title": "检视当下的自动化负向想法",
+						"summary": "认知疗法把注意力放在识别、记录与重构当前的扭曲思维，通过结构化练习提升可操作性与自我效能。",
+						"context": "book_argument",
+						"conceptNodeIds": ["cognitive-therapy", "emotion-cognition-loop"],
+						"provenance": "editorial_inference",
+						"sourceRefs": [
+							{
+								"basis": "notes",
+								"locator": "2.1 改变思维方式：认知疗法"
+							}
+						]
+					},
+					{
+						"id": "clinical-choice-boundary",
+						"kind": "boundary",
+						"title": "心理治疗与药物需要专业判断",
+						"summary": "笔记中的疗效比较、血清素机制和药物人格争议受作者时代与材料范围限制；真实诊疗、用药与知情同意必须交由合格专业人员评估。",
+						"context": "book_argument",
+						"conceptNodeIds": ["treatment-boundary"],
+						"provenance": "editorial_inference",
+						"sourceRefs": [
+							{
+								"basis": "notes",
+								"locator": "2.1 认知疗法、百忧解与医疗边界"
+							}
+						]
+					}
+				],
+				"provenance": "editorial_inference",
+				"sourceRefs": [
+					{
+						"basis": "notes",
+						"locator": "2.1 内部协调：改变心智"
+					}
+				]
+			},
+			{
+				"id": "social-interaction",
+				"order": 2,
+				"title": "社会互动：关系中的本能",
+				"role": "diagnose",
+				"maturity": "developed",
+				"question": "作为社会性动物，人类如何互惠，又为什么容易在关系中自以为是？",
+				"thesis": "互惠通过情感、认知与行为闭环维持合作；同一套声誉与自我保护机制也会放大道德表象、自利解释和对立循环。",
+				"inputUnderstanding": "内部协调似乎只要处理自己的情绪与想法。",
+				"outputUnderstanding": "心智始终嵌在关系、声誉和信息环境中，协调需要同时看见合作本能与自我辩护。",
+				"conceptNodeIds": [
+					"reciprocity-loop",
+					"reputation-cooperation",
+					"self-righteousness",
+					"motivated-reasoning",
+					"naive-realism",
+					"violence-justification",
+					"reflective-dialogue"
+				],
+				"argumentCards": [
+					{
+						"id": "reciprocity-loop-mechanism",
+						"kind": "mechanism",
+						"title": "互惠不是单纯算账",
+						"summary": "人先感知他人行为，再产生情绪评价与报恩或报复动机，最后付诸行动；文化和声誉把这套闭环扩展到非血缘群体。",
+						"context": "book_argument",
+						"conceptNodeIds": ["reciprocity-loop", "reputation-cooperation"],
+						"provenance": "editorial_inference",
+						"sourceRefs": [
+							{
+								"basis": "notes",
+								"locator": "2.2 互惠的进化根基与交换器官假说"
+							}
+						]
+					},
+					{
+						"id": "reciprocity-in-daily-life",
+						"kind": "manifestation",
+						"title": "合作、报复、模仿与谈判",
+						"summary": "直接互惠、声誉传播、模仿成功策略和讨价还价都可由互惠闭环解释；同样的回报冲动也可能被操纵。",
+						"context": "book_argument",
+						"conceptNodeIds": ["reciprocity-loop"],
+						"provenance": "editorial_inference",
+						"sourceRefs": [
+							{
+								"basis": "notes",
+								"locator": "2.2 互惠的情感—认知—行为闭环"
+							}
+						]
+					},
+					{
+						"id": "moral-hypocrisy-signal",
+						"kind": "evidence",
+						"title": "公平判断会随自利位置改变",
+						"summary": "笔记中的道德伪善实验用于说明：只有当人被迫明确思考公平并看见自己正在作弊时，部分自利行为才会停止；实验细节仍需回到原始来源核验。",
+						"context": "external_research",
+						"conceptNodeIds": ["self-righteousness"],
+						"provenance": "editorial_inference",
+						"sourceRefs": [
+							{
+								"basis": "notes",
+								"locator": "2.2 自以为是：道德伪善实验线索"
+							}
+						]
+					},
+					{
+						"id": "reason-after-judgment",
+						"kind": "mechanism",
+						"title": "先判断，再寻找理由",
+						"summary": "快速直觉先给出立场，慢速思考随后搜索支持材料；自利偏见、确认偏差和社会奖励共同巩固对自己有利的解释。",
+						"context": "book_argument",
+						"conceptNodeIds": [
+							"motivated-reasoning",
+							"self-righteousness",
+							"naive-realism"
+						],
+						"provenance": "editorial_inference",
+						"sourceRefs": [
+							{
+								"basis": "notes",
+								"locator": "2.2 自以为是：先做判断再编造说辞、天真实在论"
+							}
+						]
+					},
+					{
+						"id": "media-reward-loop",
+						"kind": "manifestation",
+						"title": "信息环境放大道德表象",
+						"summary": "电台与社交平台会奖励鲜明表象并提供支持既有立场的论据库，使内部偏差和外部社会反馈形成持续循环。",
+						"context": "personal_reflection",
+						"conceptNodeIds": ["reputation-cooperation", "motivated-reasoning"],
+						"provenance": "personal_note",
+						"sourceRefs": [
+							{
+								"basis": "notes",
+								"locator": "2.2 自以为是：现代媒体与多元信息渠道观察"
+							}
+						]
+					},
+					{
+						"id": "violence-explanation-boundary",
+						"kind": "boundary",
+						"title": "解释暴力不等于为暴力开脱",
+						"summary": "自尊威胁、资源动机与道德理想主义可以帮助分析正当化暴力的心理过程，但这种分析不取消行为责任，也不能代替具体历史证据。",
+						"context": "book_argument",
+						"conceptNodeIds": ["violence-justification", "naive-realism"],
+						"provenance": "editorial_inference",
+						"sourceRefs": [
+							{
+								"basis": "notes",
+								"locator": "2.2 邪恶与残暴的根源、暴力循环"
+							}
+						]
+					},
+					{
+						"id": "reflect-before-responding",
+						"kind": "practice",
+						"title": "把协调落到可观察的互动",
+						"summary": "记录判断、识别扭曲、正念观察和共情对话把认知、情绪与行为三个层次连接起来；冲突时先列出自己可能犯错之处。",
+						"context": "book_argument",
+						"conceptNodeIds": ["reflective-dialogue", "self-righteousness"],
+						"provenance": "editorial_inference",
+						"sourceRefs": [
+							{
+								"basis": "notes",
+								"locator": "2.2 如何寻得完满之道：系统化解决路径"
+							}
+						]
+					}
+				],
+				"provenance": "editorial_inference",
+				"sourceRefs": [
+					{
+						"basis": "notes",
+						"locator": "2.2 社会互动：互惠与自以为是"
+					}
+				]
+			},
+			{
+				"id": "pursuing-happiness",
+				"order": 3,
+				"title": "追寻幸福：来源与方程式",
+				"role": "synthesize",
+				"maturity": "outline",
+				"question": "幸福的来源和关键因素是什么，它们如何组成可检验的幸福方程式？",
+				"thesis": "当前笔记只确定了问题方向，尚不足以形成阶段性答案。",
+				"inputUnderstanding": "已经能够从内部和社会互动两层识别影响幸福的机制。",
+				"outputUnderstanding": "待补充：需要继续阅读并核验幸福来源、条件与关键变量。",
+				"conceptNodeIds": ["happiness-sources"],
+				"argumentCards": [],
+				"provenance": "editorial_inference",
+				"sourceRefs": [
+					{
+						"basis": "notes",
+						"locator": "整书总纲：追寻幸福"
+					}
+				]
+			},
+			{
+				"id": "spirit-and-transcendence",
+				"order": 4,
+				"title": "精神与超越：更高层次的幸福",
+				"role": "conclude",
+				"maturity": "outline",
+				"question": "在个人感受与社会关系之上，更高层次的幸福意味着什么？",
+				"thesis": "当前笔记只保留了精神与超越的方向，不提供未经依据的结论。",
+				"inputUnderstanding": "幸福问题已经从内部协调推进到关系与社会。",
+				"outputUnderstanding": "待补充：需要继续阅读以连接意义、德性、超越与全书结论。",
+				"conceptNodeIds": ["transcendent-happiness"],
+				"argumentCards": [],
+				"provenance": "editorial_inference",
+				"sourceRefs": [
+					{
+						"basis": "notes",
+						"locator": "整书总纲：精神与超越"
+					}
+				]
+			}
+		],
+		"transitions": [
+			{
+				"id": "internal-to-social",
+				"source": "internal-coordination",
+				"target": "social-interaction",
+				"relation": "enables",
+				"rationale": "看见自己的解释和情绪循环后，下一步是观察同一心智如何在互惠、声誉与冲突中运作。",
+				"provenance": "editorial_inference",
+				"sourceRefs": [
+					{
+						"basis": "notes",
+						"locator": "主线交接：内部协调之后进入社会互动"
+					}
+				]
+			},
+			{
+				"id": "social-to-happiness",
+				"source": "social-interaction",
+				"target": "pursuing-happiness",
+				"relation": "motivates",
+				"rationale": "只有同时理解个体内部与社会关系，才有条件追问幸福由哪些因素共同构成。",
+				"provenance": "editorial_inference",
+				"sourceRefs": [
+					{
+						"basis": "notes",
+						"locator": "四段主线顺序：社会互动至追寻幸福"
+					}
+				]
+			},
+			{
+				"id": "happiness-to-transcendence",
+				"source": "pursuing-happiness",
+				"target": "spirit-and-transcendence",
+				"relation": "enables",
+				"rationale": "幸福来源的讨论将继续引向意义、精神与超越，但当前材料不足以展开这一步。",
+				"provenance": "editorial_inference",
+				"sourceRefs": [
+					{
+						"basis": "notes",
+						"locator": "四段主线顺序：追寻幸福至精神与超越"
+					}
+				]
+			}
+		]
+	},
+	"nodes": [
+		{
+			"id": "happiness-coordination",
+			"label": "协调与幸福",
+			"kind": "core",
+			"summary": "协调直觉、情绪和理性，并理解它们在关系中的作用，是当前笔记追寻幸福的起点。",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "notes",
+					"locator": "整书总纲"
+				}
+			]
+		},
+		{
+			"id": "interpretation-shapes-experience",
+			"label": "解释塑造体验",
+			"kind": "model",
+			"summary": "事件经由认知框架得到解释，解释再影响情绪与行为。",
+			"chapter": "内部协调",
+			"anchor": "internal-coordination",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "notes",
+					"locator": "2.1 掌控解释"
+				}
+			]
+		},
+		{
+			"id": "affective-priming",
+			"label": "情感启动",
+			"kind": "bias",
+			"summary": "刺激会在意识充分参与前触发快速的好坏评价。",
+			"chapter": "内部协调",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "notes",
+					"locator": "2.1 情感启动效应"
+				}
+			]
+		},
+		{
+			"id": "negativity-bias",
+			"label": "负面偏好",
+			"kind": "bias",
+			"summary": "威胁与损失通常获得更快、更强的注意、记忆与反应。",
+			"chapter": "内部协调",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "notes",
+					"locator": "2.1 负面偏好"
+				}
+			]
+		},
+		{
+			"id": "emotion-cognition-loop",
+			"label": "情绪—认知循环",
+			"kind": "model",
+			"summary": "情绪过滤信息，认知又反馈情绪，可能形成自我强化的循环。",
+			"chapter": "内部协调",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "notes",
+					"locator": "2.1 情绪与认知的相互作用"
+				}
+			]
+		},
+		{
+			"id": "genetic-disposition",
+			"label": "遗传倾向",
+			"kind": "concept",
+			"summary": "遗传差异可能影响日常情绪基线，但不等于完全决定个人改变空间。",
+			"chapter": "内部协调",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "notes",
+					"locator": "2.1 遗传基因与双胞胎研究线索"
+				}
+			]
+		},
+		{
+			"id": "meditation-practice",
+			"label": "冥想训练",
+			"kind": "practice",
+			"summary": "通过调节注意和观察杂念，练习松动自动化思考与消极依恋。",
+			"chapter": "内部协调",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "notes",
+					"locator": "2.1 冥想"
+				}
+			]
+		},
+		{
+			"id": "cognitive-therapy",
+			"label": "认知疗法",
+			"kind": "practice",
+			"summary": "记录、识别并重构当下的自动化负向想法。",
+			"chapter": "内部协调",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "notes",
+					"locator": "2.1 认知疗法"
+				}
+			]
+		},
+		{
+			"id": "treatment-boundary",
+			"label": "治疗边界",
+			"kind": "concept",
+			"summary": "心理治疗和药物涉及专业评估、时代证据、个体差异与知情同意。",
+			"chapter": "内部协调",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "notes",
+					"locator": "2.1 认知疗法与药物治疗边界"
+				}
+			]
+		},
+		{
+			"id": "reciprocity-loop",
+			"label": "互惠闭环",
+			"kind": "model",
+			"summary": "感知行为、情绪评价、回报动机和实际行动共同组成互惠机制。",
+			"chapter": "社会互动",
+			"anchor": "social-interaction",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "notes",
+					"locator": "2.2 互惠闭环"
+				}
+			]
+		},
+		{
+			"id": "reputation-cooperation",
+			"label": "声誉与合作",
+			"kind": "concept",
+			"summary": "声誉帮助群体评估合作对象，也可能奖励道德表象。",
+			"chapter": "社会互动",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "notes",
+					"locator": "2.2 互惠与社会声誉"
+				}
+			]
+		},
+		{
+			"id": "self-righteousness",
+			"label": "自以为是",
+			"kind": "bias",
+			"summary": "人容易用行为评价他人，却用意图和有利标准评价自己。",
+			"chapter": "社会互动",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "notes",
+					"locator": "2.2 自以为是"
+				}
+			]
+		},
+		{
+			"id": "motivated-reasoning",
+			"label": "动机性思考",
+			"kind": "bias",
+			"summary": "立场和自我保护动机先行时，推理会选择性搜索支持材料。",
+			"chapter": "社会互动",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "notes",
+					"locator": "2.2 先做判断，再编造说辞"
+				}
+			]
+		},
+		{
+			"id": "naive-realism",
+			"label": "天真实在论",
+			"kind": "bias",
+			"summary": "人倾向把自身感知当作客观真理，并把分歧归因于他人的无知或偏见。",
+			"chapter": "社会互动",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "notes",
+					"locator": "2.2 天真实在论"
+				}
+			]
+		},
+		{
+			"id": "violence-justification",
+			"label": "暴力正当化",
+			"kind": "outcome",
+			"summary": "自尊威胁、资源动机与道德理想主义可能把伤害解释为必要回应。",
+			"chapter": "社会互动",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "notes",
+					"locator": "2.2 邪恶与残暴的根源"
+				}
+			]
+		},
+		{
+			"id": "reflective-dialogue",
+			"label": "反思与共情对话",
+			"kind": "practice",
+			"summary": "记录判断、承认自身可能犯错并询问对方需求，把心智协调落实到互动。",
+			"chapter": "社会互动",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "notes",
+					"locator": "2.2 系统化解决路径"
+				}
+			]
+		},
+		{
+			"id": "happiness-sources",
+			"label": "幸福来源",
+			"kind": "chapter",
+			"summary": "待补充：继续探究幸福方程式及其关键因素。",
+			"chapter": "追寻幸福",
+			"anchor": "pursuing-happiness",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "notes",
+					"locator": "整书总纲：追寻幸福"
+				}
+			]
+		},
+		{
+			"id": "transcendent-happiness",
+			"label": "精神与超越",
+			"kind": "chapter",
+			"summary": "待补充：继续追问更高层次的幸福。",
+			"chapter": "精神与超越",
+			"anchor": "spirit-and-transcendence",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "notes",
+					"locator": "整书总纲：精神与超越"
+				}
+			]
+		}
+	],
+	"edges": [
+		{
+			"id": "interpretation-starts-coordination",
+			"source": "interpretation-shapes-experience",
+			"target": "happiness-coordination",
+			"relation": "supports",
+			"directed": true,
+			"summary": "看见解释对感受的作用，为内部协调提供起点。",
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "notes", "locator": "2.1 掌控解释" }]
+		},
+		{
+			"id": "priming-feeds-loop",
+			"source": "affective-priming",
+			"target": "emotion-cognition-loop",
+			"relation": "causes",
+			"directed": true,
+			"summary": "快速评价会影响随后进入注意和解释的信息。",
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "notes", "locator": "2.1 情感启动效应" }]
+		},
+		{
+			"id": "negativity-feeds-loop",
+			"source": "negativity-bias",
+			"target": "emotion-cognition-loop",
+			"relation": "causes",
+			"directed": true,
+			"summary": "负面过滤可能强化情绪与认知的循环。",
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "notes", "locator": "2.1 负面偏好" }]
+		},
+		{
+			"id": "meditation-applies-to-loop",
+			"source": "meditation-practice",
+			"target": "emotion-cognition-loop",
+			"relation": "applies_to",
+			"directed": true,
+			"summary": "注意训练尝试松动自动化循环。",
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "notes", "locator": "2.1 冥想" }]
+		},
+		{
+			"id": "therapy-applies-to-loop",
+			"source": "cognitive-therapy",
+			"target": "emotion-cognition-loop",
+			"relation": "applies_to",
+			"directed": true,
+			"summary": "结构化练习用于识别并重构自动化负向想法。",
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "notes", "locator": "2.1 认知疗法" }]
+		},
+		{
+			"id": "treatment-qualifies-practice",
+			"source": "treatment-boundary",
+			"target": "cognitive-therapy",
+			"relation": "applies_to",
+			"directed": true,
+			"summary": "治疗路径必须放在专业判断与个体差异中理解。",
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "notes", "locator": "2.1 医疗边界" }]
+		},
+		{
+			"id": "reciprocity-supports-cooperation",
+			"source": "reciprocity-loop",
+			"target": "reputation-cooperation",
+			"relation": "supports",
+			"directed": true,
+			"summary": "回报预期和声誉帮助群体维持合作。",
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "notes", "locator": "2.2 互惠与声誉" }]
+		},
+		{
+			"id": "reputation-can-feed-righteousness",
+			"source": "reputation-cooperation",
+			"target": "self-righteousness",
+			"relation": "causes",
+			"directed": true,
+			"summary": "道德表象获得社会回报时，自以为是可能被强化。",
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "notes", "locator": "2.2 社会与声誉动机" }]
+		},
+		{
+			"id": "motivation-explains-righteousness",
+			"source": "motivated-reasoning",
+			"target": "self-righteousness",
+			"relation": "explains",
+			"directed": true,
+			"summary": "先有立场再找理由帮助维持有利的自我形象。",
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "notes", "locator": "2.2 先判断再找理由" }]
+		},
+		{
+			"id": "naive-realism-amplifies-righteousness",
+			"source": "naive-realism",
+			"target": "self-righteousness",
+			"relation": "causes",
+			"directed": true,
+			"summary": "把自身感知当作客观真理会放大对他人的道德判断。",
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "notes", "locator": "2.2 天真实在论" }]
+		},
+		{
+			"id": "righteousness-to-violence",
+			"source": "self-righteousness",
+			"target": "violence-justification",
+			"relation": "leads_to",
+			"directed": true,
+			"summary": "受害者叙事与道德使命可能把伤害解释成合理回应。",
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "notes", "locator": "2.2 暴力循环" }]
+		},
+		{
+			"id": "reflection-challenges-righteousness",
+			"source": "reflective-dialogue",
+			"target": "self-righteousness",
+			"relation": "contrasts",
+			"directed": true,
+			"summary": "先检查自身错误并询问对方需求，可以松动单边正当化。",
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "notes", "locator": "2.2 系统化解决路径" }]
+		},
+		{
+			"id": "coordination-leads-to-happiness",
+			"source": "happiness-coordination",
+			"target": "happiness-sources",
+			"relation": "leads_to",
+			"directed": true,
+			"summary": "内部与社会协调把问题推进到幸福来源。",
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "notes", "locator": "整书四段主线" }]
+		},
+		{
+			"id": "happiness-leads-to-transcendence",
+			"source": "happiness-sources",
+			"target": "transcendent-happiness",
+			"relation": "leads_to",
+			"directed": true,
+			"summary": "幸福来源的讨论将继续引向精神与超越。",
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "notes", "locator": "整书四段主线" }]
+		}
+	]
+}

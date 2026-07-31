@@ -5,6 +5,7 @@ export const BOOK_SHELF_VALUES = [
 	"cognition-and-decisions",
 	"wealth-and-growth",
 	"psychology-and-relationships",
+	"literature-and-life",
 ] as const;
 export type BookShelf = (typeof BOOK_SHELF_VALUES)[number];
 
@@ -93,6 +94,32 @@ export const BOOK_MAP_TRANSITION_RELATION_VALUES = [
 export type BookMapTransitionRelation =
 	(typeof BOOK_MAP_TRANSITION_RELATION_VALUES)[number];
 
+export const BOOK_MAP_PART_MATURITY_VALUES = [
+	"outline",
+	"developing",
+	"developed",
+] as const;
+export type BookMapPartMaturity =
+	(typeof BOOK_MAP_PART_MATURITY_VALUES)[number];
+
+export const BOOK_ARGUMENT_CARD_KIND_VALUES = [
+	"mechanism",
+	"evidence",
+	"manifestation",
+	"practice",
+	"boundary",
+] as const;
+export type BookArgumentCardKind =
+	(typeof BOOK_ARGUMENT_CARD_KIND_VALUES)[number];
+
+export const BOOK_ARGUMENT_CONTEXT_VALUES = [
+	"book_argument",
+	"external_research",
+	"cross_book",
+	"personal_reflection",
+] as const;
+export type BookArgumentContext = (typeof BOOK_ARGUMENT_CONTEXT_VALUES)[number];
+
 export interface BookGraphSourceRef {
 	basis: BookGraphBasis;
 	locator: string;
@@ -105,16 +132,29 @@ export interface BookMapStatement {
 	sourceRefs: BookGraphSourceRef[];
 }
 
+export interface BookArgumentCard {
+	id: string;
+	kind: BookArgumentCardKind;
+	title: string;
+	summary: string;
+	context: BookArgumentContext;
+	conceptNodeIds: string[];
+	provenance: BookGraphProvenance;
+	sourceRefs: BookGraphSourceRef[];
+}
+
 export interface BookMapPart {
 	id: string;
 	order: number;
 	title: string;
 	role: BookMapPartRole;
+	maturity: BookMapPartMaturity;
 	question: string;
 	thesis: string;
 	inputUnderstanding: string;
 	outputUnderstanding: string;
 	conceptNodeIds: string[];
+	argumentCards: BookArgumentCard[];
 	provenance: BookGraphProvenance;
 	sourceRefs: BookGraphSourceRef[];
 }
@@ -173,19 +213,46 @@ export interface BookGraphData {
 	edges: BookGraphEdge[];
 }
 
+export interface BookExcerpt {
+	text: string;
+	source: string;
+	url?: string;
+}
+
+export interface BookSourceCitation {
+	text: string;
+	source: string;
+	url: string;
+}
+
+export const BOOK_READING_REASON_KIND_VALUES = [
+	"insight",
+	"scope",
+	"perspective",
+	"readability",
+	"application",
+	"boundary",
+] as const;
+export type BookReadingReasonKind =
+	(typeof BOOK_READING_REASON_KIND_VALUES)[number];
+
+export interface BookReadingReason extends BookSourceCitation {
+	title: string;
+	kind: BookReadingReasonKind;
+}
+
 export interface BookCardData {
 	id: string;
 	title: string;
 	originalTitle?: string;
 	authors: string[];
 	description: string;
-	previewFocus: string;
+	sourceIntroduction: string;
 	status: BookStatus;
 	shelf: BookShelf;
 	topics: string[];
 	coverUrl: string;
 	url: string;
-	graphStage: BookGraphStage;
 }
 
 export interface BookDirectoryItem {
@@ -205,6 +272,7 @@ export const BOOK_SHELF_LABELS: Record<BookShelf, string> = {
 	"cognition-and-decisions": "认知与决策",
 	"wealth-and-growth": "财富与成长",
 	"psychology-and-relationships": "心理与关系",
+	"literature-and-life": "文学与人生",
 };
 
 export const BOOK_GRAPH_STAGE_LABELS: Record<BookGraphStage, string> = {
@@ -266,6 +334,34 @@ export const BOOK_MAP_PART_ROLE_LABELS: Record<BookMapPartRole, string> = {
 	prescribe: "给出实践",
 	conclude: "形成结论",
 };
+
+export const BOOK_MAP_PART_MATURITY_LABELS: Record<
+	BookMapPartMaturity,
+	string
+> = {
+	outline: "待补充",
+	developing: "整理中",
+	developed: "已展开",
+};
+
+export const BOOK_ARGUMENT_CARD_KIND_LABELS: Record<
+	BookArgumentCardKind,
+	string
+> = {
+	mechanism: "机 · 解释机制",
+	evidence: "证 · 依据线索",
+	manifestation: "症 · 现实表现",
+	practice: "法 · 实践方法",
+	boundary: "界 · 适用边界",
+};
+
+export const BOOK_ARGUMENT_CONTEXT_LABELS: Record<BookArgumentContext, string> =
+	{
+		book_argument: "本书论证",
+		external_research: "外部研究线索",
+		cross_book: "跨书关联",
+		personal_reflection: "个人思考",
+	};
 
 export const BOOK_MAP_TRANSITION_RELATION_LABELS: Record<
 	BookMapTransitionRelation,

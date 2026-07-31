@@ -1,0 +1,45 @@
+{
+	"book": "emotional",
+	"title": "《情绪：影响正确决策的变量》预读知识地图",
+	"stage": "preview",
+	"basis": ["metadata", "toc"],
+	"aiAssisted": true,
+	"layout": "breadthfirst",
+	"summary": "从情绪的来源走向决策作用，预读感受如何参与思考。",
+	"nodes": [
+		{
+			"id": "emotion-shapes-thinking",
+			"label": "情绪塑造思考",
+			"kind": "core",
+			"summary": "情绪为注意、评价和行动提供信息，而非只会妨碍判断。",
+			"chapter": "情绪如何参与决策",
+			"anchor": "emotion-decisions",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "metadata", "locator": "书名与副标题" }]
+		},
+		{
+			"id": "emotion-origin",
+			"label": "情绪的来源",
+			"kind": "model",
+			"summary": "进化与生物机制为理解不同情绪的功能提供起点。",
+			"chapter": "情绪从何而来",
+			"anchor": "emotion-origin",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "toc", "locator": "PART I《情绪的来源》" }]
+		}
+	],
+	"edges": [
+		{
+			"id": "origin-explains-thinking",
+			"source": "emotion-origin",
+			"target": "emotion-shapes-thinking",
+			"relation": "explains",
+			"directed": true,
+			"summary": "情绪的功能与来源帮助解释其为何参与认知和决策。",
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "toc", "locator": "目录主题整理" }]
+		}
+	]
+}

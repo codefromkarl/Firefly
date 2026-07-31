@@ -1,0 +1,47 @@
+{
+	"book": "made-in-america",
+	"title": "《富甲美国》预读知识地图",
+	"stage": "preview",
+	"basis": ["metadata", "toc"],
+	"aiAssisted": true,
+	"layout": "breadthfirst",
+	"summary": "从创业历程和经营原则两条线索预读沃尔玛的零售扩张。",
+	"nodes": [
+		{
+			"id": "retail-expansion",
+			"label": "零售扩张",
+			"kind": "core",
+			"summary": "企业从小店起步，经由选址、组织和资本等环节扩大规模。",
+			"chapter": "从小店到扩张",
+			"anchor": "retail-growth",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "toc", "locator": "目录：小店起家至闯出新路" }]
+		},
+		{
+			"id": "operating-discipline",
+			"label": "经营纪律",
+			"kind": "practice",
+			"summary": "成本意识、顾客反馈与合作关系构成可反复执行的经营约束。",
+			"chapter": "经营原则",
+			"anchor": "operating-principles",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{ "basis": "toc", "locator": "目录主题：珍惜每一美元、建立合作关系" }
+			]
+		}
+	],
+	"edges": [
+		{
+			"id": "discipline-supports-expansion",
+			"source": "operating-discipline",
+			"target": "retail-expansion",
+			"relation": "supports",
+			"directed": true,
+			"summary": "可复制的经营纪律为规模扩张提供基础。",
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "toc", "locator": "目录主题整理" }]
+		}
+	]
+}

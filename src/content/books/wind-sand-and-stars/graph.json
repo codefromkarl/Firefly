@@ -1,0 +1,50 @@
+{
+	"book": "wind-sand-and-stars",
+	"title": "《风沙星辰》基础知识地图",
+	"stage": "preview",
+	"basis": ["metadata"],
+	"aiAssisted": true,
+	"layout": "breadthfirst",
+	"summary": "从飞行职业与沙漠遇险出发，重访责任、同伴关系和生命意义。",
+	"nodes": [
+		{
+			"id": "aviation-as-craft",
+			"label": "飞行作为职业",
+			"kind": "core",
+			"summary": "早期航空把技术、风险和责任结合为一种需要共同承担的职业实践。",
+			"chapter": "飞行作为职业",
+			"anchor": "aviation",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "metadata", "locator": "作品类型与公开梗概" }]
+		},
+		{
+			"id": "human-solidarity",
+			"label": "人的团结",
+			"kind": "concept",
+			"summary": "危险、孤独和互助让同伴关系成为理解人的尊严与意义的入口。",
+			"chapter": "沙漠、同伴与人的意义",
+			"anchor": "solidarity",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{
+					"basis": "metadata",
+					"locator": "公开梗概：友谊、英雄主义、团结与意义"
+				}
+			]
+		}
+	],
+	"edges": [
+		{
+			"id": "craft-reveals-solidarity",
+			"source": "aviation-as-craft",
+			"target": "human-solidarity",
+			"relation": "leads_to",
+			"directed": true,
+			"summary": "职业中的风险与协作把飞行经验推进为对人的团结的思考。",
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "metadata", "locator": "公开梗概主题整理" }]
+		}
+	]
+}

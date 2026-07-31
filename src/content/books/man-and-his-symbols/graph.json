@@ -1,0 +1,47 @@
+{
+	"book": "man-and-his-symbols",
+	"title": "《人类与象征》预读知识地图",
+	"stage": "preview",
+	"basis": ["metadata", "toc"],
+	"aiAssisted": true,
+	"layout": "circle",
+	"summary": "以无意识为中心，预读梦、象征和原型如何构成人类理解心灵的线索。",
+	"nodes": [
+		{
+			"id": "unconscious-expression",
+			"label": "无意识的表达",
+			"kind": "core",
+			"summary": "梦与象征被用来观察意识之外的心理活动。",
+			"chapter": "探索无意识",
+			"anchor": "unconscious",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{ "basis": "toc", "locator": "第一章《探索无意识》及子节" }
+			]
+		},
+		{
+			"id": "symbol-and-archetype",
+			"label": "象征与原型",
+			"kind": "concept",
+			"summary": "反复出现的意象为个人心理与更广泛文化经验建立联系。",
+			"chapter": "象征与原型",
+			"anchor": "symbols",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "toc", "locator": "目录主题：梦的象征与原型" }]
+		}
+	],
+	"edges": [
+		{
+			"id": "unconscious-through-symbols",
+			"source": "symbol-and-archetype",
+			"target": "unconscious-expression",
+			"relation": "explains",
+			"directed": true,
+			"summary": "象征与原型提供观察无意识表达的概念入口。",
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "toc", "locator": "目录主题整理" }]
+		}
+	]
+}

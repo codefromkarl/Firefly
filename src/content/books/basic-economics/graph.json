@@ -1,0 +1,47 @@
+{
+	"book": "basic-economics",
+	"title": "《经济学的思维方式》预读知识地图",
+	"stage": "preview",
+	"basis": ["metadata", "toc"],
+	"aiAssisted": true,
+	"layout": "breadthfirst",
+	"summary": "从稀缺性和价格机制出发，预读经济选择的约束与后果。",
+	"nodes": [
+		{
+			"id": "scarcity-and-tradeoffs",
+			"label": "稀缺性与权衡",
+			"kind": "core",
+			"summary": "资源有限意味着任何选择都伴随被放弃的其他用途。",
+			"chapter": "稀缺性与选择",
+			"anchor": "scarcity",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "toc", "locator": "第 1 章《什么是经济学？》" }]
+		},
+		{
+			"id": "price-signals",
+			"label": "价格信号",
+			"kind": "model",
+			"summary": "价格帮助分散的生产者与消费者调整数量、成本和替代选择。",
+			"chapter": "价格如何协调信息",
+			"anchor": "prices",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "toc", "locator": "第一部分《价格与市场》" }]
+		}
+	],
+	"edges": [
+		{
+			"id": "prices-coordinate-scarcity",
+			"source": "price-signals",
+			"target": "scarcity-and-tradeoffs",
+			"relation": "explains",
+			"directed": true,
+			"summary": "价格机制是协调稀缺资源用途的一种方式。",
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{ "basis": "toc", "locator": "目录顺序：稀缺性至价格与市场" }
+			]
+		}
+	]
+}

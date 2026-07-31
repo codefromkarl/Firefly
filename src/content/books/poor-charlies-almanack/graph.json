@@ -1,0 +1,47 @@
+{
+	"book": "poor-charlies-almanack",
+	"title": "《穷查理宝典》预读知识地图",
+	"stage": "preview",
+	"basis": ["metadata", "toc"],
+	"aiAssisted": true,
+	"layout": "circle",
+	"summary": "以多元思维模型为中心，预读判断方法与长期实践之间的联系。",
+	"nodes": [
+		{
+			"id": "latticework-models",
+			"label": "多元思维模型",
+			"kind": "core",
+			"summary": "来自不同学科的模型共同构成分析复杂问题的认知格栅。",
+			"chapter": "多元思维模型",
+			"anchor": "mental-models",
+			"importance": 3,
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "toc", "locator": "目录：演讲与思维方法主题" }]
+		},
+		{
+			"id": "judgment-and-character",
+			"label": "判断与品格",
+			"kind": "practice",
+			"summary": "思维工具需要与诚实、耐心和长期行动结合，才能形成稳定判断。",
+			"chapter": "判断与品格",
+			"anchor": "judgment-character",
+			"importance": 2,
+			"provenance": "editorial_inference",
+			"sourceRefs": [
+				{ "basis": "toc", "locator": "目录主题：传略、演讲与智慧箴言" }
+			]
+		}
+	],
+	"edges": [
+		{
+			"id": "models-applied-by-character",
+			"source": "latticework-models",
+			"target": "judgment-and-character",
+			"relation": "applies_to",
+			"directed": true,
+			"summary": "模型的价值需要在判断习惯和长期行动中体现。",
+			"provenance": "editorial_inference",
+			"sourceRefs": [{ "basis": "toc", "locator": "目录主题整理" }]
+		}
+	]
+}

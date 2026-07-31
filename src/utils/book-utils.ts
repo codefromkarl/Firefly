@@ -75,12 +75,11 @@ export function toBookCardData(
 		originalTitle: book.data.originalTitle,
 		authors: book.data.authors,
 		description: book.data.description,
-		previewFocus: book.data.previewFocus,
+		sourceIntroduction: book.data.introductions[0].text,
 		status: book.data.status,
 		shelf: book.data.shelf,
 		topics: book.data.topics,
 		coverUrl,
 		url: getBookUrl(book.id),
-		graphStage: book.data.graphStage,
 	};
 }
