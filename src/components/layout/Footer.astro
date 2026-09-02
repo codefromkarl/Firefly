@@ -1,7 +1,7 @@
 ---
 import fs from "node:fs";
 import path from "node:path";
-import { footerConfig, profileConfig } from "@/config";
+import { footerConfig, licenseConfig, profileConfig, siteConfig } from "@/config";
 import { url } from "@/utils/url-utils";
 
 const currentYear = new Date().getFullYear();
@@ -26,55 +26,106 @@ if (footerConfig.enable) {
 		);
 	}
 }
+
+// 页脚导航（与 siteConfig.pages 开关联动）
+const pages = siteConfig.pages;
+const navLinks = [
+	{ label: "主页", href: url("/"), key: null },
+	{ label: "归档", href: url("/archive/"), key: null },
+	{ label: "书单", href: url("/books/"), key: null },
+	{ label: "技术栈", href: url("/tech-stack/"), key: null },
+	{ label: "实验室", href: url("/lab/"), key: null },
+	{ label: "关于", href: url("/about/"), key: null },
+].filter((l) => l.key === null || pages[l.key as keyof typeof pages] !== false);
+
+const wordmarkFont =
+	"var(--font-navbar-title), 'Space Grotesk', ui-sans-serif, system-ui, sans-serif";
+const monoFont =
+	"'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
 ---
 
+{customFooterHtml && (
+	<div class="hairline-t transition mx-auto max-w-(--page-width) px-4 md:px-6 pt-6">
+		<div class="text-center text-sm" set:html={customFooterHtml} />
+	</div>
+)}
 
-<div
-  class="transition border-t border-black/10 dark:border-white/15 my-10 border-dashed mx-32"
->
-</div>
+<footer class="transition">
+	<div class="hairline-t mx-auto max-w-(--page-width) px-4 md:px-6 pt-10 pb-12">
+		<div class="grid grid-cols-1 gap-10 md:grid-cols-[1.2fr_1fr] md:gap-16">
+			{/* 左侧：站点字标 */}
+			<div>
+				<div
+					class="text-4xl font-bold tracking-[-0.02em] transition text-90 md:text-5xl"
+					style={`font-family: ${wordmarkFont}`}
+				>
+					{siteConfig.title}
+				</div>
+				<div class="transition mt-4 max-w-105 text-sm leading-relaxed text-50">
+					{siteConfig.subtitle}
+				</div>
+			</div>
 
-<div
-  class="transition border-dashed border-[oklch(85%_0.01_var(--hue))] dark:border-white/15 rounded-2xl mb-12 flex flex-col items-center justify-center px-6"
->
-  <div class="transition text-50 text-sm text-center wrap">
-    <div class="mb-2">
-      {customFooterHtml && <div set:html={customFooterHtml} />}
-    </div>
-    <div class="m-0.5 flex gap-2 justify-center flex-wrap">
-      &copy; <span id="copyright-year">{currentYear}</span>
-      {profileConfig.name}. All Rights Reserved.
-      <span aria-hidden="true">/</span>
-      <a
-        class="transition link text-(--primary) font-medium"
-        target="_blank"
-        href={url("rss.xml")}>RSS</a
-      >
-      <span aria-hidden="true">/</span>
-      <a
-        class="transition link text-(--primary) font-medium"
-        target="_blank"
-        href={url("sitemap-index.xml")}>Sitemap</a
-      >
-    </div>
-    <div class="m-0.5 flex gap-2 justify-center flex-wrap">
-      <span>Powered by</span>
-      <a
-        class="transition link text-(--primary) font-medium"
-        target="_blank"
-        href="https://astro.build">Astro</a
-      >
-      <span aria-hidden="true">&</span>
-      <a
-        class="transition link text-(--primary) font-medium"
-        target="_blank"
-        href="https://github.com/CuteLeaf/Firefly">Firefly</a
-      >
-    </div>
-    <!-- 
-      注意：请勿随意修改或删除 "Powered by Astro & Firefly" 部分，这是对开源项目的尊重和支持。
-      如果您需要在底部增加内容，请在src/config/footerConfig.ts中修改enable属性为true，然后编辑src/config/FooterConfig.html文件。
-      您可以随意在src/config/FooterConfig.html中随意添加自定义内容，不需要修改Footer.astro文件。
-    -->
-  </div>
-</div>
+			{/* 右侧：导航列 */}
+			<nav aria-label="Footer" class="md:justify-self-end">
+				<ul class="grid grid-cols-2 gap-x-10 gap-y-2.5">
+					{navLinks.map((link) => (
+						<li>
+							<a
+								href={link.href}
+								class="group transition inline-flex items-baseline gap-2 text-75 hover:text-(--primary)"
+							>
+								<span
+									class="transition translate-y-0 group-hover:translate-x-0.5"
+									aria-hidden="true"
+									style={`font-family: ${monoFont}`}
+									>→</span
+								>
+								<span class="text-sm">{link.label}</span>
+							</a>
+						</li>
+					))}
+				</ul>
+			</nav>
+		</div>
+
+		{/* 底部条：版权 / 许可 / 引擎 */}
+		<div
+			class="hairline-t mt-10 pt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
+			style={`font-family: ${monoFont}`}
+		>
+			<div class="transition flex flex-wrap items-center gap-x-2 text-xs text-50">
+				<span>&copy;</span>
+				<span id="copyright-year">{currentYear}</span>
+				<span>{profileConfig.name}</span>
+				<span aria-hidden="true">/</span>
+				<span>{licenseConfig.name}</span>
+			</div>
+			<div class="transition flex flex-wrap items-center gap-x-4 text-xs text-50">
+				<a href={url("rss.xml")} class="transition hover:text-(--primary)">RSS</a>
+				<a href={url("sitemap-index.xml")} class="transition hover:text-(--primary)">
+					Sitemap
+				</a>
+				<span aria-hidden="true">—</span>
+				<span>
+					Powered by
+					<a
+						class="transition hover:text-(--primary)"
+						target="_blank"
+						href="https://astro.build">Astro</a
+					>
+					<span aria-hidden="true">&amp;</span>
+					<a
+						class="transition hover:text-(--primary)"
+						target="_blank"
+						href="https://github.com/CuteLeaf/Firefly">Firefly</a
+					>
+				</span>
+			</div>
+		</div>
+		{/* 
+		  注意：请保留 "Powered by Astro & Firefly" 署名。
+		  自定义底部内容请编辑 src/config/FooterConfig.html（footerConfig.enable = true）。
+		*/}
+	</div>
+</footer>

@@ -503,7 +503,7 @@ function portal(node: HTMLElement) {
   on:click={generatePoster}
   aria-label="Generate Share Poster"
 >
-  <Icon icon="material-symbols:share" size="md" />
+  <Icon icon="lucide:share" size="md" />
   <span>{i18n(I18nKey.shareArticle)}</span>
 </button>
 
@@ -533,10 +533,10 @@ function portal(node: HTMLElement) {
           on:click={copyLink}
         >
           {#if copied}
-            <Icon icon="material-symbols:check" size="md" />
+            <Icon icon="lucide:check" size="md" />
             <span>{i18n(I18nKey.copied)}</span>
           {:else}
-            <Icon icon="material-symbols:link" size="md" />
+            <Icon icon="lucide:link" size="md" />
             <span>{i18n(I18nKey.copyLink)}</span>
           {/if}
         </button>
@@ -546,7 +546,7 @@ function portal(node: HTMLElement) {
           on:click={downloadPoster}
           disabled={!posterImage}
         >
-          <Icon icon="material-symbols:download" size="md" />
+          <Icon icon="lucide:download" size="md" />
           {i18n(I18nKey.savePoster)}
         </button>
       </div>

@@ -28,18 +28,18 @@ const postUrl = sourceLink || decodeURIComponent(Astro.url.toString());
 function getLicenseIcon(name: string): string {
 	const n = name.toLowerCase();
 	if (/cc0|creative commons zero/.test(n)) {
-		return "fa7-brands:creative-commons-zero";
+		return "lucide:copyright";
 	}
 	if (/public domain|公共领域/.test(n)) {
-		return "fa7-brands:creative-commons-pd";
+		return "lucide:copyright";
 	}
 	if (/^cc($|[\s-])|creative commons|知识共享/.test(n)) {
-		return "fa7-brands:creative-commons";
+		return "lucide:copyright";
 	}
 	if (/\b(mit|apache|bsd|isc|mulan|unlicense)\b|gpl|mpl\b/.test(n)) {
-		return "fa7-brands:osi";
+		return "lucide:shield-check";
 	}
-	return "fa7-regular:copyright";
+	return "lucide:copyright";
 }
 
 // 文章单独指定的许可证按名称自动匹配；站点默认许可证优先使用配置中的自定义图标

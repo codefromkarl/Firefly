@@ -28,7 +28,7 @@ export const backgroundWallpaper: BackgroundWallpaperConfig = {
 		navbar: {
 			transparentMode: "semi",
 			enableBlur: true,
-			blur: 5,
+			blur: 18,
 		},
 		waves: {
 			enable: {

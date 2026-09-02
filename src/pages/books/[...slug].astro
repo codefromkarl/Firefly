@@ -150,7 +150,7 @@ const jsonLd = {
 										class="inline-flex items-center gap-1 font-medium text-(--primary) hover:underline"
 									>
 										{introduction.source}
-										<Icon is:inline name="material-symbols:open-in-new" class="text-base" />
+										<Icon is:inline name="lucide:external-link" class="text-base" />
 									</a>
 								))}
 							</div>
@@ -170,12 +170,12 @@ const jsonLd = {
 
 					<div class="mt-auto flex flex-wrap gap-x-6 gap-y-2 pt-7 text-sm text-neutral-500 dark:text-neutral-400">
 						<span class="inline-flex items-center gap-2">
-							<Icon is:inline name="material-symbols:language" class="text-lg" />
+							<Icon is:inline name="lucide:globe" class="text-lg" />
 							{book.data.language}
 						</span>
 						{book.data.isbn && (
 							<span class="inline-flex items-center gap-2">
-								<Icon is:inline name="material-symbols:barcode" class="text-lg" />
+								<Icon is:inline name="lucide:barcode" class="text-lg" />
 								ISBN {book.data.isbn}
 							</span>
 						)}
@@ -200,7 +200,7 @@ const jsonLd = {
 					<blockquote class="flex h-full flex-col rounded-2xl border border-(--line-divider) bg-(--btn-regular-bg)/45 p-5">
 						<Icon
 							is:inline
-							name="material-symbols:format-quote"
+							name="lucide:quote"
 							class="text-3xl text-(--primary)"
 							aria-hidden="true"
 						/>
@@ -219,7 +219,7 @@ const jsonLd = {
 								class="mt-2 inline-flex items-center gap-1 font-medium text-(--primary) hover:underline"
 							>
 								查看依据来源
-								<Icon is:inline name="material-symbols:open-in-new" class="text-base" />
+								<Icon is:inline name="lucide:external-link" class="text-base" />
 							</a>
 						</footer>
 					</blockquote>
@@ -243,7 +243,7 @@ const jsonLd = {
 										class="inline-flex items-center gap-1 font-medium text-(--primary) hover:underline"
 									>
 										查看评价来源
-										<Icon is:inline name="material-symbols:open-in-new" class="text-base" />
+										<Icon is:inline name="lucide:external-link" class="text-base" />
 									</a>
 								</footer>
 							</blockquote>
@@ -291,7 +291,7 @@ const jsonLd = {
 												核对公开原文
 												<Icon
 													is:inline
-													name="material-symbols:open-in-new"
+													name="lucide:external-link"
 													class="text-base"
 												/>
 											</a>

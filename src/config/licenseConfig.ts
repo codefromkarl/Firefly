@@ -8,17 +8,17 @@ export const licenseConfig: LicenseConfig = {
 	name: "CC BY-NC-SA 4.0",
 	url: "https://creativecommons.org/licenses/by-nc-sa/4.0/",
 
-	// 可选：自定义许可证图标（iconify 图标名）
+	// 可选：自定义许可证图标（Lucide 图标名，如 "lucide:copyright"）
 	// 留空时根据许可证名称自动匹配，匹配规则如下：
 	//   CC BY / CC BY-SA / CC BY-NC / CC BY-NC-SA / CC BY-ND / CC BY-NC-ND 等 CC 系列
-	//   → fa7-brands:creative-commons
+	//   → lucide:copyright
 	//   CC0 1.0
-	//   → fa7-brands:creative-commons-zero
+	//   → lucide:copyright
 	//   Public Domain / 公共领域
-	//   → fa7-brands:creative-commons-pd
+	//   → lucide:copyright
 	//   MIT / Apache / BSD / ISC / MPL / GPL / LGPL / AGPL / MulanPSL / Unlicense
-	//   → fa7-brands:osi
+	//   → lucide:shield-check
 	//   其余未匹配的许可证（如 All Rights Reserved、WTFPL 等）
-	//   → fa7-regular:copyright
+	//   → lucide:copyright
 	icon: "",
 };

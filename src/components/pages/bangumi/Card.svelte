@@ -1,6 +1,7 @@
 <script lang="ts">
 import I18nKey from "@/i18n/i18nKey";
 import { i18n } from "@/i18n/translation";
+import Icon from "@/components/common/Icon.svelte";
 import type { UserSubjectCollection } from "@/types/bangumi";
 
 interface Props {
@@ -145,7 +146,7 @@ function handleError(e: Event) {
       />
     {:else}
       <div class="w-full h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-        <div class="text-gray-400 text-4xl">📖</div>
+        <Icon icon="lucide:book-open" class="w-10 h-10 text-gray-400" />
       </div>
     {/if}
 
@@ -157,7 +158,7 @@ function handleError(e: Event) {
     <!-- Score badge -->
     {#if score}
       <div class="absolute top-2 right-2 px-2 py-1 rounded-full text-xs text-white font-medium bg-black/50 backdrop-blur-sm flex items-center gap-1">
-        <span class="text-yellow-400">⭐</span>
+        <Icon icon="lucide:star" class="w-3.5 h-3.5 text-yellow-400 fill-current" />
         {score}
       </div>
     {/if}

@@ -1,0 +1,218 @@
+/* ============================================================
+   editorial-content.css — 文章阅读页（正文排版 / 代码块 / 横幅）
+   ============================================================ */
+
+/* ---------- 文章横幅：与首页同族，灰度电影底 + 克制标题 ---------- */
+#wallpaper-wrapper:has(.banner-post-meta-overlay, .banner-page-title-overlay) img {
+	filter: grayscale(1) brightness(0.68) contrast(1.06);
+	opacity: 0.9;
+}
+:root:not(.dark)
+	#wallpaper-wrapper:has(.banner-post-meta-overlay, .banner-page-title-overlay)
+	img {
+	filter: grayscale(1) brightness(0.72) contrast(1.04);
+}
+
+.banner-post-meta-overlay .banner-post-title {
+	font-size: clamp(1.9rem, 3.6vw, 2.75rem);
+	font-weight: 650;
+	letter-spacing: -0.01em;
+	line-height: 1.25;
+	text-wrap: balance;
+	text-shadow: 0 2px 32px rgba(0, 0, 0, 0.55);
+}
+
+/* 描述块：去掉圆底卡片与引号，改纯文本 */
+.banner-post-meta-overlay .banner-post-description {
+	background: transparent !important;
+	padding: 0;
+	border-radius: 0;
+	color: rgba(255, 255, 255, 0.88);
+	font-size: 1rem;
+	line-height: 1.9;
+	text-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
+}
+.banner-post-meta-overlay .banner-post-description-quote {
+	display: none !important;
+}
+.banner-post-meta-overlay .banner-post-description-divider {
+	background: rgba(255, 255, 255, 0.25);
+}
+
+/* ---------- 正文排版：editorial 阅读体验 ---------- */
+/* 版心：编辑栏宽居中（覆盖横向通栏） */
+#post-container {
+	max-width: 46rem;
+	margin-inline: auto;
+}
+
+.custom-md.prose {
+	--tw-prose-body: var(--deep-text);
+	--tw-prose-headings: var(--deep-text);
+	--tw-prose-bold: var(--deep-text);
+	--tw-prose-links: var(--primary);
+	--tw-prose-quotes: var(--deep-text);
+	--tw-prose-quote-borders: var(--primary);
+	--tw-prose-captions: var(--content-meta);
+	--tw-prose-code: var(--inline-code-color);
+	--tw-prose-pre-code: oklch(0.88 0.008 258);
+	--tw-prose-pre-bg: var(--codeblock-bg);
+	--tw-prose-hr: var(--line-color);
+	--tw-prose-th-borders: var(--line-color);
+	--tw-prose-td-borders: var(--line-divider);
+	--tw-prose-counters: var(--content-meta);
+	--tw-prose-bullets: var(--content-meta);
+}
+
+/* 段落尺码：宽松行高，中文友好 */
+.custom-md.prose p {
+	font-size: 1.0625rem;
+	line-height: 1.95;
+	color: color-mix(in oklch, var(--deep-text) 88%, transparent);
+}
+
+/* 标题层级：收紧字距、大间隔、锚点低调 */
+.custom-md.prose h1,
+.custom-md.prose h2,
+.custom-md.prose h3,
+.custom-md.prose h4,
+.custom-md.prose h5,
+.custom-md.prose h6 {
+	font-weight: 750;
+	color: var(--deep-text) !important;
+	letter-spacing: -0.012em;
+	text-wrap: balance;
+}
+.custom-md.prose h1 {
+	font-size: 2.05rem !important;
+	line-height: 1.3 !important;
+	margin-top: 0.5em !important;
+}
+.custom-md.prose h2 {
+	font-size: 1.6rem !important;
+	line-height: 1.4 !important;
+	margin-top: 2.6em !important;
+	margin-bottom: 1.05em !important;
+	padding-top: 0.4em;
+	border-top: 1px solid var(--line-divider);
+}
+.custom-md.prose h3 {
+	font-size: 1.3rem !important;
+	line-height: 1.45 !important;
+	margin-top: 2.1em !important;
+	margin-bottom: 0.85em !important;
+}
+.custom-md.prose h4 {
+	font-size: 1.1rem !important;
+	margin-top: 1.9em !important;
+	margin-bottom: 0.7em !important;
+}
+.custom-md.prose .anchor {
+	opacity: 0 !important;
+	font-size: 0.85em;
+}
+.custom-md.prose h1:hover .anchor,
+.custom-md.prose h2:hover .anchor,
+.custom-md.prose h3:hover .anchor,
+.custom-md.prose h4:hover .anchor,
+.custom-md.prose h5:hover .anchor,
+.custom-md.prose h6:hover .anchor {
+	opacity: 0.6 !important;
+}
+
+/* 链接：发丝下划线（覆盖 markdown.css 的虚线 + 悬停色块） */
+.custom-md.prose a:not(.no-styling) {
+	background: none !important;
+	border: none !important;
+	border-radius: 0 !important;
+	text-decoration: none;
+	border-bottom: 1px solid var(--link-underline);
+	box-decoration-break: clone;
+	-webkit-box-decoration-break: clone;
+	transition: color 0.2s ease, border-color 0.2s ease;
+}
+.custom-md.prose a:not(.no-styling):hover {
+	border-bottom-color: var(--link-hover);
+}
+
+/* 引用：左竖线引文，无圆角块 */
+.custom-md.prose blockquote {
+	border: none !important;
+	border-left: 2px solid var(--primary) !important;
+	padding: 0.15em 0 0.15em 1.5em !important;
+	border-radius: 0 !important;
+	font-size: 1.1rem;
+	line-height: 1.85;
+	margin: 2.2em 0 !important;
+}
+.custom-md.prose blockquote::before {
+	display: none !important;
+}
+.custom-md.prose blockquote p {
+	font-size: inherit;
+	line-height: inherit;
+}
+
+/* 列表与分隔 */
+.custom-md.prose li {
+	margin: 0.42em 0 !important;
+}
+.custom-md.prose li::marker {
+	color: var(--content-meta) !important;
+}
+.custom-md.prose hr {
+	margin: 3.5em auto !important;
+	width: 100%;
+	border-top-width: 1px;
+}
+
+/* 行内代码：扁平芯片 */
+.custom-md.prose code:not(pre code, .expressive-code code) {
+	background: var(--inline-code-bg) !important;
+	color: var(--inline-code-color) !important;
+	border-radius: 0.25rem !important;
+	padding: 0.15em 0.45em !important;
+	font-size: 0.86em !important;
+	font-weight: 500;
+}
+.custom-md.prose pre code {
+	background: transparent !important;
+	padding: 0 !important;
+}
+
+/* 表格：去色块、纯发丝线 */
+.custom-md.prose table {
+	border-collapse: collapse !important;
+	border-radius: 0 !important;
+	overflow: visible !important;
+	border: 1px solid var(--line-color);
+}
+.custom-md.prose th,
+.custom-md.prose td {
+	background: transparent !important;
+	border-right: none !important;
+}
+.custom-md.prose th {
+	border-bottom: 1px solid var(--meta-divider) !important;
+}
+.custom-md.prose tr:nth-child(even) td {
+	background: transparent !important;
+}
+
+/* ---------- 代码块 chrome：发丝线 + 微圆角 ---------- */
+.custom-md .expressive-code .frame {
+	border: 1px solid var(--line-color);
+	border-radius: var(--radius-md);
+	overflow: hidden;
+}
+.custom-md .expressive-code .header {
+	border-bottom: 1px solid var(--line-color);
+	font-size: 0.75rem;
+	letter-spacing: 0.08em;
+}
+
+/* ---------- 图片：圆角收敛、无默认边框 ---------- */
+.custom-md.prose img,
+.custom-md.prose figure img {
+	border-radius: var(--radius-md);
+}

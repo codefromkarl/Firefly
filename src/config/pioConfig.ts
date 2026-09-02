@@ -51,13 +51,13 @@ export const spineModelConfig: SpineModelConfig = {
 		// 点击时随机显示的文字消息
 		clickMessages: [
 			"你好呀！我是流萤~",
-			"今天也要加油哦！✨",
-			"想要一起去看星空吗？🌟",
+			"今天也要加油哦！",
+			"想要一起去看星空吗？",
 			"记得要好好休息呢~",
-			"有什么想对我说的吗？💫",
-			"让我们一起探索未知的世界吧！🚀",
-			"每一颗星星都有自己的故事~⭐",
-			"希望能带给你温暖和快乐！💖",
+			"有什么想对我说的吗？",
+			"让我们一起探索未知的世界吧！",
+			"每一颗星星都有自己的故事~",
+			"希望能带给你温暖和快乐！",
 		],
 		// 文字显示时间（毫秒）
 		messageDisplayTime: 3000,
@@ -124,27 +124,27 @@ export const live2dWidgetConfig: Live2DWidgetConfig = {
 		// 完全替换默认菜单项
 		items: [
 			{
-				icon: "mdi:home",
+				icon: "lucide:house",
 				label: "返回主页",
 				action: "home",
 			},
 			{
-				icon: "mdi:arrow-up",
+				icon: "lucide:arrow-up",
 				label: "返回顶部",
 				action: "scrollToTop",
 			},
 			{
-				icon: "mdi:bed",
+				icon: "lucide:bed",
 				label: "休眠",
 				action: "sleep",
 			},
 			{
-				icon: "mdi:swap-horizontal",
+				icon: "lucide:arrow-left-right",
 				label: "切换模型",
 				action: "switchModel",
 			},
 			{
-				icon: "mdi:github",
+				icon: "lucide:github",
 				label: "GitHub",
 				action: "github",
 			},

@@ -151,14 +151,14 @@ const relatedPosts = await getRelatedPosts(entry, 5);
             />
             <div class="absolute inset-x-4 top-3 z-10 flex flex-wrap items-center justify-end gap-x-3 gap-y-1 text-xs font-medium text-white drop-shadow-[0_1px_2px_rgb(0_0_0/0.9)]">
               <div class="flex items-center gap-1 whitespace-nowrap">
-                <Icon is:inline name="material-symbols:notes-rounded" class="text-base" />
+                <Icon is:inline name="lucide:sticky-note" class="text-base" />
                 <span>
                   {remarkPluginFrontmatter.words}
                   {" " + i18n(remarkPluginFrontmatter.words === 1 ? I18nKey.wordCount : I18nKey.wordsCount)}
                 </span>
               </div>
               <div class="flex items-center gap-1 whitespace-nowrap">
-                <Icon is:inline name="material-symbols:schedule-outline-rounded" class="text-base" />
+                <Icon is:inline name="lucide:clock" class="text-base" />
                 <span>
                   {remarkPluginFrontmatter.minutes}
                   {" " + i18n(remarkPluginFrontmatter.minutes === 1 ? I18nKey.minuteCount : I18nKey.minutesCount)}
@@ -166,7 +166,7 @@ const relatedPosts = await getRelatedPosts(entry, 5);
               </div>
               {entry.data.password && (
                 <div class="flex items-center gap-1 whitespace-nowrap">
-                  <Icon is:inline name="material-symbols:lock-outline" class="text-base" />
+                  <Icon is:inline name="lucide:lock" class="text-base" />
                   <span>{i18n(I18nKey.postEncrypted)}</span>
                 </div>
               )}
@@ -204,7 +204,7 @@ const relatedPosts = await getRelatedPosts(entry, 5);
               <div
                 class="transition h-6 w-6 rounded-md bg-black/5 dark:bg-white/10 text-black/50 dark:text-white/50 flex items-center justify-center mr-2"
               >
-                <Icon is:inline name="material-symbols:notes-rounded" />
+                <Icon is:inline name="lucide:sticky-note" />
               </div>
               <div class="text-sm">
                 {remarkPluginFrontmatter.words}
@@ -215,7 +215,7 @@ const relatedPosts = await getRelatedPosts(entry, 5);
               <div
                 class="transition h-6 w-6 rounded-md bg-black/5 dark:bg-white/10 text-black/50 dark:text-white/50 flex items-center justify-center mr-2"
               >
-                <Icon is:inline name="material-symbols:schedule-outline-rounded" />
+                <Icon is:inline name="lucide:clock" />
               </div>
               <div class="text-sm">
                 {remarkPluginFrontmatter.minutes}
@@ -234,7 +234,7 @@ const relatedPosts = await getRelatedPosts(entry, 5);
                 <div
                   class="transition h-6 w-6 rounded-md bg-black/5 dark:bg-white/10 text-black/50 dark:text-white/50 flex items-center justify-center mr-2"
                 >
-                  <Icon is:inline name="material-symbols:lock-outline" />
+                  <Icon is:inline name="lucide:lock" />
                 </div>
                 <div class="text-sm">
                   {i18n(I18nKey.postEncrypted)}
@@ -318,8 +318,8 @@ const relatedPosts = await getRelatedPosts(entry, 5);
                         <Icon is:inline
                           name={sponsorConfig.showButtonInPost &&
                           siteConfig.pages.sponsor
-                            ? "material-symbols:favorite"
-                            : "material-symbols:share"}
+                            ? "lucide:heart"
+                            : "lucide:share"}
                           class="text-2xl"
                         />
                       </div>
@@ -365,7 +365,7 @@ const relatedPosts = await getRelatedPosts(entry, 5);
                             class="inline-flex items-center gap-2 px-6 py-3 bg-(--primary) text-white dark:text-black/70 rounded-lg font-medium hover:bg-(--primary)/80 hover:scale-105 active:scale-95 transition-all whitespace-nowrap"
                           >
                             <span>{i18n(I18nKey.sponsor)}</span>
-                            <Icon is:inline name="fa7-solid:arrow-right" class="text-sm" />
+                            <Icon is:inline name="lucide:arrow-right" class="text-sm" />
                           </a>
                         )
                       }
@@ -408,8 +408,8 @@ const relatedPosts = await getRelatedPosts(entry, 5);
                         <Icon is:inline
                           name={sponsorConfig.showButtonInPost &&
                           siteConfig.pages.sponsor
-                            ? "material-symbols:favorite"
-                            : "material-symbols:share"}
+                            ? "lucide:heart"
+                            : "lucide:share"}
                           class="text-2xl"
                         />
                       </div>
@@ -455,7 +455,7 @@ const relatedPosts = await getRelatedPosts(entry, 5);
                             class="inline-flex items-center gap-2 px-6 py-3 bg-(--primary) text-white dark:text-black/70 rounded-lg font-medium hover:bg-(--primary)/80 hover:scale-105 active:scale-95 transition-all whitespace-nowrap"
                           >
                             <span>{i18n(I18nKey.sponsor)}</span>
-                            <Icon is:inline name="fa7-solid:arrow-right" class="text-sm" />
+                            <Icon is:inline name="lucide:arrow-right" class="text-sm" />
                           </a>
                         )
                       }
@@ -503,7 +503,7 @@ const relatedPosts = await getRelatedPosts(entry, 5);
           <div class="flex items-center gap-2">
             <div class="transition h-9 w-9 rounded-lg overflow-hidden relative flex items-center justify-center mr-0">
               <Icon is:inline
-                name="material-symbols:history-rounded"
+                name="lucide:clock-arrow-up"
                 class="text-4xl text-(--primary) transition-transform group-hover:translate-x-0.5 bg-(--enter-btn-bg) p-2 rounded-md"
               />
             </div>
@@ -563,7 +563,7 @@ const relatedPosts = await getRelatedPosts(entry, 5);
     >
       <div class="btn-card rounded-2xl w-full h-15 max-w-full px-4 flex items-center justify-start! gap-4">
         <Icon is:inline
-          name="material-symbols:chevron-left-rounded"
+          name="lucide:chevron-left"
           class="text-[2rem] text-(--primary)"
         />
         <div class="overflow-hidden transition text-ellipsis whitespace-nowrap max-w-[calc(100%-3rem)] text-black/75 dark:text-white/75">
@@ -581,7 +581,7 @@ const relatedPosts = await getRelatedPosts(entry, 5);
           {entry.data.prevTitle || i18n(I18nKey.home)}
         </div>
         <Icon is:inline
-          name="material-symbols:chevron-right-rounded"
+          name="lucide:chevron-right"
           class="text-[2rem] text-(--primary)"
         />
       </div>

@@ -199,19 +199,19 @@ let visibleTabs = $derived.by(() => {
 	if (hasAppearanceTab)
 		tabs.push({
 			key: "appearance",
-			icon: "material-symbols:palette",
+			icon: "lucide:palette",
 			label: i18n(I18nKey.settingsTabAppearance),
 		});
 	if (hasWallpaperTab)
 		tabs.push({
 			key: "wallpaper",
-			icon: "material-symbols:wallpaper",
+			icon: "lucide:wallpaper",
 			label: i18n(I18nKey.settingsTabWallpaper),
 		});
 	if (hasEffectsTab)
 		tabs.push({
 			key: "effects",
-			icon: "mdi:flower-poppy",
+			icon: "lucide:flower-2",
 			label: i18n(I18nKey.settingsTabEffects),
 		});
 	return tabs;
@@ -629,7 +629,7 @@ $effect(() => {
 				<button aria-label="Reset to Default" class="btn-regular rounded-md active:scale-90"
 						class:opacity-0={hue === defaultHue} class:pointer-events-none={hue === defaultHue} onclick={resetHue}>
 					<div class="text-(--btn-content)">
-						<Icon icon="fa7-solid:arrow-rotate-left" class="text-[0.75rem]"></Icon>
+						<Icon icon="lucide:rotate-ccw" class="text-[0.75rem]"></Icon>
 					</div>
 				</button>
 				<div id="hueValue" class="transition bg-(--btn-regular-bg) rounded-md flex justify-center
@@ -652,7 +652,7 @@ $effect(() => {
 				<button aria-label="Reset to Default" class="btn-regular rounded-md active:scale-90"
 						class:opacity-0={currentLayout === effectiveDefaultLayout} class:pointer-events-none={currentLayout === effectiveDefaultLayout} onclick={resetLayout}>
 					<div class="text-(--btn-content)">
-						<Icon icon="fa7-solid:arrow-rotate-left" class="text-[0.75rem]"></Icon>
+						<Icon icon="lucide:rotate-ccw" class="text-[0.75rem]"></Icon>
 					</div>
 				</button>
 			</div>
@@ -697,7 +697,7 @@ $effect(() => {
 				<button aria-label="Reset to Default" class="btn-regular rounded-md active:scale-90"
 						class:opacity-0={cardSettingsIsDefault} class:pointer-events-none={cardSettingsIsDefault} onclick={resetCardSettings}>
 					<div class="text-(--btn-content)">
-						<Icon icon="fa7-solid:arrow-rotate-left" class="text-[0.75rem]"></Icon>
+						<Icon icon="lucide:rotate-ccw" class="text-[0.75rem]"></Icon>
 					</div>
 				</button>
 			</div>
@@ -708,7 +708,7 @@ $effect(() => {
 					class:bg-(--btn-regular-bg-hover)={cardBorderEnabled}
 					onclick={toggleCardBorderEnabled}
 				>
-					<Icon icon="material-symbols:border-outer-rounded" class="text-[1.25rem] shrink-0"></Icon>
+					<Icon icon="lucide:square-dashed" class="text-[1.25rem] shrink-0"></Icon>
 					<span class="text-sm flex-1">{i18n(I18nKey.cardBorder)}</span>
 					<div class="w-10 h-5 rounded-full transition-all duration-200 relative"
 						 class:bg-(--primary)={cardBorderEnabled}
@@ -725,7 +725,7 @@ $effect(() => {
 					class:bg-(--btn-regular-bg-hover)={cardFollowThemeEnabled}
 					onclick={toggleCardFollowThemeEnabled}
 				>
-					<Icon icon="material-symbols:palette" class="text-[1.25rem] shrink-0"></Icon>
+					<Icon icon="lucide:palette" class="text-[1.25rem] shrink-0"></Icon>
 					<span class="text-sm flex-1">{i18n(I18nKey.cardFollowTheme)}</span>
 					<div class="w-10 h-5 rounded-full transition-all duration-200 relative"
 						 class:bg-(--primary)={cardFollowThemeEnabled}
@@ -751,7 +751,7 @@ $effect(() => {
 				<button aria-label="Reset to Default" class="btn-regular rounded-md active:scale-90"
 						class:opacity-0={wallpaperMode === defaultWallpaperMode} class:pointer-events-none={wallpaperMode === defaultWallpaperMode} onclick={resetWallpaperMode}>
 					<div class="text-(--btn-content)">
-						<Icon icon="fa7-solid:arrow-rotate-left" class="text-[0.75rem]"></Icon>
+						<Icon icon="lucide:rotate-ccw" class="text-[0.75rem]"></Icon>
 					</div>
 				</button>
 			</div>
@@ -762,7 +762,7 @@ $effect(() => {
 					class:bg-(--btn-regular-bg-hover)={wallpaperMode === WALLPAPER_BANNER}
 					onclick={() => switchWallpaperMode(WALLPAPER_BANNER)}
 				>
-					<Icon icon="material-symbols:image-outline" class="text-[1.25rem] shrink-0"></Icon>
+					<Icon icon="lucide:image" class="text-[1.25rem] shrink-0"></Icon>
 					<span class="text-xs font-medium">{i18n(I18nKey.wallpaperBannerMode)}</span>
 				</button>
 				<button
@@ -771,7 +771,7 @@ $effect(() => {
 					class:bg-(--btn-regular-bg-hover)={wallpaperMode === WALLPAPER_FULLSCREEN}
 					onclick={() => switchWallpaperMode(WALLPAPER_FULLSCREEN)}
 				>
-					<Icon icon="material-symbols:wallpaper" class="text-[1.25rem] shrink-0"></Icon>
+					<Icon icon="lucide:wallpaper" class="text-[1.25rem] shrink-0"></Icon>
 					<span class="text-xs font-medium">{i18n(I18nKey.wallpaperFullscreenMode)}</span>
 				</button>
 				<button
@@ -780,7 +780,7 @@ $effect(() => {
 					class:bg-(--btn-regular-bg-hover)={wallpaperMode === WALLPAPER_OVERLAY}
 					onclick={() => switchWallpaperMode(WALLPAPER_OVERLAY)}
 				>
-					<Icon icon="material-symbols:full-coverage-outline-rounded" class="text-[1.25rem] shrink-0"></Icon>
+					<Icon icon="lucide:maximize" class="text-[1.25rem] shrink-0"></Icon>
 					<span class="text-xs font-medium">{i18n(I18nKey.wallpaperOverlayMode)}</span>
 				</button>
 				<button
@@ -789,7 +789,7 @@ $effect(() => {
 					class:bg-(--btn-regular-bg-hover)={wallpaperMode === WALLPAPER_NONE}
 					onclick={() => switchWallpaperMode(WALLPAPER_NONE)}
 				>
-					<Icon icon="material-symbols:hide-image-outline" class="text-[1.25rem] shrink-0"></Icon>
+					<Icon icon="lucide:image-off" class="text-[1.25rem] shrink-0"></Icon>
 					<span class="text-xs font-medium">{i18n(I18nKey.wallpaperNoneMode)}</span>
 				</button>
 			</div>
@@ -804,7 +804,7 @@ $effect(() => {
 				<button aria-label="Reset to Default" class="btn-regular rounded-md active:scale-90"
 						class:opacity-0={overlaySettingsIsDefault} class:pointer-events-none={overlaySettingsIsDefault} onclick={resetOverlaySettings}>
 					<div class="text-(--btn-content)">
-						<Icon icon="fa7-solid:arrow-rotate-left" class="text-[0.75rem]"></Icon>
+						<Icon icon="lucide:rotate-ccw" class="text-[0.75rem]"></Icon>
 					</div>
 				</button>
 			</div>
@@ -841,7 +841,7 @@ $effect(() => {
 				<button aria-label="Reset to Default" class="btn-regular rounded-md active:scale-90"
 						class:opacity-0={bannerSettingsIsDefault} class:pointer-events-none={bannerSettingsIsDefault} onclick={resetBannerSettings}>
 					<div class="text-(--btn-content)">
-						<Icon icon="fa7-solid:arrow-rotate-left" class="text-[0.75rem]"></Icon>
+						<Icon icon="lucide:rotate-ccw" class="text-[0.75rem]"></Icon>
 					</div>
 				</button>
 			</div>
@@ -853,7 +853,7 @@ $effect(() => {
 					class:bg-(--btn-regular-bg-hover)={bannerTitleEnabled}
 					onclick={toggleBannerTitleEnabled}
 				>
-					<Icon icon="material-symbols:titlecase-rounded" class="text-[1.25rem] shrink-0"></Icon>
+					<Icon icon="lucide:case-upper" class="text-[1.25rem] shrink-0"></Icon>
 					<span class="text-sm flex-1">{i18n(I18nKey.wallpaperTitle)}</span>
 					<div class="w-10 h-5 rounded-full transition-all duration-200 relative"
 						 class:bg-(--primary)={bannerTitleEnabled}
@@ -871,7 +871,7 @@ $effect(() => {
 					class:bg-(--btn-regular-bg-hover)={bannerCarouselEnabled}
 					onclick={toggleBannerCarouselEnabled}
 				>
-					<Icon icon="material-symbols:view-carousel-outline" class="text-[1.25rem] shrink-0"></Icon>
+					<Icon icon="lucide:gallery-horizontal" class="text-[1.25rem] shrink-0"></Icon>
 					<span class="text-sm flex-1">{i18n(I18nKey.wallpaperCarousel)}</span>
 					<div class="w-10 h-5 rounded-full transition-all duration-200 relative"
 						 class:bg-(--primary)={bannerCarouselEnabled}
@@ -889,7 +889,7 @@ $effect(() => {
 					class:bg-(--btn-regular-bg-hover)={wavesEnabled}
 					onclick={toggleWavesEnabled}
 				>
-					<Icon icon="material-symbols:airwave-rounded" class="text-[1.25rem] shrink-0"></Icon>
+					<Icon icon="lucide:waves" class="text-[1.25rem] shrink-0"></Icon>
 					<span class="text-sm flex-1">{i18n(I18nKey.wavesAnimation)}</span>
 					<div class="w-10 h-5 rounded-full transition-all duration-200 relative"
 						 class:bg-(--primary)={wavesEnabled}
@@ -907,7 +907,7 @@ $effect(() => {
 					class:bg-(--btn-regular-bg-hover)={gradientEnabled}
 					onclick={toggleGradientEnabled}
 				>
-					<Icon icon="material-symbols:gradient" class="text-[1.25rem] shrink-0"></Icon>
+					<Icon icon="lucide:blend" class="text-[1.25rem] shrink-0"></Icon>
 					<span class="text-sm flex-1">{i18n(I18nKey.gradientTransition)}</span>
 					<div class="w-10 h-5 rounded-full transition-all duration-200 relative"
 						 class:bg-(--primary)={gradientEnabled}
@@ -932,7 +932,7 @@ $effect(() => {
 				<button aria-label="Reset to Default" class="btn-regular rounded-md active:scale-90"
 						class:opacity-0={sakuraEnabled === defaultSakuraEnabled} class:pointer-events-none={sakuraEnabled === defaultSakuraEnabled} onclick={() => { sakuraEnabled = defaultSakuraEnabled; setSakuraEnabled(defaultSakuraEnabled); }}>
 					<div class="text-(--btn-content)">
-						<Icon icon="fa7-solid:arrow-rotate-left" class="text-[0.75rem]"></Icon>
+						<Icon icon="lucide:rotate-ccw" class="text-[0.75rem]"></Icon>
 					</div>
 				</button>
 			</div>
@@ -941,7 +941,7 @@ $effect(() => {
 				class:bg-(--btn-regular-bg-hover)={sakuraEnabled}
 				onclick={toggleSakuraEnabled}
 			>
-				<Icon icon="mdi:flower-poppy" class="text-[1.25rem] shrink-0"></Icon>
+				<Icon icon="lucide:flower-2" class="text-[1.25rem] shrink-0"></Icon>
 				<span class="text-sm flex-1">{i18n(I18nKey.sakuraEffect)}</span>
 				<div class="w-10 h-5 rounded-full transition-all duration-200 relative"
 					 class:bg-(--primary)={sakuraEnabled}

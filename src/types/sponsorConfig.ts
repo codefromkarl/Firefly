@@ -1,7 +1,7 @@
 // 打赏方式类型
 export type SponsorMethod = {
 	name: string; // 打赏方式名称，如 "支付宝"、"微信"、"PayPal"
-	icon?: string; // 图标名称（Iconify 格式），如 "fa7-brands:alipay"
+	icon?: string; // 图标名称（Lucide 格式），如 "lucide:heart"
 	qrCode?: string; // 收款码图片路径（相对于 public 目录），可选
 	link?: string; // 打赏链接 URL，可选。如果提供，会显示跳转按钮
 	description?: string; // 描述文本

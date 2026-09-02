@@ -2,6 +2,7 @@
 import { onMount } from "svelte";
 import I18nKey from "@/i18n/i18nKey";
 import { i18n } from "@/i18n/translation";
+import Icon from "@/components/common/Icon.svelte";
 import type { UserSubjectCollection } from "@/types/bangumi";
 import BangumiSection from "./BangumiSection.svelte";
 import TabNav from "./TabNav.svelte";
@@ -221,7 +222,7 @@ onMount(async () => {
 {:else if isDynamic && error}
   <div class="text-center py-16">
     <div class="inline-flex items-center justify-center w-16 h-16 bg-(--btn-regular-bg) rounded-full mb-6 border border-(--line-divider)">
-      <span class="text-[2rem] text-red-500">⚠</span>
+      <Icon icon="lucide:triangle-alert" class="w-8 h-8 text-red-500" />
     </div>
     <h2 class="text-xl font-semibold text-black/80 dark:text-white/80 mb-3">{errorTitle}</h2>
     <p class="text-black/60 dark:text-white/60 mb-4 max-w-md mx-auto">{errorDesc}</p>

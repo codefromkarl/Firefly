@@ -7,19 +7,19 @@ export const profileConfig: ProfileConfig = {
 	links: [
 		{
 			name: "GitHub",
-			icon: "fa7-brands:github",
+			icon: "lucide:github",
 			url: "https://github.com/codefromkarl",
 			showName: false,
 		},
 		{
 			name: "Email",
-			icon: "fa7-solid:envelope",
+			icon: "lucide:mail",
 			url: "mailto:1069123094@qq.com",
 			showName: false,
 		},
 		{
 			name: "RSS",
-			icon: "fa7-solid:rss",
+			icon: "lucide:rss",
 			url: "/rss.xml",
 			showName: false,
 		},

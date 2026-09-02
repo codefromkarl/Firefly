@@ -72,28 +72,28 @@ const todayText = i18n(I18nKey.today);
 
 const stats = [
 	{
-		icon: "material-symbols:article-outline",
+		icon: "lucide:file-text",
 		label: i18n(I18nKey.siteStatsPostCount),
 		value: posts.length,
 	},
 	{
-		icon: "material-symbols:folder-outline",
+		icon: "lucide:folder",
 		label: i18n(I18nKey.siteStatsCategoryCount),
 		value: categories.length,
 	},
 	{
-		icon: "material-symbols:label-outline",
+		icon: "lucide:tag",
 		label: i18n(I18nKey.siteStatsTagCount),
 		value: tags.length,
 	},
 	{
-		icon: "material-symbols:text-ad-outline-rounded",
+		icon: "lucide:type",
 		label: i18n(I18nKey.siteStatsTotalWords),
 		value: totalWords,
 		formatted: true,
 	},
 	{
-		icon: "material-symbols:calendar-clock-outline",
+		icon: "lucide:calendar-clock",
 		label: i18n(I18nKey.siteStatsRunningDays),
 		value: 0, // 将由客户端更新
 		suffix: i18n(I18nKey.siteStatsDays).replace("{days}", ""),
@@ -101,7 +101,7 @@ const stats = [
 		id: "running-days",
 	},
 	{
-		icon: "mingcute:heartbeat-line",
+		icon: "lucide:activity",
 		label: i18n(I18nKey.siteStatsLastUpdate),
 		value: 0, // 将由客户端更新
 		suffix: i18n(I18nKey.siteStatsDaysAgo).replace("{days}", ""),

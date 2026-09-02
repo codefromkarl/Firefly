@@ -1,0 +1,219 @@
+/* ============================================================
+   editorial-components.css — 壳层与索引页组件级 Editorial 重塑
+   顺序加载于其他样式之后；结构性覆盖使用 !important 以胜过
+   组件 scoped / 旧样式表。
+   ============================================================ */
+
+/* ================= 导航栏：字标气质 + 底部发丝线 ================= */
+/* 背景/毛玻璃由 navbar.css 按 data-transparent-mode 状态接管 */
+#navbar > div {
+	border-bottom: 1px solid var(--line-divider);
+}
+
+/* 站点字标：等宽气质、宽字距、小尺寸大写 */
+#navbar .btn-plain > div {
+	font-size: 0.9rem;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+}
+#navbar .btn-plain svg.inline-icon {
+	margin-right: 0.5rem;
+}
+
+/* 控制按钮：弱化圆形气泡背景，仅图标悬停变色 */
+#navbar .btn-plain.scale-animation {
+	border-radius: var(--radius-md) !important;
+}
+
+/* ================= 首页 Hero：电影感单色底 + 巨幅字标 ================= */
+/* 仅当页面含首页文字层（.banner-home-text-overlay）时生效 */
+#wallpaper-wrapper:has(.banner-home-text-overlay) img {
+	filter: grayscale(1) brightness(0.62) contrast(1.08);
+	opacity: 0.9;
+}
+:root:not(.dark) #wallpaper-wrapper:has(.banner-home-text-overlay) img {
+	filter: grayscale(1) brightness(0.6) contrast(1.06);
+	opacity: 0.92;
+}
+
+/* 尺寸容器查询，让巨幅字标随版心等比缩放 */
+.banner-home-text-overlay {
+	container-type: inline-size;
+}
+
+.banner-home-text-overlay .banner-title {
+	font-weight: 700;
+	letter-spacing: 0.01em;
+	text-transform: uppercase;
+	text-wrap: balance;
+	text-shadow: 0 2px 48px rgba(0, 0, 0, 0.55);
+	/* 兜底缩放 */
+	font-size: clamp(2.4rem, 9vw, 6.8rem) !important;
+}
+@supports (container-type: inline-size) {
+	.banner-home-text-overlay .banner-title {
+		font-size: 10.5cqw !important;
+	}
+}
+
+.banner-home-text-overlay #banner-subtitle {
+	font-size: clamp(0.9rem, 2.4vw, 1.15rem) !important;
+	font-weight: 400;
+	letter-spacing: 0.28em;
+	color: rgba(255, 255, 255, 0.82);
+	text-shadow: 0 2px 24px rgba(0, 0, 0, 0.6);
+}
+
+/* ================= 文章索引：发丝线行式目录 ================= */
+@media (min-width: 768px) {
+	#post-list-container.list-mode {
+		gap: 0 !important;
+	}
+	#post-list-container.list-mode .post-card-wrapper {
+		counter-increment: edg-index;
+		position: relative;
+		background: transparent !important;
+		border-radius: 0 !important;
+		box-shadow: none !important;
+		overflow: visible !important;
+		border-bottom: 1px solid var(--line-divider);
+		padding: 2.25rem 0;
+		min-height: 12.5rem;
+	}
+	#post-list-container.list-mode {
+		counter-reset: edg-index;
+	}
+	#post-list-container.list-mode .post-card-wrapper:first-child {
+		border-top: 1px solid var(--line-divider);
+	}
+
+	/* 行内序号：等宽字、随行定位 */
+	#post-list-container.list-mode .post-card-wrapper::before {
+		content: counter(edg-index, decimal-leading-zero);
+		position: absolute;
+		left: 0;
+		top: 2.4rem;
+		font-family:
+			"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas,
+			monospace;
+		font-size: 0.75rem;
+		letter-spacing: 0.06em;
+		color: var(--content-meta);
+		line-height: 1;
+	}
+
+	/* 内容占位左移让位序号，封面收缩为方形缩略图 */
+	#post-list-container.list-mode .post-card-content {
+		width: 100% !important;
+		padding: 0 0 0 3.75rem !important;
+	}
+	#post-list-container.list-mode .has-cover .post-card-content {
+		width: calc(100% - 7.5rem - 2.5rem) !important;
+	}
+	#post-list-container.list-mode .post-card-image {
+		position: absolute !important;
+		inset: auto 0.25rem auto auto !important;
+		top: 50% !important;
+		transform: translateY(-50%);
+		width: 7.5rem !important;
+		aspect-ratio: 1/1 !important;
+		border-radius: var(--radius-sm) !important;
+		border: 1px solid var(--line-divider);
+		overflow: hidden;
+	}
+	#post-list-container.list-mode .post-card-image img {
+		transform: none !important;
+		transition: opacity 0.3s ease !important;
+	}
+	#post-list-container.list-mode .post-card-image:hover img {
+		opacity: 0.8;
+	}
+	#post-list-container.list-mode .post-card-image .absolute {
+		display: none !important;
+	}
+
+	/* 标题：清晰的大号链接，hover 微位移 + 强调色 */
+	#post-list-container.list-mode .post-card-title {
+		font-size: 1.55rem !important;
+		line-height: 1.35 !important;
+		font-weight: 700;
+		letter-spacing: -0.012em;
+		margin: 0 0 0.9rem !important;
+		transition:
+			color 0.25s ease,
+			transform 0.25s var(--ease-decelerate) !important;
+		text-wrap: balance;
+	}
+	#post-list-container.list-mode .post-card-title::before {
+		display: none !important;
+	}
+	#post-list-container.list-mode .post-card-wrapper:hover .post-card-title {
+		transform: translateX(6px);
+	}
+
+	/* 元信息：去图标气泡，纯文本小字号 */
+	#post-list-container.list-mode .post-meta {
+		gap: 0.5rem 1.5rem !important;
+		margin-bottom: 0 !important;
+	}
+	#post-list-container.list-mode .post-meta .meta-icon {
+		display: none !important;
+	}
+	#post-list-container.list-mode .post-meta .pinned-btn {
+		background: transparent !important;
+		padding: 0 !important;
+		border-radius: 0 !important;
+		font-weight: 600;
+	}
+	#post-list-container.list-mode .post-meta .pinned-btn svg {
+		width: 0.95em;
+		height: 0.95em;
+	}
+	#post-list-container.list-mode .post-meta a.link-lg,
+	#post-list-container.list-mode .post-meta .link-lg {
+		padding: 0 !important;
+		margin: 0 !important;
+		border-radius: 0 !important;
+	}
+	#post-list-container.list-mode .post-meta .link-lg::before,
+	#post-list-container.list-mode .expand-animation::before {
+		display: none !important;
+	}
+
+	/* 列表行内隐藏简介与底部标签，保留呼吸感 */
+	#post-list-container.list-mode .description,
+	#post-list-container.list-mode .stats,
+	#post-list-container.list-mode .post-card-bottom-tags,
+	#post-list-container.list-mode .post-card-enter-btn {
+		display: none !important;
+	}
+	#post-list-container.list-mode .post-card-title .lucide,
+	#post-list-container.list-mode .post-card-title svg {
+		width: 1.1em;
+		height: 1.1em;
+		vertical-align: -0.12em;
+	}
+}
+
+/* ================= 页面横幅标题（非首页） ================= */
+.banner-page-title-overlay .banner-page-title {
+	font-size: clamp(2.2rem, 5.2vw, 3.6rem);
+	font-weight: 700;
+	letter-spacing: -0.015em;
+	line-height: 1.2;
+	text-shadow: 0 2px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* ================= 404：巨型描边数字 ================= */
+#content-wrapper .text-8xl.md\:text-9xl.text-\(--primary\).opacity-20 {
+	color: transparent !important;
+	opacity: 1 !important;
+	font-family:
+		"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas,
+		monospace;
+	font-weight: 700;
+	letter-spacing: -0.05em;
+	line-height: 0.9;
+	font-size: clamp(7rem, 24vw, 17rem) !important;
+	-webkit-text-stroke: 1px var(--meta-divider);
+}

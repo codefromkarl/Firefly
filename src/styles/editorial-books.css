@@ -1,0 +1,93 @@
+/* ============================================================
+   editorial-books.css — 图书库 Editorial 化
+   · neutral-* 硬编码灰阶 → 令牌驱动（双模式自动正确）
+   · 图书卡片/筛选/引文块的版面收敛
+   ============================================================ */
+
+/* ---------- neutral 灰阶 → 令牌（深/浅自动适配） ---------- */
+.text-neutral-900,
+.text-neutral-800 {
+	color: var(--deep-text) !important;
+}
+.text-neutral-700 {
+	color: color-mix(in oklch, var(--deep-text) 93%, transparent) !important;
+}
+.text-neutral-600 {
+	color: color-mix(in oklch, var(--deep-text) 84%, transparent) !important;
+}
+.text-neutral-500 {
+	color: color-mix(in oklch, var(--deep-text) 64%, transparent) !important;
+}
+.text-neutral-400 {
+	color: color-mix(in oklch, var(--deep-text) 54%, transparent) !important;
+}
+.text-neutral-300 {
+	color: color-mix(in oklch, var(--deep-text) 68%, transparent) !important;
+}
+.text-neutral-200,
+.text-neutral-100 {
+	color: var(--deep-text) !important;
+}
+
+/* 常见黑白底色微块 → 墨色混入（亮暗各自呈中性） */
+.bg-black\/5,
+.bg-black\/10 {
+	background-color: color-mix(in oklch, var(--deep-text) 7%, transparent) !important;
+}
+.bg-white\/10,
+.bg-white\/15 {
+	background-color: color-mix(in oklch, var(--deep-text) 11%, transparent) !important;
+}
+
+/* 黑白描边 → 发丝线 */
+.border-black\/5,
+.border-white\/10 {
+	border-color: var(--line-divider) !important;
+}
+
+/* 虚线占位框也走发丝线 */
+.border-dashed.border-(--line-divider) {
+	opacity: 0.8;
+}
+
+/* ---------- 引文/摘抄块：无色块、发丝线分隔 ---------- */
+:where(blockquote, li).rounded-2xl {
+	background: transparent !important;
+	border-radius: var(--radius-md) !important;
+}
+:where(blockquote, li).rounded-2xl .border-(--line-divider) {
+	opacity: 0.7;
+}
+
+/* 序号圈 → 方形等宽标签 */
+.rounded-full.bg-\(--primary\)\/12 {
+	border-radius: var(--radius-sm) !important;
+	font-family:
+		"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas,
+		monospace;
+	font-size: 0.72rem !important;
+	letter-spacing: 0.04em;
+	background: transparent !important;
+	border: 1px solid color-mix(in oklch, var(--primary) 45%, transparent);
+}
+
+/* ---------- 图书卡/筛选面板细节 ---------- */
+/* 卡片 hover 位移更克制、描边渐显 */
+.group.card-base:has(img[alt*="封面"]) {
+	transition:
+		transform 0.3s var(--ease-decelerate),
+		border-color 0.3s ease !important;
+}
+.group.card-base:has(img[alt*="封面"]):hover {
+	box-shadow: none !important;
+	border-color: var(--meta-divider) !important;
+}
+
+/* 封面图 hover：褪色代替缩放 */
+img[alt*="封面"] {
+	transform: none !important;
+	transition: filter 0.45s ease !important;
+}
+.group:hover img[alt*="封面"] {
+	filter: brightness(0.86) contrast(1.04);
+}

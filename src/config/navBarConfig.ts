@@ -9,42 +9,42 @@ export const LinkPresets: Record<string, NavBarLink> = {
 	Home: {
 		name: "主页",
 		url: "/",
-		icon: "material-symbols:home",
+		icon: "lucide:house",
 	},
 	Archive: {
 		name: "归档",
 		url: "/archive/",
-		icon: "material-symbols:archive",
+		icon: "lucide:archive",
 	},
 	Categories: {
 		name: "分类",
 		url: "/categories/",
-		icon: "material-symbols:folder-open-rounded",
+		icon: "lucide:folder-open",
 	},
 	Tags: {
 		name: "标签",
 		url: "/tags/",
-		icon: "material-symbols:tag-rounded",
+		icon: "lucide:tag",
 	},
 	Books: {
 		name: "书单",
 		url: "/books/",
-		icon: "material-symbols:menu-book-rounded",
+		icon: "lucide:library",
 	},
 	Lab: {
 		name: "实验室",
 		url: "/lab/",
-		icon: "material-symbols:experiment",
+		icon: "lucide:flask-conical",
 	},
 	TechStack: {
 		name: "技术栈",
 		url: "/tech-stack/",
-		icon: "material-symbols:code",
+		icon: "lucide:code",
 	},
 	About: {
 		name: "关于我",
 		url: "/about/",
-		icon: "material-symbols:person",
+		icon: "lucide:user",
 	},
 };
 
@@ -54,13 +54,13 @@ export const navBarConfig: NavBarConfig = {
 		{
 			name: "文章",
 			url: "#",
-			icon: "material-symbols:article",
+			icon: "lucide:file-text",
 			children: [LinkPresets.Archive, LinkPresets.Categories, LinkPresets.Tags],
 		},
 		{
 			name: "探索",
 			url: "#",
-			icon: "material-symbols:explore",
+			icon: "lucide:compass",
 			children: [
 				LinkPresets.Books,
 				LinkPresets.Lab,
@@ -72,7 +72,7 @@ export const navBarConfig: NavBarConfig = {
 			name: "GitHub",
 			url: "https://github.com/codefromkarl",
 			external: true,
-			icon: "fa7-brands:github",
+			icon: "lucide:github",
 		},
 	],
 };
