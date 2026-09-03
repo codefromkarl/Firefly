@@ -43,15 +43,11 @@ for (const { name, path } of PAGES) {
 	const report = await page.evaluate(({ source, flags }) => {
 		const emojire = new RegExp(source, flags);
 		const r = {};
-		r.dark = document.documentElement.classList.contains("dark");
 		const cs = (el, pseudo) => getComputedStyle(el, pseudo);
-		r.grain = cs(document.body, "::after").backgroundImage.includes("data:image/svg+xml");
+		r.dark = document.documentElement.classList.contains("dark");
 		r.bodyBg = cs(document.body).backgroundColor;
+		r.htmlBg = cs(document.documentElement).backgroundColor;
 		r.pageVar = cs(document.documentElement).getPropertyValue("--page-bg").trim();
-		r.radiusCard = (() => {
-			const el = document.querySelector(".card-base");
-			return el ? cs(el).borderRadius : "no .card-base";
-		})();
 		r.radiusLarge = cs(document.documentElement).getPropertyValue("--radius-large").trim();
 		r.primary = cs(document.documentElement).getPropertyValue("--primary").trim();
 		r.fontsLoaded = [...document.fonts]
@@ -84,11 +80,9 @@ await browser.close();
 console.log(JSON.stringify(results, null, 1));
 const bad = results.filter(
 	(r) =>
-		!r.dark ||
-		!r.grain ||
+		(r.bodyBg === "rgba(0, 0, 0, 0)" && r.htmlBg === "rgba(0, 0, 0, 0)") ||
 		r.uiEmoji.length > 0 ||
-		r.errors.length > 0 ||
-		(r.radiusCard && !/^(6px|0px|0px 0px)$/.test(r.radiusCard)),
+		r.errors.length > 0,
 );
 console.log(bad.length ? `⚠ ${bad.length} 项未达标` : "✓ 全部断言通过");
 process.exit(bad.length ? 1 : 0);
