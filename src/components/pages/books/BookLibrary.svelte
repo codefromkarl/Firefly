@@ -7,7 +7,6 @@ import {
 	BOOK_STATUS_LABELS,
 	BOOK_STATUS_VALUES,
 } from "@/types/book";
-import Icon from "@/components/common/Icon.svelte";
 import BookCard from "./BookCard.svelte";
 
 interface Props {
@@ -308,10 +307,10 @@ onMount(() => {
 	{:else}
 		<div class="card-base rounded-(--radius-large) px-6 py-16 text-center">
 			<div
-				class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-(--radius-md) border border-(--line-divider)"
+				class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-(--btn-regular-bg) text-2xl"
 				aria-hidden="true"
 			>
-				<Icon icon="lucide:search-x" class="w-6 h-6 text-50" />
+				⌕
 			</div>
 			<h3 class="text-lg font-semibold text-neutral-800 dark:text-neutral-100">没有匹配的书籍</h3>
 			<p class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">

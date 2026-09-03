@@ -8,14 +8,10 @@ interface Props {
 }
 
 const { book, priority = false }: Props = $props();
-
-const topicLine = book.topics.slice(0, 3).join(" / ");
-const MONO =
-	"'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
 </script>
 
 <article
-	class="group relative flex h-full flex-col overflow-hidden rounded-(--radius-md) border border-(--line-divider) bg-(--card-bg) transition duration-300 hover:-translate-y-0.5 hover:border-(--meta-divider)"
+	class="group card-base h-full overflow-hidden rounded-(--radius-large) border border-black/5 transition duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-white/10"
 >
 	<a
 		href={book.url}
@@ -31,51 +27,53 @@ const MONO =
 				loading={priority ? "eager" : "lazy"}
 				fetchpriority={priority ? "high" : "auto"}
 				decoding="async"
-				class="h-full w-full object-cover"
+				class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
 			/>
 			<div
-				class="absolute inset-x-0 bottom-0 h-1/4 bg-linear-to-t from-black/65 to-transparent"
+				class="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-black/70 to-transparent"
 				aria-hidden="true"
 			></div>
-			<span
-				class="absolute left-3 top-3 rounded-sm border border-white/15 bg-black/55 px-2 py-1 text-[0.65rem] font-semibold tracking-[0.1em] text-white/95 backdrop-blur-sm"
-			>
-				{BOOK_STATUS_LABELS[book.status]}
-			</span>
+			<div class="absolute bottom-3 left-3 right-3 flex flex-wrap gap-2">
+				<span
+					class="rounded-full bg-(--primary) px-2.5 py-1 text-xs font-semibold text-white shadow-sm dark:text-black/80"
+				>
+					{BOOK_STATUS_LABELS[book.status]}
+				</span>
+			</div>
 		</div>
 
-		<div class="flex grow flex-col px-4.5 pb-4.5 pt-4">
+		<div class="flex grow flex-col p-5">
 			<h2
-				class="line-clamp-2 text-[1.05rem] font-bold leading-snug tracking-[-0.01em] text-90 transition group-hover:text-(--primary)"
+				class="text-xl font-bold text-neutral-900 transition group-hover:text-(--primary) dark:text-neutral-100"
 			>
 				{book.title}
 			</h2>
 			{#if book.originalTitle}
-				<p
-					class="mt-1.5 line-clamp-1 text-[0.7rem] tracking-[0.06em] text-50"
-					style={`font-family: ${MONO}`}
-				>
+				<p class="mt-1 line-clamp-1 text-xs text-neutral-400">
 					{book.originalTitle}
 				</p>
 			{/if}
-			<p class="mt-2 text-xs text-50">{book.authors.join("、")}</p>
+			<p class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
+				{book.authors.join("、")}
+			</p>
 
-			<p class="mt-3 line-clamp-2 text-[0.82rem] leading-relaxed text-75">
+			<p class="mt-4 line-clamp-3 text-sm leading-6 text-neutral-600 dark:text-neutral-300">
 				{book.sourceIntroduction}
 			</p>
 
-			<div class="hairline-t mt-auto flex items-baseline gap-2.5 pt-3.5">
-				<span class="shrink-0 text-[0.7rem] font-semibold text-(--primary)">
+			<div class="mt-auto flex flex-wrap gap-1.5 pt-5">
+				<span
+					class="rounded-full bg-(--primary)/10 px-2.5 py-1 text-xs font-medium text-(--primary)"
+				>
 					{BOOK_SHELF_LABELS[book.shelf]}
 				</span>
-				{#if topicLine}
+				{#each book.topics.slice(0, 3) as topic}
 					<span
-						class="line-clamp-1 text-[0.68rem] tracking-[0.04em] text-50"
-						style={`font-family: ${MONO}`}
+						class="rounded-full bg-black/5 px-2.5 py-1 text-xs text-neutral-500 dark:bg-white/10 dark:text-neutral-400"
 					>
-						{topicLine}
+						#{topic}
 					</span>
-				{/if}
+				{/each}
 			</div>
 		</div>
 	</a>

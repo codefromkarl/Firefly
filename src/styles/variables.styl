@@ -1,170 +1,153 @@
-/* ============================================================
-   Firefly × Editorial Dark 设计令牌
-   视觉原则：暗色画布优先、发丝线分隔、克制圆角、单点强调色
-   全部组件依赖的变量名保持不变，仅重铸取值语义。
-   ============================================================ */
-
 /* ===== 基础变量定义 ===== */
 :root
-  /* 版式圆角：editorial 风格收敛到微圆角 */
-  --radius-large: 0.375rem
+  --radius-large: 1rem
   --content-delay: 150ms
 
-/* ===== 主题相关变量（亮色 · 纸面模式） ===== */
+/* ===== 主题相关变量 ===== */
 :root
-  /* 强调色：仅承担点睛职能，中性面不再随色相漂移 */
-  --primary: oklch(0.52 0.15 var(--hue))
-  --page-bg: oklch(0.972 0.0035 90)
-  --card-bg: oklch(1 0 90)
-  --card-bg-transparent: unquote("rgb(252 251 248 / var(--card-transparent-opacity, 0.72))")
-
-  --btn-content: oklch(0.46 0.13 var(--hue))
-  --btn-regular-bg: oklch(0.938 0.005 90)
-  --btn-regular-bg-hover: oklch(0.908 0.008 90)
-  --btn-regular-bg-active: oklch(0.875 0.01 90)
-
-  --btn-plain-bg-hover: oklch(0.945 0.005 90)
-  --btn-plain-bg-active: oklch(0.91 0.008 90)
-
-  --btn-card-bg-hover: oklch(0.955 0.005 90)
-  --btn-card-bg-active: oklch(0.93 0.008 90)
-
+  --primary: oklch(0.70 0.14 var(--hue))
+  --page-bg: oklch(0.95 0.01 var(--hue))
+  --card-bg: white
+  --card-bg-transparent: unquote("rgb(255 255 255 / var(--card-transparent-opacity, 0.6))")
+  
+  --btn-content: oklch(0.55 0.12 var(--hue))
+  --btn-regular-bg: oklch(0.95 0.025 var(--hue))
+  --btn-regular-bg-hover: oklch(0.9 0.05 var(--hue))
+  --btn-regular-bg-active: oklch(0.85 0.08 var(--hue))
+  
+  --btn-plain-bg-hover: oklch(0.95 0.025 var(--hue))
+  --btn-plain-bg-active: oklch(0.98 0.01 var(--hue))
+  
+  --btn-card-bg-hover: oklch(0.98 0.005 var(--hue))
+  --btn-card-bg-active: oklch(0.9 0.03 var(--hue))
+  
   --enter-btn-bg: var(--btn-regular-bg)
   --enter-btn-bg-hover: var(--btn-regular-bg-hover)
   --enter-btn-bg-active: var(--btn-regular-bg-active)
-
-  /* 正文墨色：暖黑 */
-  --deep-text: oklch(0.21 0.012 70)
-  --title-active: oklch(0.5 0.11 var(--hue))
-
-  --line-divider: rgba(28, 24, 18, 0.10)
-  --line-color: rgba(28, 24, 18, 0.14)
-  --meta-divider: rgba(28, 24, 18, 0.22)
-  --content-meta: rgba(28, 24, 18, 0.68)
-
+  
+  --deep-text: oklch(0.25 0.02 var(--hue))
+  --title-active: oklch(0.6 0.1 var(--hue))
+  
+  --line-divider: rgba(0, 0, 0, 0.08)
+  --line-color: rgba(0, 0, 0, 0.1)
+  --meta-divider: rgba(0, 0, 0, 0.2)
+  --content-meta: rgba(0, 0, 0, 0.7)
+  
   --inline-code-bg: var(--btn-regular-bg)
-  --inline-code-color: oklch(0.48 0.13 var(--hue))
-  --muted: oklch(0.945 0.004 90)
-  --selection-bg: oklch(0.87 0.08 var(--hue))
-  --codeblock-bg: oklch(0.15 0.008 258)
-  --codeblock-topbar-bg: oklch(0.19 0.009 258)
-
-  --license-block-bg: rgba(28, 24, 18, 0.04)
-
-  --link-underline: unquote("oklch(0.52 0.15 var(--hue) / 0.32)")
-  --link-hover: unquote("oklch(0.52 0.15 var(--hue) / 0.55)")
-  --link-active: unquote("oklch(0.44 0.13 var(--hue) / 0.65)")
-
-  --float-panel-bg: oklch(1 0 90)
-
-  --scrollbar-bg-light: rgba(28, 24, 18, 0.35)
-  --scrollbar-bg-hover-light: rgba(28, 24, 18, 0.5)
-  --scrollbar-bg-active-light: rgba(28, 24, 18, 0.6)
-
-  --scrollbar-bg-dark: rgba(255, 255, 255, 0.3)
-  --scrollbar-bg-hover-dark: rgba(255, 255, 255, 0.45)
-  --scrollbar-bg-active-dark: rgba(255, 255, 255, 0.55)
-
+  --inline-code-color: var(--btn-content)
+  --muted: oklch(0.93 0.015 var(--hue))
+  --selection-bg: oklch(0.90 0.05 var(--hue))
+  --codeblock-bg: oklch(0.17 0.015 var(--hue))
+  --codeblock-topbar-bg: oklch(0.3 0.02 var(--hue))
+  
+  --license-block-bg: rgba(0, 0, 0, 0.03)
+  
+  --link-underline: oklch(0.93 0.04 var(--hue))
+  --link-hover: oklch(0.95 0.025 var(--hue))
+  --link-active: oklch(0.90 0.05 var(--hue))
+  
+  --float-panel-bg: white
+  
+  --scrollbar-bg-light: rgba(0, 0, 0, 0.4)
+  --scrollbar-bg-hover-light: rgba(0, 0, 0, 0.5)
+  --scrollbar-bg-active-light: rgba(0, 0, 0, 0.6)
+  
+  --scrollbar-bg-dark: rgba(255, 255, 255, 0.4)
+  --scrollbar-bg-hover-dark: rgba(255, 255, 255, 0.5)
+  --scrollbar-bg-active-dark: rgba(255, 255, 255, 0.6)
+  
   --scrollbar-bg: var(--scrollbar-bg-light)
   --scrollbar-bg-hover: var(--scrollbar-bg-hover-light)
   --scrollbar-bg-active: var(--scrollbar-bg-active-light)
-
+  
   --display-light-icon: 1
   --display-dark-icon: 0
-
-  --admonitions-color-tip: oklch(0.62 0.13 165)
-  --admonitions-color-note: oklch(0.58 0.13 255)
-  --admonitions-color-important: oklch(0.58 0.15 310)
-  --admonitions-color-warning: oklch(0.66 0.13 80)
-  --admonitions-color-caution: oklch(0.58 0.18 28)
-
+  
+  --admonitions-color-tip: oklch(0.7 0.14 180)
+  --admonitions-color-note: oklch(0.7 0.14 250)
+  --admonitions-color-important: oklch(0.7 0.14 310)
+  --admonitions-color-warning: oklch(0.7 0.14 60)
+  --admonitions-color-caution: oklch(0.6 0.2 25)
+  
   /* TOC相关变量 */
-  --toc-badge-bg: var(--btn-regular-bg)
-  --toc-btn-hover: var(--btn-regular-bg-hover)
-  --toc-btn-active: var(--btn-regular-bg-active)
-  --toc-indicator-bg: oklch(0.9 0.006 90)
+  --toc-badge-bg: oklch(0.9 0.045 var(--hue))
+  --toc-btn-hover: oklch(0.92 0.05 var(--hue))
+  --toc-btn-active: oklch(0.90 0.06 var(--hue))
+  --toc-indicator-bg: oklch(0.92 0.015 var(--hue))
   --toc-width: calc((100vw - var(--page-width)) / 2 - 1rem)
-  --toc-item-active: var(--primary)
+  --toc-item-active: oklch(0.70 0.13 var(--hue))
 
   /* Live2D 消息框变量 */
-  --l2d-msg-bg: var(--primary)
+  --l2d-msg-bg: oklch(0.7 0.14 var(--hue))
 
-  /* 主题色选择条渐变（两模式共用，仅供色相选择器） */
+  /* 主题色选择条渐变 */
   --color-selection-bar: linear-gradient(to right, oklch(0.80 0.10 0), oklch(0.80 0.10 30), oklch(0.80 0.10 60), oklch(0.80 0.10 90), oklch(0.80 0.10 120), oklch(0.80 0.10 150), oklch(0.80 0.10 180), oklch(0.80 0.10 210), oklch(0.80 0.10 240), oklch(0.80 0.10 270), oklch(0.80 0.10 300), oklch(0.80 0.10 330), oklch(0.80 0.10 360))
 
-/* ===== 暗色主题变量（先锋 Editorial · 默认） ===== */
+/* 卡片风格跟随主题色相 */
+:root:not(.dark) body.card-follow-theme-hue
+  --card-bg: oklch(1 0.01 var(--hue))
+
+/* 暗色主题变量 */
 :root.dark
-  --primary: oklch(0.76 0.15 var(--hue))
-  --page-bg: oklch(0.135 0.005 258)
-  --card-bg: oklch(0.163 0.006 258)
-  --card-bg-transparent: unquote("rgb(14 15 19 / var(--card-transparent-opacity, 0.72))")
-
-  --btn-content: oklch(0.72 0.13 var(--hue))
-  --btn-regular-bg: oklch(0.205 0.007 258)
-  --btn-regular-bg-hover: oklch(0.245 0.008 258)
-  --btn-regular-bg-active: oklch(0.285 0.009 258)
-
-  --btn-plain-bg-hover: oklch(0.19 0.007 258)
-  --btn-plain-bg-active: oklch(0.225 0.008 258)
-
-  --btn-card-bg-hover: oklch(0.20 0.007 258)
-  --btn-card-bg-active: oklch(0.235 0.008 258)
-
-  --enter-btn-bg: var(--btn-regular-bg)
-  --enter-btn-bg-hover: var(--btn-regular-bg-hover)
-  --enter-btn-bg-active: var(--btn-regular-bg-active)
-
-  --deep-text: oklch(0.925 0.004 258)
-  --title-active: oklch(0.70 0.12 var(--hue))
-
-  --line-divider: rgba(255, 255, 255, 0.075)
-  --line-color: rgba(255, 255, 255, 0.12)
+  --primary: oklch(0.75 0.14 var(--hue))
+  --page-bg: oklch(0.16 0.014 var(--hue))
+  --card-bg: oklch(0.23 0.015 var(--hue))
+  --card-bg-transparent: unquote("rgb(23 23 23 / var(--card-transparent-opacity, 0.6))")
+  
+  --btn-content: oklch(0.75 0.1 var(--hue))
+  --btn-regular-bg: oklch(0.33 0.035 var(--hue))
+  --btn-regular-bg-hover: oklch(0.38 0.04 var(--hue))
+  --btn-regular-bg-active: oklch(0.43 0.045 var(--hue))
+  
+  --btn-plain-bg-hover: oklch(0.30 0.035 var(--hue))
+  --btn-plain-bg-active: oklch(0.27 0.025 var(--hue))
+  
+  --btn-card-bg-hover: oklch(0.3 0.03 var(--hue))
+  --btn-card-bg-active: oklch(0.35 0.035 var(--hue))
+  
+  --line-divider: rgba(255, 255, 255, 0.08)
+  --line-color: rgba(255, 255, 255, 0.1)
   --meta-divider: rgba(255, 255, 255, 0.2)
-  --content-meta: rgba(255, 255, 255, 0.62)
-
-  --inline-code-bg: oklch(0.21 0.008 258)
-  --inline-code-color: oklch(0.75 0.12 var(--hue))
-  --muted: oklch(0.20 0.007 258)
-  --selection-bg: unquote("oklch(0.46 0.13 var(--hue) / 0.55)")
-  --codeblock-bg: oklch(0.115 0.006 258)
-  --codeblock-topbar-bg: oklch(0.175 0.007 258)
-
-  --license-block-bg: rgba(255, 255, 255, 0.045)
-
-  --link-underline: unquote("oklch(0.76 0.15 var(--hue) / 0.35)")
-  --link-hover: unquote("oklch(0.76 0.15 var(--hue) / 0.6)")
-  --link-active: unquote("oklch(0.68 0.13 var(--hue) / 0.7)")
-
-  --float-panel-bg: oklch(0.195 0.008 258)
-
+  --content-meta: rgba(255, 255, 255, 0.6)
+  
+  --muted: oklch(0.25 0.015 var(--hue))
+  --selection-bg: oklch(0.40 0.08 var(--hue))
+  --codeblock-bg: oklch(0.17 0.015 var(--hue))
+  --codeblock-topbar-bg: oklch(0.12 0.015 var(--hue))
+  
+  --license-block-bg: var(--codeblock-bg)
+  
+  --link-underline: oklch(0.40 0.08 var(--hue))
+  --link-hover: oklch(0.40 0.08 var(--hue))
+  --link-active: oklch(0.35 0.07 var(--hue))
+  
+  --float-panel-bg: oklch(0.19 0.015 var(--hue))
+  
   --scrollbar-bg: var(--scrollbar-bg-dark)
   --scrollbar-bg-hover: var(--scrollbar-bg-hover-dark)
   --scrollbar-bg-active: var(--scrollbar-bg-active-dark)
-
+  
   --display-light-icon: 0
   --display-dark-icon: 1
-
-  --admonitions-color-tip: oklch(0.78 0.13 165)
-  --admonitions-color-note: oklch(0.74 0.13 255)
-  --admonitions-color-important: oklch(0.74 0.14 310)
-  --admonitions-color-warning: oklch(0.80 0.13 85)
-  --admonitions-color-caution: oklch(0.72 0.16 28)
-
-  /* TOC相关变量 - 暗色 */
+  
+  --admonitions-color-tip: oklch(0.75 0.14 180)
+  --admonitions-color-note: oklch(0.75 0.14 250)
+  --admonitions-color-important: oklch(0.75 0.14 310)
+  --admonitions-color-warning: oklch(0.75 0.14 60)
+  --admonitions-color-caution: oklch(0.65 0.2 25)
+  
+  /* TOC相关变量 - 暗色主题 */
   --toc-badge-bg: var(--btn-regular-bg)
-  --toc-btn-hover: oklch(0.245 0.008 258)
-  --toc-btn-active: oklch(0.28 0.009 258)
-  --toc-indicator-bg: oklch(0.24 0.009 258)
-  --toc-item-active: oklch(0.70 0.12 var(--hue))
+  --toc-btn-hover: oklch(0.28 0.04 var(--hue))
+  --toc-btn-active: oklch(0.32 0.05 var(--hue))
+  --toc-indicator-bg: oklch(0.28 0.04 var(--hue))
+  --toc-item-active: oklch(0.35 0.07 var(--hue))
 
-  /* Live2D 消息框变量 - 暗色 */
-  --l2d-msg-bg: oklch(0.30 0.02 258)
+  /* Live2D 消息框变量 - 暗色主题 */
+  --l2d-msg-bg: oklch(0.35 0.08 var(--hue))
 
-/* 卡片风格跟随主题色相（轻微着色，保留中性基底） */
-body.card-follow-theme-hue
-  --card-bg: unquote("color-mix(in oklch, var(--card-bg) 90%, oklch(0.55 0.09 var(--hue)) 10%)")
-:root.dark body.card-follow-theme-hue
-  --card-bg: unquote("color-mix(in oklch, var(--card-bg) 88%, oklch(0.62 0.07 var(--hue)) 12%)")
+  /* 主题色选择条渐变 - 暗色主题 */
+  --color-selection-bar: linear-gradient(to right, oklch(0.70 0.10 0), oklch(0.70 0.10 30), oklch(0.70 0.10 60), oklch(0.70 0.10 90), oklch(0.70 0.10 120), oklch(0.70 0.10 150), oklch(0.70 0.10 180), oklch(0.70 0.10 210), oklch(0.70 0.10 240), oklch(0.70 0.10 270), oklch(0.70 0.10 300), oklch(0.70 0.10 330), oklch(0.70 0.10 360))
 
 /* ===== 响应式断点变量 ===== */
 :root
@@ -175,7 +158,7 @@ body.card-follow-theme-hue
   --breakpoint-lg: 1024px
   --breakpoint-xl: 1280px
   --breakpoint-2xl: 1536px
-
+  
   /* 容器宽度 */
   --container-xs: 100%
   --container-sm: 100%
@@ -191,14 +174,14 @@ body.card-follow-theme-hue
   --ease-decelerate: cubic-bezier(0.25, 0.46, 0.45, 0.94)
   --ease-accelerate: cubic-bezier(0.55, 0.055, 0.675, 0.19)
   --ease-sharp: cubic-bezier(0.4, 0, 0.6, 1)
-
+  
   /* 动画时长 */
   --duration-fast: 100ms
   --duration-normal: 150ms
   --duration-medium: 200ms
   --duration-slow: 250ms
   --duration-slower: 300ms
-
+  
   /* 动画延迟 */
   --delay-none: 0ms
   --delay-short: 30ms
@@ -218,40 +201,40 @@ body.card-follow-theme-hue
   --spacing-3xl: 2rem      /* 32px */
   --spacing-4xl: 2.5rem    /* 40px */
   --spacing-5xl: 3rem      /* 48px */
-
+  
   /* 组件间距 */
   --widget-gap-mobile: var(--spacing-md)
   --widget-gap-tablet: var(--spacing-lg)
   --widget-gap-desktop: var(--spacing-xl)
-
+  
   /* 侧边栏宽度 */
   --sidebar-width-mobile: 100%
   --sidebar-width-tablet: 280px
   --sidebar-width-desktop: 320px
 
-/* ===== 阴影变量（editorial：以发丝线为主，阴影仅用于悬浮层） ===== */
+/* ===== 阴影变量 ===== */
 :root
   /* 基础阴影 */
-  --shadow-sm: 0 1px 2px rgba(15, 14, 10, 0.05)
-  --shadow-md: 0 2px 8px rgba(15, 14, 10, 0.06)
-  --shadow-lg: 0 8px 24px rgba(15, 14, 10, 0.08)
-  --shadow-xl: 0 16px 48px rgba(15, 14, 10, 0.14)
-  --shadow-2xl: 0 24px 64px rgba(15, 14, 10, 0.18)
-
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05)
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1)
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1)
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1)
+  --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.25)
+  
   /* 特殊阴影 */
-  --shadow-navbar: 0 1px 0 rgba(15, 14, 10, 0.06)
-  --shadow-navbar-dark: 0 1px 0 rgba(255, 255, 255, 0.08)
-  --shadow-button: 0 1px 2px rgba(15, 14, 10, 0.1)
-  --shadow-button-dark: 0 1px 2px rgba(0, 0, 0, 0.4)
+  --shadow-navbar: 0 4px 16px rgba(0, 0, 0, 0.1)
+  --shadow-navbar-dark: 0 4px 16px rgba(0, 0, 0, 0.2)
+  --shadow-button: 0 4px 12px rgba(0, 0, 0, 0.15)
+  --shadow-button-dark: 0 4px 12px rgba(255, 255, 255, 0.1)
 
-/* ===== 边框半径变量（editorial：锐利为主） ===== */
+/* ===== 边框半径变量 ===== */
 :root
-  --radius-sm: 0.125rem    /* 2px */
-  --radius-md: 0.25rem     /* 4px */
-  --radius-lg: 0.375rem    /* 6px */
-  --radius-xl: 0.5rem      /* 8px */
-  --radius-2xl: 0.625rem   /* 10px */
-  --radius-3xl: 0.75rem    /* 12px */
+  --radius-sm: 0.25rem     /* 4px */
+  --radius-md: 0.375rem    /* 6px */
+  --radius-lg: 0.5rem      /* 8px */
+  --radius-xl: 0.75rem     /* 12px */
+  --radius-2xl: 1rem       /* 16px */
+  --radius-3xl: 1.5rem     /* 24px */
   --radius-full: 9999px
 
 /* ===== 透明度变量 ===== */
@@ -293,7 +276,7 @@ body.card-follow-theme-hue
   --translate-xl: 1rem        /* 16px */
   --translate-2xl: 1.5rem      /* 24px */
   --translate-3xl: 2rem       /* 32px */
-
+  
   /* 缩放 */
   --scale-95: 0.95
   --scale-98: 0.98
@@ -320,7 +303,7 @@ body.card-follow-theme-hue
   /* GPU加速 */
   --gpu-transform: translateZ(0)
   --gpu-backface: hidden
-
+  
   /* 动画性能 */
   --animation-fill-mode: both
   --animation-timing: var(--ease-standard)
