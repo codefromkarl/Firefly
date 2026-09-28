@@ -6,7 +6,7 @@ When the user wants to change Trellis phases, next-action hints, whether to crea
 
 1. `.trellis/workflow.md`
 2. Entry files for the current platform, such as skills/commands/prompts/workflows
-3. The current task's `task.json` and `prd.md`
+3. The matching explicitly bound task and its canonical plan links, if this request belongs to that task
 
 ## Common Needs And Edit Points
 
@@ -33,7 +33,7 @@ To change when task creation can be skipped, usually edit `[workflow-state:no_ta
 
 ```md
 [workflow-state:no_task]
-Task is not required when the answer is a one-reply explanation, no files are changed, and no research is needed.
+Analysis needs no task. Clear bounded edits may proceed without a new task unless project lifecycle rules require one. Complex work follows the canonical plan and prior authorization.
 [/workflow-state:no_task]
 ```
 
@@ -45,18 +45,18 @@ If the user wants only one platform to avoid sub-agents, first confirm whether t
 
 ## `/trellis:continue` Route Table
 
-`/trellis:continue` resumes a task by deciding which phase step to load next. The decision combines `task.json.status` with the presence of artifacts inside the task directory. The mapping is fixed in the command itself; forks that add custom statuses must extend both the workflow.md tag block and this table.
+`/trellis:continue` resumes a task by deciding which phase step to load next. The decision combines `task.json.status` with the presence of artifacts inside the task directory. Keep the command, canonical planning links, current evidence and workflow.md routing coherent; do not infer readiness from filenames alone.
 
 | `status` | Artifact state | Resume at |
 | --- | --- | --- |
 | `planning` | `prd.md` missing | Phase 1.1 (load `trellis-brainstorm`) |
-| `planning` | lightweight task with `prd.md` complete | ask for start review, then run `task.py start` |
-| `planning` | complex task missing `design.md` or `implement.md` | complete missing planning artifacts |
-| `planning` | complex task has `prd.md`, `design.md`, and `implement.md` | ask for start review, then run `task.py start` |
-| `in_progress` | no implementation in conversation history | Phase 2.1 (`trellis-implement`) |
+| `planning` | lightweight plan sufficient | start only when implementation is authorized; reuse prior approval |
+| `planning` | canonical design or execution decisions incomplete | complete the missing content; read linked plans instead of duplicating them |
+| `planning` | canonical plan sufficient and reviewed | start within existing implementation authorization; ask only for a material scope/risk change |
+| `in_progress` | authorized implementation incomplete | Phase 2.1, main-session by default; inspect current evidence |
 | `in_progress` | implementation done, no `trellis-check` run | Phase 2.2 (`trellis-check`) |
-| `in_progress` | check passed | Phase 3.3 (spec update) → 3.4 (commit) |
-| `completed` | task is still in active tree | Phase 3.5 (run `/trellis:finish-work` to archive) |
+| `in_progress` | check evidence current | 3.3 only for durable deltas → 3.4 only authorized delivery → report |
+| `completed` | task is still in active tree | report actual evidence; archive only with explicit target authorization and complete acceptance |
 
 When you add a custom status (e.g. `in-review`), add a `[workflow-state:in-review]` block in `.trellis/workflow.md` for the per-turn breadcrumb AND extend this route table — usually by editing the `/trellis:continue` command file (`.{platform}/commands/trellis/continue.md` or equivalent) to add a row that decides where to resume from. Without the route entry, `/trellis:continue` will fall through to a default branch and the user will not land on the step you intended.
 

@@ -1,98 +1,17 @@
 ---
 name: trellis-check
-description: "Comprehensive quality verification: spec compliance, lint, type-check, tests, cross-layer data flow, code reuse, and consistency checks. Use when code is written and needs quality verification, before committing changes, or to catch context drift during long sessions."
+description: "Verify affected behavior and required project gates using current evidence, without mechanical tests or unrelated fixes."
 ---
 
-# Code Quality Check
+# Check Changes
 
-Comprehensive quality verification for recently written code. Combines spec compliance, cross-layer safety, and pre-commit checks.
+1. Identify this task's changes with git status/diff, including relevant untracked files. Separate pre-existing WIP; never silently review/fix all dirty files as this task.
+2. Read applicable project rules and canonical acceptance/design contracts, following task links. Reuse unchanged context. Load relevant package Quality Check sections; risk depends on behavior, not line count.
+3. During iteration run affected lint/type checks/tests. Cover meaningful regressions, error paths, permissions, state transitions and cross-layer contracts. Do not add tests merely for new wrapper functions, and do not mirror implementation.
+4. At the applicable commit/PR/merge boundary complete all mandatory project checks, full suites, builds and runtime evidence. A lightweight workflow does not waive these gates or required independent human review.
+5. Reuse passing results only for unchanged relevant code, dependencies, configuration and an appropriate unchanged environment. A skill/phase switch alone does not invalidate evidence. Rerun affected checks after fixes or new findings.
+6. Review ownership, data flow, imports, error handling and duplicated domain concepts where the change requires it. Search existing patterns with rg; do not extract a shared abstraction solely because two literal values match.
+7. Fix findings caused by this task. Classify pre-existing/environmental failures and report them without expanding scope or weakening gates. Investigate before retrying; continue useful diagnosis while possible.
+8. Report commands, scope, results and missing evidence honestly. Update an existing spec only for a durable contract delta.
 
----
-
-## Step 1: Identify What Changed
-
-```bash
-git diff --name-only HEAD
-git status
-```
-
-## Step 2: Read Task Artifacts and Applicable Specs
-
-Read the current task artifacts in order:
-
-- `prd.md`
-- `design.md` if present
-- `implement.md` if present
-
-```bash
-python3 ./.trellis/scripts/get_context.py --mode packages
-```
-
-For each changed package/layer, read the spec index and follow its **Quality Check** section:
-
-```bash
-cat .trellis/spec/<package>/<layer>/index.md
-```
-
-Read the specific guideline files referenced — the index is a pointer, not the goal.
-
-## Step 3: Run Project Checks
-
-Run the project's lint, type-check, and test commands. Fix any failures before proceeding.
-
-## Step 4: Review Against Checklist
-
-### Code Quality
-
-- [ ] Linter passes?
-- [ ] Type checker passes (if applicable)?
-- [ ] Tests pass?
-- [ ] No debug logging left in?
-- [ ] No suppressed warnings or type-safety bypasses?
-
-### Test Coverage
-
-- [ ] New function → unit test added?
-- [ ] Bug fix → regression test added?
-- [ ] Changed behavior → existing tests updated?
-
-### Spec Sync
-
-- [ ] Does `.trellis/spec/` need updates? (new patterns, conventions, lessons learned)
-
-> "If I fixed a bug or discovered something non-obvious, should I document it so future me won't hit the same issue?" → If YES, update the relevant spec doc.
-
-## Step 5: Cross-Layer Dimensions (if applicable)
-
-Skip this step if your change is confined to a single layer.
-
-### A. Data Flow (changes touch 3+ layers)
-
-- [ ] Read flow traces correctly: Storage → Service → API → UI
-- [ ] Write flow traces correctly: UI → API → Service → Storage
-- [ ] Types/schemas correctly passed between layers?
-- [ ] Errors properly propagated to caller?
-
-### B. Code Reuse (modifying constants, creating utilities)
-
-- [ ] Searched for existing similar code before creating new?
-  ```bash
-  grep -r "pattern" src/
-  ```
-- [ ] If 2+ places define same value → extracted to shared constant?
-- [ ] After batch modification, all occurrences updated?
-
-### C. Import/Dependency (creating new files)
-
-- [ ] Correct import paths (relative vs absolute)?
-- [ ] No circular dependencies?
-
-### D. Same-Layer Consistency
-
-- [ ] Other places using the same concept are consistent?
-
----
-
-## Step 6: Report and Fix
-
-Report violations found and fix them directly. Re-run project checks after fixes.
+Main-session checking is the default. A read-only review stays read-only unless fixes are authorized. Local green, CI, merge, deployment and runtime/human acceptance are separate facts.
