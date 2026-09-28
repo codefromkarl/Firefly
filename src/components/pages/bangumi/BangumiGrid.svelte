@@ -1,8 +1,8 @@
 <script lang="ts">
 import { onMount } from "svelte";
+import Icon from "@/components/common/Icon.svelte";
 import I18nKey from "@/i18n/i18nKey";
 import { i18n } from "@/i18n/translation";
-import Icon from "@/components/common/Icon.svelte";
 import type { UserSubjectCollection } from "@/types/bangumi";
 import BangumiSection from "./BangumiSection.svelte";
 import TabNav from "./TabNav.svelte";

@@ -1,7 +1,7 @@
 <script lang="ts">
+import Icon from "@/components/common/Icon.svelte";
 import I18nKey from "@/i18n/i18nKey";
 import { i18n } from "@/i18n/translation";
-import Icon from "@/components/common/Icon.svelte";
 import type { UserSubjectCollection } from "@/types/bangumi";
 
 interface Props {
