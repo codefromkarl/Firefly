@@ -902,7 +902,9 @@ const primaryBannerFetchPriority = isHomePageCheck ? "high" : "auto";
                                 data-page-left-sidebar
                                 class={sidebarClass}
                             >
-                                <div class="sticky top-4 flex w-full flex-col gap-4">
+                                <div
+                                    class="sticky top-4 flex max-h-[calc(100vh-2rem)] w-full flex-col gap-4 overflow-y-auto overscroll-contain [&>*]:shrink-0"
+                                >
                                     <slot name="left-sidebar"></slot>
                                 </div>
                             </aside>
@@ -913,7 +915,9 @@ const primaryBannerFetchPriority = isHomePageCheck ? "high" : "auto";
                 <div id="left-sidebar-dynamic" class="contents transition-swup-fade">
                     {hasCustomLeftSidebar ? (
                         <aside data-page-left-sidebar class={sidebarClass}>
-                            <div class="sticky top-4 flex w-full flex-col gap-4">
+                            <div
+                                class="sticky top-4 flex max-h-[calc(100vh-2rem)] w-full flex-col gap-4 overflow-y-auto overscroll-contain [&>*]:shrink-0"
+                            >
                                 <slot name="left-sidebar"></slot>
                             </div>
                         </aside>

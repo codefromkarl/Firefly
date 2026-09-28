@@ -18,6 +18,9 @@ const { books }: Props = $props();
 let query = $state("");
 let activeShelf = $state<"all" | BookShelf>("all");
 let activeStatus = $state<"all" | BookStatus>("all");
+/** 首屏只渲染一部分：160+ 本一次性铺开会把页面拉到上百屏 */
+const PAGE_SIZE = 48;
+let visibleCount = $state(PAGE_SIZE);
 
 const shelves = $derived(
 	BOOK_SHELF_VALUES.filter((shelf) =>
@@ -48,6 +51,10 @@ const filteredBooks = $derived(
 		return matchesQuery && matchesShelf && matchesStatus;
 	}),
 );
+
+/** 实际渲染的切片；筛选条件变化时 visibleCount 会被重置 */
+const displayedBooks = $derived(filteredBooks.slice(0, visibleCount));
+const hasMore = $derived(filteredBooks.length > displayedBooks.length);
 
 const activeFilterLabels = $derived.by(() => {
 	const labels: string[] = [];
@@ -109,8 +116,14 @@ function writeFiltersToUrl() {
 	updateDirectoryState();
 }
 
+/** 筛选条件一变就回到第一页，否则用户会落在「已加载到一半」的中间态 */
+function resetPaging() {
+	visibleCount = PAGE_SIZE;
+}
+
 function handleQueryInput(event: Event) {
 	query = (event.currentTarget as HTMLInputElement).value;
+	resetPaging();
 	writeFiltersToUrl();
 }
 
@@ -118,6 +131,7 @@ function handleShelfChange(event: Event) {
 	activeShelf = (event.currentTarget as HTMLSelectElement).value as
 		| "all"
 		| BookShelf;
+	resetPaging();
 	writeFiltersToUrl();
 }
 
@@ -125,6 +139,7 @@ function handleStatusChange(event: Event) {
 	activeStatus = (event.currentTarget as HTMLSelectElement).value as
 		| "all"
 		| BookStatus;
+	resetPaging();
 	writeFiltersToUrl();
 }
 
@@ -132,6 +147,7 @@ function clearFilters() {
 	query = "";
 	activeShelf = "all";
 	activeStatus = "all";
+	resetPaging();
 	writeFiltersToUrl();
 }
 
@@ -141,6 +157,7 @@ onMount(() => {
 
 	const handlePopState = () => {
 		readFiltersFromUrl();
+		resetPaging();
 		writeFiltersToUrl();
 	};
 	window.addEventListener("popstate", handlePopState);
@@ -264,11 +281,25 @@ onMount(() => {
 	</div>
 
 	{#if filteredBooks.length > 0}
-		<div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
-			{#each filteredBooks as book, index (book.id)}
+		<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 xl:grid-cols-3">
+			{#each displayedBooks as book, index (book.id)}
 				<BookCard {book} priority={index === 0} />
 			{/each}
 		</div>
+		{#if hasMore}
+			<div class="mt-8 flex flex-col items-center gap-2">
+				<button
+					type="button"
+					onclick={() => (visibleCount += PAGE_SIZE)}
+					class="rounded-xl bg-(--btn-regular-bg) px-6 py-3 text-sm font-medium text-(--btn-content) transition hover:bg-(--btn-regular-bg-hover) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--primary)"
+				>
+					加载更多
+				</button>
+				<p class="text-xs text-neutral-400">
+					已显示 {displayedBooks.length} / {filteredBooks.length} 本
+				</p>
+			</div>
+		{/if}
 	{:else}
 		<div class="card-base rounded-(--radius-large) px-6 py-16 text-center">
 			<div
