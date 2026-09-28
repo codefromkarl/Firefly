@@ -27,7 +27,10 @@ const { book, priority = false }: Props = $props();
 				loading={priority ? "eager" : "lazy"}
 				fetchpriority={priority ? "high" : "auto"}
 				decoding="async"
-				class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+				class:list={[
+					"h-full w-full object-cover transition duration-500",
+					book.coverSource !== "placeholder" && "group-hover:scale-105",
+				]}
 			/>
 			<div
 				class="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-black/70 to-transparent"
@@ -39,6 +42,13 @@ const { book, priority = false }: Props = $props();
 				>
 					{BOOK_STATUS_LABELS[book.status]}
 				</span>
+				{#if book.coverSource === "placeholder"}
+					<span
+						class="rounded-full bg-black/60 px-2.5 py-1 text-xs font-medium text-white"
+					>
+						封面待补
+					</span>
+				{/if}
 			</div>
 		</div>
 
@@ -58,8 +68,9 @@ const { book, priority = false }: Props = $props();
 			</p>
 
 			<p class="mt-4 line-clamp-3 text-sm leading-6 text-neutral-600 dark:text-neutral-300">
-				{book.sourceIntroduction}
+				{book.description}
 			</p>
+			<p class="mt-1 text-xs text-neutral-400">内容概述（自撰）</p>
 
 			<div class="mt-auto flex flex-wrap gap-1.5 pt-5">
 				<span

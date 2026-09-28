@@ -1,11 +1,22 @@
 export const BOOK_STATUS_VALUES = ["wishlist", "reading", "read"] as const;
 export type BookStatus = (typeof BOOK_STATUS_VALUES)[number];
 
+/** 与电纸书书库的 14 个分类目录一一对应；数组顺序即侧栏分组顺序。 */
 export const BOOK_SHELF_VALUES = [
-	"cognition-and-decisions",
-	"wealth-and-growth",
-	"psychology-and-relationships",
-	"literature-and-life",
+	"biography",
+	"reference",
+	"economics",
+	"sci-fi",
+	"science",
+	"history",
+	"logic",
+	"society",
+	"literature",
+	"fiction",
+	"psychology",
+	"art",
+	"philosophy",
+	"politics",
 ] as const;
 export type BookShelf = (typeof BOOK_SHELF_VALUES)[number];
 
@@ -241,17 +252,25 @@ export interface BookReadingReason extends BookSourceCitation {
 	kind: BookReadingReasonKind;
 }
 
+/** 封面来源：EPUB 内提取 → 设备缓存 → 生成占位。占位封面在 UI 上需标注。 */
+export const BOOK_COVER_SOURCE_VALUES = [
+	"epub",
+	"device",
+	"placeholder",
+] as const;
+export type BookCoverSource = (typeof BOOK_COVER_SOURCE_VALUES)[number];
+
 export interface BookCardData {
 	id: string;
 	title: string;
 	originalTitle?: string;
 	authors: string[];
 	description: string;
-	sourceIntroduction: string;
 	status: BookStatus;
 	shelf: BookShelf;
 	topics: string[];
 	coverUrl: string;
+	coverSource?: BookCoverSource;
 	url: string;
 }
 
@@ -269,10 +288,20 @@ export const BOOK_STATUS_LABELS: Record<BookStatus, string> = {
 };
 
 export const BOOK_SHELF_LABELS: Record<BookShelf, string> = {
-	"cognition-and-decisions": "认知与决策",
-	"wealth-and-growth": "财富与成长",
-	"psychology-and-relationships": "心理与关系",
-	"literature-and-life": "文学与人生",
+	biography: "传记",
+	reference: "工具书",
+	economics: "经济",
+	"sci-fi": "科幻",
+	science: "科学",
+	history: "历史",
+	logic: "逻辑",
+	society: "社会",
+	literature: "文学",
+	fiction: "小说",
+	psychology: "心理",
+	art: "艺术",
+	philosophy: "哲学",
+	politics: "政治",
 };
 
 export const BOOK_GRAPH_STAGE_LABELS: Record<BookGraphStage, string> = {

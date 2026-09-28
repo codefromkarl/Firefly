@@ -37,7 +37,7 @@ excerpts:
   - text: "价格的主要作用是提供一种能够影响人们使用资源和生产产品行为的经济激励。"
     source: "第一部分《价格与市场》"
 status: "wishlist"
-shelf: "wealth-and-growth"
+shelf: "economics"
 topics:
   - "经济学"
   - "市场"

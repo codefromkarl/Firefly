@@ -37,7 +37,7 @@ excerpts:
   - text: "欲望就是你跟自己的约定，约定的内容是：不得到我想要的东西，我是不会快乐的。"
     source: "第三章《学习幸福》"
 status: "wishlist"
-shelf: "wealth-and-growth"
+shelf: "psychology"
 topics:
   - "财富"
   - "个人成长"

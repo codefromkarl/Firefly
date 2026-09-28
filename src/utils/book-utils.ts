@@ -1,8 +1,9 @@
 import { type CollectionEntry, getCollection } from "astro:content";
-import type {
-	BookCardData,
-	BookDirectoryItem,
-	BookGraphData,
+import {
+	BOOK_SHELF_VALUES,
+	type BookCardData,
+	type BookDirectoryItem,
+	type BookGraphData,
 } from "@/types/book";
 import { url } from "@/utils/url-utils";
 
@@ -11,8 +12,16 @@ export async function getPublishedBooks(): Promise<CollectionEntry<"books">[]> {
 		import.meta.env.PROD ? data.draft !== true : true,
 	);
 
-	return books.sort((a, b) =>
-		a.data.title.localeCompare(b.data.title, "zh-CN"),
+	// 先按分类（侧栏分组顺序），再按书名，使网格与侧栏目录一致
+	const shelfOrder = new Map(
+		BOOK_SHELF_VALUES.map((shelf, index) => [shelf, index]),
+	);
+
+	return books.sort(
+		(a, b) =>
+			(shelfOrder.get(a.data.shelf) ?? 0) -
+				(shelfOrder.get(b.data.shelf) ?? 0) ||
+			a.data.title.localeCompare(b.data.title, "zh-CN"),
 	);
 }
 
@@ -75,11 +84,11 @@ export function toBookCardData(
 		originalTitle: book.data.originalTitle,
 		authors: book.data.authors,
 		description: book.data.description,
-		sourceIntroduction: book.data.introductions[0].text,
 		status: book.data.status,
 		shelf: book.data.shelf,
 		topics: book.data.topics,
 		coverUrl,
+		coverSource: book.data.coverSource,
 		url: getBookUrl(book.id),
 	};
 }

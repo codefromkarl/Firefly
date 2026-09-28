@@ -40,7 +40,7 @@ excerpts:
     source: "作者官网公开导言（据英文原文译）"
     url: "https://www.happinesshypothesis.com/happiness-hypothesis-intro.pdf"
 status: "reading"
-shelf: "psychology-and-relationships"
+shelf: "psychology"
 topics:
   - "幸福"
   - "社会心理学"

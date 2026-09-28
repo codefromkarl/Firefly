@@ -40,7 +40,7 @@ excerpts:
     source: "作品官网英文摘录（据译）"
     url: "https://www.lepetitprince.com/en/"
 status: "read"
-shelf: "literature-and-life"
+shelf: "fiction"
 topics:
   - "寓言"
   - "友谊"

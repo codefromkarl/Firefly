@@ -38,7 +38,7 @@ excerpts:
   - text: "阿德勒心理学反对一切“纵向关系”，提倡把所有的人际关系都看作“横向关系”。"
     source: "第四夜《要有被讨厌的勇气》"
 status: "wishlist"
-shelf: "psychology-and-relationships"
+shelf: "psychology"
 topics:
   - "阿德勒心理学"
   - "人际关系"

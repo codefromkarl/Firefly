@@ -42,7 +42,7 @@ excerpts:
     source: "《风沙星辰》英文版，转引自《时代》周刊（据译）"
     url: "https://time.com/4255854/little-prince-1943-history-2/"
 status: "read"
-shelf: "literature-and-life"
+shelf: "literature"
 topics:
   - "回忆录"
   - "飞行"

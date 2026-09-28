@@ -18,17 +18,10 @@ const { books }: Props = $props();
 let query = $state("");
 let activeShelf = $state<"all" | BookShelf>("all");
 let activeStatus = $state<"all" | BookStatus>("all");
-let activeTopic = $state("all");
 
 const shelves = $derived(
 	BOOK_SHELF_VALUES.filter((shelf) =>
 		books.some((book) => book.shelf === shelf),
-	),
-);
-
-const topics = $derived(
-	[...new Set(books.flatMap((book) => book.topics))].sort((a, b) =>
-		a.localeCompare(b, "zh-CN"),
 	),
 );
 
@@ -38,17 +31,21 @@ const filteredBooks = $derived(
 	books.filter((book) => {
 		const matchesQuery =
 			!normalizedQuery ||
-			[book.title, book.originalTitle ?? "", ...book.authors, ...book.topics]
+			[
+				book.title,
+				book.originalTitle ?? "",
+				...book.authors,
+				book.description,
+				...book.topics,
+			]
 				.join(" ")
 				.toLocaleLowerCase("zh-CN")
 				.includes(normalizedQuery);
 		const matchesShelf = activeShelf === "all" || book.shelf === activeShelf;
 		const matchesStatus =
 			activeStatus === "all" || book.status === activeStatus;
-		const matchesTopic =
-			activeTopic === "all" || book.topics.includes(activeTopic);
 
-		return matchesQuery && matchesShelf && matchesStatus && matchesTopic;
+		return matchesQuery && matchesShelf && matchesStatus;
 	}),
 );
 
@@ -56,7 +53,6 @@ const activeFilterLabels = $derived.by(() => {
 	const labels: string[] = [];
 	if (activeShelf !== "all") labels.push(BOOK_SHELF_LABELS[activeShelf]);
 	if (activeStatus !== "all") labels.push(BOOK_STATUS_LABELS[activeStatus]);
-	if (activeTopic !== "all") labels.push(`#${activeTopic}`);
 	if (query.trim()) labels.push(`关键词：${query.trim()}`);
 	return labels;
 });
@@ -73,20 +69,15 @@ function readFiltersFromUrl() {
 	const params = new URL(window.location.href).searchParams;
 	const shelf = params.get("shelf");
 	const status = params.get("status");
-	const topic = params.get("topic");
 
 	query = params.get("q") ?? "";
 	activeShelf = isBookShelf(shelf) ? shelf : "all";
 	activeStatus = isBookStatus(status) ? status : "all";
-	activeTopic = topic && topics.includes(topic) ? topic : "all";
 }
 
 function updateDirectoryState() {
 	const hasFilters = Boolean(
-		query.trim() ||
-			activeShelf !== "all" ||
-			activeStatus !== "all" ||
-			activeTopic !== "all",
+		query.trim() || activeShelf !== "all" || activeStatus !== "all",
 	);
 	document
 		.querySelectorAll<HTMLAnchorElement>("[data-book-library-root]")
@@ -112,8 +103,7 @@ function writeFiltersToUrl() {
 	else current.searchParams.delete("shelf");
 	if (activeStatus !== "all") current.searchParams.set("status", activeStatus);
 	else current.searchParams.delete("status");
-	if (activeTopic !== "all") current.searchParams.set("topic", activeTopic);
-	else current.searchParams.delete("topic");
+	current.searchParams.delete("topic"); // 已退役的筛选维度，清理旧链接
 
 	history.replaceState(history.state, "", current);
 	updateDirectoryState();
@@ -138,16 +128,10 @@ function handleStatusChange(event: Event) {
 	writeFiltersToUrl();
 }
 
-function handleTopicChange(event: Event) {
-	activeTopic = (event.currentTarget as HTMLSelectElement).value;
-	writeFiltersToUrl();
-}
-
 function clearFilters() {
 	query = "";
 	activeShelf = "all";
 	activeStatus = "all";
-	activeTopic = "all";
 	writeFiltersToUrl();
 }
 
@@ -199,7 +183,7 @@ onMount(() => {
 				</div>
 			</div>
 
-			<div class="grid gap-4 md:grid-cols-3">
+			<div class="grid gap-4 md:grid-cols-2">
 				<div>
 					<label
 						for="book-shelf-filter"
@@ -240,25 +224,6 @@ onMount(() => {
 					</select>
 				</div>
 
-				<div>
-					<label
-						for="book-topic-filter"
-						class="mb-2 block text-sm font-semibold text-neutral-700 dark:text-neutral-200"
-					>
-						主题
-					</label>
-					<select
-						id="book-topic-filter"
-						value={activeTopic}
-						onchange={handleTopicChange}
-						class="w-full rounded-xl border border-(--line-divider) bg-(--card-bg) px-3 py-3 text-sm text-neutral-700 outline-none focus:border-(--primary) dark:text-neutral-200"
-					>
-						<option value="all">全部主题</option>
-						{#each topics as topic}
-							<option value={topic}>{topic}</option>
-						{/each}
-					</select>
-				</div>
 			</div>
 
 			{#if activeFilterLabels.length > 0}
@@ -281,10 +246,10 @@ onMount(() => {
 	<div class="mb-4 flex items-center justify-between gap-4">
 		<div>
 			<h2 id="book-library-heading" class="text-xl font-bold text-neutral-900 dark:text-neutral-100">
-				想读书单
+				我的藏书
 			</h2>
 			<p class="mt-1 text-sm text-neutral-500 dark:text-neutral-400" aria-live="polite">
-				显示 {filteredBooks.length} / {books.length} 本
+				显示 {filteredBooks.length} / {books.length} 本 · 简介为自撰内容概述
 			</p>
 		</div>
 		{#if activeFilterLabels.length > 0}

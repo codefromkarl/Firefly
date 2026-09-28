@@ -39,7 +39,7 @@ excerpts:
   - text: "在一个由概率而非确定性决定的世界中，安全边际——你也可以把它称为“容错空间”或“冗余空间”——是唯一能保证安全的方式。"
     source: "第13章《容错空间》"
 status: "wishlist"
-shelf: "wealth-and-growth"
+shelf: "economics"
 topics:
   - "财富"
   - "心理学"

@@ -42,7 +42,7 @@ excerpts:
   - text: "这些压力管理原则只在某些情况下有效，同时只对具有某些问题的某些人有用。"
     source: "第16章《压力管理》"
 status: "wishlist"
-shelf: "psychology-and-relationships"
+shelf: "science"
 topics:
   - "压力"
   - "健康"

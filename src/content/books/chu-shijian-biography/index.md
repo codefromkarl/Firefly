@@ -36,7 +36,7 @@ excerpts:
   - text: "一旦制度确立，以后的事情就好办了。制度还是非常重要的。"
     source: "第四篇《华彩人生篇章》"
 status: "wishlist"
-shelf: "wealth-and-growth"
+shelf: "biography"
 topics:
   - "传记"
   - "企业经营"

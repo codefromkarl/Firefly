@@ -37,7 +37,7 @@ excerpts:
   - text: "阴影不是无意识人格的全部。它代表了自我中不为人知或鲜为人知的属性和特性。"
     source: "第三章《个体化的过程·阴影的呈现》"
 status: "wishlist"
-shelf: "cognition-and-decisions"
+shelf: "psychology"
 topics:
   - "心理学"
   - "无意识"

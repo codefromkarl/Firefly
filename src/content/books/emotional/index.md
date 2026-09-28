@@ -37,7 +37,7 @@ excerpts:
   - text: "悲伤能促进思维的改变，帮助人适应环境。"
     source: "第4章《情绪与思维》"
 status: "wishlist"
-shelf: "cognition-and-decisions"
+shelf: "psychology"
 topics:
   - "情绪"
   - "决策"

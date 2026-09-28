@@ -35,7 +35,7 @@ excerpts:
   - text: "反过来想，总是反过来想。"
     source: "《投资原则检查清单》"
 status: "wishlist"
-shelf: "wealth-and-growth"
+shelf: "economics"
 topics:
   - "投资"
   - "思维模型"

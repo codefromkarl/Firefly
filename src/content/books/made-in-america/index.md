@@ -38,7 +38,7 @@ excerpts:
   - text: "每当我们真正遇到麻烦，或工会极有可能插足公司事务时，原因都在于管理层的失误，在于我们没有倾听员工们的心声，或者亏待了他们。"
     source: "第9章《建立合作关系》"
 status: "wishlist"
-shelf: "wealth-and-growth"
+shelf: "biography"
 topics:
   - "商业"
   - "零售"

@@ -39,7 +39,7 @@ excerpts:
   - text: "自卑感并不是变态的象征，而是个人在追求优越地位时的一种正常的发展过程。"
     source: "第三章《自卑感和优越感》"
 status: "wishlist"
-shelf: "psychology-and-relationships"
+shelf: "psychology"
 topics:
   - "个体心理学"
   - "自卑"

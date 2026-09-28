@@ -39,7 +39,7 @@ excerpts:
   - text: "行使任何一门艺术都需要有一些基本的东西，木匠艺术、医疗技术和爱的艺术都是如此。首先要求有纪律。"
     source: "第四章《爱的实践》"
 status: "wishlist"
-shelf: "psychology-and-relationships"
+shelf: "psychology"
 topics:
   - "爱"
   - "心理学"

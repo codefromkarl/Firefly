@@ -21,12 +21,12 @@ src/content/posts/<stable-slug>/index.md
 and keep adjacent article images in that directory. Renaming the path changes
 the generated `/posts/<stable-slug>/` URL and requires a permanent redirect.
 
-## Scenario: Maintain the Public Three-Section Book Detail
+## Scenario: Maintain the Public Book Library
 
 ### 1. Scope / Trigger
 
-This contract applies when adding or changing a public book card, book detail,
-cover, introduction, reading rationale, or verified excerpt.
+This contract applies when adding or changing a public library entry, its cover,
+its self-written description, or the list/filter behaviour of `/books/`.
 
 ### 2. Signatures
 
@@ -34,34 +34,65 @@ cover, introduction, reading rationale, or verified excerpt.
 - Cover source: `src/content/books/<slug>/cover.webp`.
 - List route: `/books/`.
 - Detail route: `/books/<slug>/`.
-- Public sourced fields:
-  `introductions: BookSourceCitation[]`,
+- Required fields: `title`, `authors` (≥1), `description`, `status`, `shelf`,
+  `cover`.
+- Optional curated fields: `introductions: BookSourceCitation[]`,
   `readingReasons: BookReadingReason[]`,
-  `endorsements: BookSourceCitation[]`, and
-  `excerpts: Array<{ text: string; source: string; url?: string }>`.
+  `endorsements: BookSourceCitation[]`,
+  `excerpts: Array<{ text: string; source: string; url?: string }>`, `topics`.
 - Source citation:
   `{ text: string; source: string; url: string }`.
 - Reading reason:
   `{ title: string; kind: BookReadingReasonKind; text: string; source: string; url: string }`.
-- Detail section IDs, in order:
-  `book-introduction`, `why-read`, `classic-excerpts`.
-- Primary shelf:
-  `shelf: "cognition-and-decisions" | "wealth-and-growth" | "psychology-and-relationships" | "literature-and-life"`.
+- `coverSource: "epub" | "device" | "placeholder"` — where the cover came from;
+  `placeholder` drives the `封面待补` marker.
+- Detail route renders exactly one first-level content section: `book-overview`.
+- Primary shelf is one of the fourteen values in `BOOK_SHELF_VALUES` —
+  `biography`, `reference`, `economics`, `sci-fi`, `science`, `history`, `logic`,
+  `society`, `literature`, `fiction`, `psychology`, `art`, `philosophy`,
+  `politics` — mirroring the e-reader library's directories. The earlier
+  four-shelf values are retired.
+- Bulk import: `scripts/import-book-library.ts`, dry-run by default; `--apply`
+  writes. Device covers come from `--fetch-covers` into `.local/device-covers`.
 
 ### 3. Contracts
 
+**Library entries**
+
 - The directory slug is the stable ID for the content entry and public URL.
-- The schema accepts at least one introduction, two to four reading reasons,
-  and zero to three endorsements. Reading-reason kinds are unique within a
-  book. The card preview and detail introduction use the same first
-  `introductions` entry; public components do not consume an unsourced
-  `whyRead` field.
-- A curated public-library entry targets three complementary introductions:
+- Every entry carries a `description`: a self-written one-sentence content
+  overview. Both the list card and the detail page render it and mark it
+  `内容概述（自撰）`; it must never be presented as publisher copy or as a
+  sourced quotation.
+- `introductions`, `readingReasons`, `endorsements`, `excerpts` and `topics` are
+  **curated** fields. A lightweight imported entry omits them all — `[]` is
+  valid. An entry that does fill them must satisfy *Curated content* below.
+- Because Zod applies `.default([])` through the whole chain, non-empty
+  constraints live in `superRefine`, not `.min()`: a present `introductions` is
+  non-empty, and a present `readingReasons` has 2–4 entries with unique `kind`s.
+  Writing `.min(2).default([])` makes every entry that omits the field fail.
+- `topics` is optional; when present it is non-empty and must not repeat the
+  shelf label.
+- Every entry has exactly one `shelf` from the fourteen values.
+- Covers are 480px-wide WebP derivatives that preserve the source aspect ratio
+  and are never upscaled. A missing or unreadable `cover.webp` fails content
+  sync. When neither the EPUB nor the device cache yields a cover, the import
+  writes a deterministic generated placeholder and sets
+  `coverSource: "placeholder"`.
+- The import is **append-only and idempotent**: an existing `<slug>/index.md` is
+  never overwritten, and re-running it leaves `git status --porcelain` empty.
+  Overlap between the source library and the blog is resolved by an explicit
+  title→slug alias table — never by creating a second directory for the same
+  work.
+
+**Curated content** (binding only when those fields are filled)
+
+- A curated entry targets three complementary introductions:
   the book's core question or premise, its main scope or structure, and its
   conclusion or practical destination. Repeating one abstract summary three
   ways does not satisfy this editorial coverage audit.
-- Public detail pages contain exactly three first-level content sections:
-  whole-book introduction, places worth reading, and classic excerpts.
+- Public detail pages contain exactly one first-level content section,
+  `book-overview`; curated material renders inside it.
 - The introduction section renders publisher, author-site, official-book-site,
   or authoritative-catalog citations. Prefer recognizable first-party and
   established book sources such as Macmillan, Penguin Random House,
@@ -135,8 +166,17 @@ cover, introduction, reading rationale, or verified excerpt.
 
 | Condition | Required result |
 | --- | --- |
-| `introductions` is missing/empty | Content sync/build fails |
-| `readingReasons` has fewer than two or more than four entries | Content sync/build fails |
+| `description` is missing or empty | Content sync/build fails |
+| `cover` file is missing or unreadable | Content sync/build fails |
+| `shelf` uses one of the retired four values | Content sync/build fails |
+| `coverSource` is outside `epub`/`device`/`placeholder` | Content sync/build fails |
+| `introductions` is present but empty | Content sync/build fails |
+| `readingReasons` is present with 1 or more than 4 entries | Content sync/build fails |
+| `topics` is present but empty | Content sync/build fails |
+| A second directory exists for the same work | Editorial audit fails |
+| Re-running the import modifies an existing entry | Import audit fails |
+| `introductions` is absent (lightweight entry) | Accepted — this is the base state |
+| `readingReasons` is absent (lightweight entry) | Accepted — this is the base state |
 | Two reading reasons reuse the same `kind` | Content sync/build fails |
 | `endorsements` has more than three entries | Content sync/build fails |
 | Source citation text exceeds 240 characters | Content sync/build fails |
@@ -159,46 +199,57 @@ cover, introduction, reading rationale, or verified excerpt.
 
 ### 5. Good / Base / Bad Cases
 
-- Good: build three sourced introduction facets, provide at least two distinct
-  source-backed reading values, demote generic prestige praise to
-  `endorsements`, and select at least three short, non-adjacent,
+- Good (lightweight): a minimal frontmatter entry — title, authors,
+  `description`, status, `shelf`, `topics: []`, cover — with a 480px WebP cover
+  extracted from the EPUB. This is the normal shape of an imported entry.
+- Good (curated): additionally build three sourced introduction facets, at
+  least two distinct source-backed reading values, demote generic prestige
+  praise to `endorsements`, and select at least three short, non-adjacent,
   source-labeled excerpts checked against a local edition or a public
-  authoritative text. Present the introduction facets as one coherent book
-  description and list each unique source URL once.
-- Base: publish sourced introduction/reason cards plus an explicit
-  “尚未添加经原文核对的摘抄” state while original-text verification is pending.
-- Bad: treat “the author is brilliant” as a reading reason, write an AI
-  recommendation without a source, call a translated review a Chinese-edition
-  quotation, repeat source chrome after every summary paragraph, use a search
-  result snippet as the book description, turn every citation into the same
-  abstract-summary sentence pattern, render a graph because `graph.json`
-  exists, expose stale Markdown notes, or generate famous-sounding author
-  quotations.
+  authoritative text. Present the facets as one coherent description and list
+  each unique source URL once.
+- Base: a generated placeholder cover (`coverSource: "placeholder"`, rendered
+  as `封面待补`) when neither the EPUB nor the device cache yields an image.
+- Bad: present a self-written `description` as publisher copy or a sourced
+  quotation; give a lightweight entry invented citations; re-run the import and
+  overwrite a reviewed entry; upscale a 480px cover to 720; repeat the shelf
+  label inside `topics`; treat “the author is brilliant” as a reading reason;
+  call a translated review a Chinese-edition quotation; use a search result
+  snippet as the book description; render a graph because `graph.json` exists;
+  expose stale Markdown notes; or generate famous-sounding author quotations.
 
 ### 6. Tests Required
 
 ```bash
+npx tsx scripts/import-book-library.ts            # 演练：应报 新建 0 / 已存在 N
 pnpm exec biome check src/content.config.ts src/types/book.ts \
-  src/utils/book-utils.ts src/components/pages/books src/pages/books
+  src/utils/book-utils.ts src/components/pages/books src/pages/books \
+  scripts/import-book-library.ts
 pnpm check
 pnpm type-check
+pnpm lqips                                        # 新增封面后必须重跑
 pnpm build
 ```
 
 Assert that `/books/` and every non-draft `/books/<slug>/` page are emitted,
-every detail contains exactly the three required IDs in order, every sidebar
-contains the matching three links, and no public book output includes graph
-labels or graph runtime references. Also assert that all books have at least one
-introduction, two to four reading reasons with unique kinds, every citation
-exposes its attribution and HTTPS URL, and no public consumer references
-`whyRead` or `reviews`. For the curated library, audit exactly three
-introductions and at least three unique excerpts per book; reject missing source
-text, generic praise used as a reason, invalid optional excerpt URLs, and
-repeated excerpt text. In a real browser, cover one page with three reasons and
-an endorsement, one local-edition excerpt page, one page with public excerpt
-links, and the pending-state base case when it exists at desktop and 390px
-widths; assert visible sources, no root horizontal overflow, no console error,
-no Cytoscape request, working filters, and working Swup navigation.
+every detail contains exactly `book-overview` and no retired section ID, and no
+public book output includes graph labels or graph runtime references. Also
+assert that every entry has a readable `cover.webp`, every `shelf` is one of the
+fourteen values, every entry renders the `内容概述（自撰）` marker, no public
+consumer references `whyRead` or `reviews`, and no entry uses a retired shelf
+value. For curated entries additionally assert the introduction/reason rules
+above; reject missing source text, generic praise used as a reason, and invalid
+optional excerpt URLs.
+
+Import assertions: re-running `import-book-library.ts --apply` creates zero
+directories and leaves `git status --porcelain` unchanged for existing entries;
+no duplicate directory exists for one work; every generated slug matches
+`/^[a-z0-9]+(?:-[a-z0-9]+)*$/`.
+
+In a real browser, cover the list page and a detail page at desktop and 390px
+widths; assert the fourteen sidebar groups, both filters writing to the URL,
+zero root horizontal overflow, zero console errors, no Cytoscape request, and
+working Swup navigation (a second navigation, not only first load).
 
 ### 7. Wrong vs Correct
 
@@ -242,6 +293,19 @@ excerpts:
     url: "https://example.com/book/excerpt"
 ```
 
+```yaml
+# Correct (lightweight): an imported library entry states only what it can back
+# up — the description is marked self-written in the UI, and no source is implied.
+title: "双城记"
+authors: ["查尔斯·狄更斯"]
+description: "狄更斯以法国大革命为背景的小说，讲述伦敦与巴黎两地人物的命运交织。"
+status: "wishlist"
+shelf: "fiction"
+topics: []
+cover: "./cover.webp"
+coverSource: "epub"
+```
+
 ## Scenario: Maintain Internal Book Knowledge-Graph Data
 
 ### 1. Scope / Trigger
@@ -256,8 +320,8 @@ graph relationships. It does not authorize mounting graph UI on public routes.
 - Graph source: `src/content/books/<slug>/graph.json`.
 - Cover source: `src/content/books/<slug>/cover.webp`.
 - Historical graph components remain internal and are not routed publicly.
-- Primary shelf:
-  `shelf: "cognition-and-decisions" | "wealth-and-growth" | "psychology-and-relationships" | "literature-and-life"`.
+- Primary shelf: one of the fourteen `BOOK_SHELF_VALUES` (see the library
+  scenario above). Graph data carries no shelf of its own.
 - Resolver:
   `getGraphForBook(book: CollectionEntry<"books">): Promise<CollectionEntry<"bookGraphs">>`.
 - Node evidence:

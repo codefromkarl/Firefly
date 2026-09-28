@@ -24,11 +24,7 @@ const shelves = BOOK_SHELF_VALUES.map((shelf) => ({
 })).filter((shelf) => shelf.books.length > 0);
 const currentBook = books.find((book) => book.id === currentBookId);
 
-const pageSections = [
-	{ href: "#book-introduction", label: "整本书介绍" },
-	{ href: "#why-read", label: "这本书值得看的地方" },
-	{ href: "#classic-excerpts", label: "经典摘抄" },
-];
+const pageSections = [{ href: "#book-overview", label: "内容概述" }];
 ---
 
 <WidgetLayout id="book-list-directory" name="书单目录">
@@ -228,6 +224,9 @@ const pageSections = [
 		flex-direction: column;
 		gap: 0.08rem;
 		padding: 0.15rem 0 0.2rem;
+		/* 14 个分类下，历史/科学等大组展开会很长，限制高度并允许内部滚动 */
+		max-height: min(50vh, 24rem);
+		overflow-y: auto;
 	}
 
 	.book-directory-item {

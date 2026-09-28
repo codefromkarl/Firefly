@@ -39,7 +39,7 @@ excerpts:
   - text: "同一信息的不同表达方式常常会激发人们不同的情感。"
     source: "第7章《字母“B”与数字“13”》"
 status: "wishlist"
-shelf: "cognition-and-decisions"
+shelf: "psychology"
 topics:
   - "认知科学"
   - "决策"

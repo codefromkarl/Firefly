@@ -5,6 +5,7 @@ import { type ZodType, z } from "astro/zod";
 import {
 	BOOK_ARGUMENT_CARD_KIND_VALUES,
 	BOOK_ARGUMENT_CONTEXT_VALUES,
+	BOOK_COVER_SOURCE_VALUES,
 	BOOK_GRAPH_BASIS_VALUES,
 	BOOK_GRAPH_LAYOUT_VALUES,
 	BOOK_GRAPH_NODE_KIND_VALUES,
@@ -18,6 +19,7 @@ import {
 	BOOK_READING_REASON_KIND_VALUES,
 	BOOK_SHELF_VALUES,
 	BOOK_STATUS_VALUES,
+	type BookCoverSource,
 	type BookExcerpt,
 	type BookGraphData,
 	type BookGraphProvenance,
@@ -74,6 +76,7 @@ type BookData = {
 	language: string;
 	isbn?: string;
 	cover: z.infer<ReturnType<SchemaContext["image"]>>;
+	coverSource?: BookCoverSource;
 	draft: boolean;
 	graphStage: BookGraphStage;
 	published?: Date;
@@ -147,6 +150,9 @@ const bookSchema = ({ image }: SchemaContext): ZodType<BookData> =>
 		originalTitle: z.string().min(1).optional(),
 		authors: z.array(z.string().min(1)).min(1),
 		description: z.string().min(1),
+		// 策展字段：轻量藏书条目不写，为空数组即合法；一旦填写则须满足原有质量标准。
+		// 注意 Zod 的 .default() 会把默认值再喂给整条链校验，因此非空约束必须放进
+		// superRefine 而不是 .min()，否则 .default([]) 会直接抛错。
 		introductions: z
 			.array(
 				z.object({
@@ -155,7 +161,7 @@ const bookSchema = ({ image }: SchemaContext): ZodType<BookData> =>
 					url: z.url(),
 				}),
 			)
-			.min(1),
+			.default([]),
 		readingReasons: z
 			.array(
 				z.object({
@@ -166,9 +172,15 @@ const bookSchema = ({ image }: SchemaContext): ZodType<BookData> =>
 					url: z.url(),
 				}),
 			)
-			.min(2)
 			.max(4)
 			.superRefine((reasons, context) => {
+				if (reasons.length === 0) return; // 轻量条目不适用
+				if (reasons.length < 2) {
+					context.addIssue({
+						code: "custom",
+						message: "readingReasons must provide 2-4 entries when present",
+					});
+				}
 				const kinds = new Set(reasons.map((reason) => reason.kind));
 				if (kinds.size !== reasons.length) {
 					context.addIssue({
@@ -177,7 +189,8 @@ const bookSchema = ({ image }: SchemaContext): ZodType<BookData> =>
 							"readingReasons must cover distinct reader-value dimensions",
 					});
 				}
-			}),
+			})
+			.default([]),
 		endorsements: z
 			.array(
 				z.object({
@@ -199,12 +212,13 @@ const bookSchema = ({ image }: SchemaContext): ZodType<BookData> =>
 			.default([]),
 		status: z.enum(BOOK_STATUS_VALUES),
 		shelf: z.enum(BOOK_SHELF_VALUES),
-		topics: z.array(z.string().min(1)).min(1),
+		topics: z.array(z.string().min(1)).default([]),
 		language: z.string().min(2).default("zh-CN"),
 		isbn: z.string().min(10).optional(),
 		cover: image(),
+		coverSource: z.enum(BOOK_COVER_SOURCE_VALUES).optional(),
 		draft: z.boolean().optional().default(false),
-		graphStage: z.enum(BOOK_GRAPH_STAGE_VALUES),
+		graphStage: z.enum(BOOK_GRAPH_STAGE_VALUES).default("preview"),
 		published: z.date().optional(),
 	});
 

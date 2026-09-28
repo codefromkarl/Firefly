@@ -39,7 +39,7 @@ excerpts:
   - text: "我每拍一部影片，就经历一段五光十色的人生。我从电影中体验了各种各样的人生。"
     source: "《姿三四郎》"
 status: "wishlist"
-shelf: "literature-and-life"
+shelf: "biography"
 topics:
   - "回忆录"
   - "电影"
