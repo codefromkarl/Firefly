@@ -42,3 +42,6 @@ package/
 .claude
 .mimocode
 .redesign-shots/
+
+# Private creator vault, local inventories, exports and runtime evidence
+.local/
