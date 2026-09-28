@@ -195,7 +195,7 @@ onMount(() => {
 						value={query}
 						oninput={handleQueryInput}
 						placeholder="搜索书名、作者或主题"
-						class="w-full rounded-xl border border-(--line-divider) bg-(--card-bg) py-3 pl-10 pr-4 text-sm text-neutral-900 outline-none transition placeholder:text-neutral-400 focus:border-(--primary) focus:ring-2 focus:ring-(--primary)/20 dark:text-neutral-100"
+						class="min-h-[44px] w-full rounded-xl border border-(--line-divider) bg-(--card-bg) py-3 pl-10 pr-4 text-sm text-neutral-900 outline-none transition placeholder:text-neutral-400 focus:border-(--primary) focus:ring-2 focus:ring-(--primary)/20 dark:text-neutral-100"
 					/>
 				</div>
 			</div>
@@ -212,7 +212,7 @@ onMount(() => {
 						id="book-shelf-filter"
 						value={activeShelf}
 						onchange={handleShelfChange}
-						class="w-full rounded-xl border border-(--line-divider) bg-(--card-bg) px-3 py-3 text-sm text-neutral-700 outline-none focus:border-(--primary) dark:text-neutral-200"
+						class="min-h-[44px] w-full rounded-xl border border-(--line-divider) bg-(--card-bg) px-3 py-3 text-sm text-neutral-700 outline-none focus:border-(--primary) dark:text-neutral-200"
 					>
 						<option value="all">全部分类</option>
 						{#each shelves as shelf}
@@ -232,7 +232,7 @@ onMount(() => {
 						id="book-status-filter"
 						value={activeStatus}
 						onchange={handleStatusChange}
-						class="w-full rounded-xl border border-(--line-divider) bg-(--card-bg) px-3 py-3 text-sm text-neutral-700 outline-none focus:border-(--primary) dark:text-neutral-200"
+						class="min-h-[44px] w-full rounded-xl border border-(--line-divider) bg-(--card-bg) px-3 py-3 text-sm text-neutral-700 outline-none focus:border-(--primary) dark:text-neutral-200"
 					>
 						<option value="all">全部状态</option>
 						{#each BOOK_STATUS_VALUES as status}
@@ -291,7 +291,7 @@ onMount(() => {
 				<button
 					type="button"
 					onclick={() => (visibleCount += PAGE_SIZE)}
-					class="rounded-xl bg-(--btn-regular-bg) px-6 py-3 text-sm font-medium text-(--btn-content) transition hover:bg-(--btn-regular-bg-hover) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--primary)"
+					class="min-h-[44px] rounded-xl bg-(--btn-regular-bg) px-6 py-3 text-sm font-medium text-(--btn-content) transition hover:bg-(--btn-regular-bg-hover) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--primary)"
 				>
 					加载更多
 				</button>

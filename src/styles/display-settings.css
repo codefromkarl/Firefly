@@ -2,14 +2,16 @@
 
 #display-setting input[type="range"] {
 	-webkit-appearance: none;
-	height: 1.5rem;
+	/* 用 px 而非 rem：站点根字号是 14px，1.5rem 只有 21px，低于 WCAG 2.5.8 的 24px 下限 */
+	height: 24px;
 	border-radius: 999px;
 	background-image: linear-gradient(90deg, var(--primary) 0 var(--range-progress, 50%), hsla(var(--hue), 22%, 28%, 0.18) var(--range-progress, 50%) 100%);
 	transition: background-image 0.15s ease-in-out;
 }
 
 #display-setting input[type="range"].overlay-slider {
-	height: 1rem;
+	/* 同上：1rem 在 14px 根字号下只有 14px */
+	height: 24px;
 	border-radius: 0.125rem;
 	background-image: linear-gradient(90deg, var(--primary) 0 var(--range-progress, 50%), hsla(var(--hue), 22%, 28%, 0.18) var(--range-progress, 50%) 100%);
 }

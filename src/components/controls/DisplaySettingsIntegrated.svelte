@@ -639,7 +639,7 @@ $effect(() => {
 			</div>
 			<div class="w-full h-6 px-1 bg-[oklch(0.80_0.10_0)] dark:bg-[oklch(0.70_0.10_0)] rounded-sm select-none">
 				<input aria-label={i18n(I18nKey.themeColor)} type="range" min="0" max="360" bind:value={hue}
-					   class="slider" id="colorSlider" step="5" style="width: 100%">
+					   class="slider h-full" id="colorSlider" step="5" style="width: 100%">
 			</div>
 		</div>
 		{/if}
