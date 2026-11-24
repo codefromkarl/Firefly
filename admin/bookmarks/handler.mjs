@@ -1,7 +1,7 @@
 import { createRemoteJWKSet, jwtVerify } from "jose";
-import { analyzeBookmark, publicBookmarkURL } from "./analysis.mjs";
 
 const path = "/admin/bookmarks";
+const importPath = `${path}/import`;
 const headers = {
 	"Cache-Control": "private, no-store",
 	"Referrer-Policy": "no-referrer",
@@ -56,75 +56,33 @@ function json(data, status) {
 	return Response.json(data, { status, headers });
 }
 
-async function readURL(request) {
-	if (!request.body || request.headers.get("Content-Length") > 4096)
-		return null;
-	const reader = request.body.pipeThrough(new TextDecoderStream()).getReader();
-	let text = "";
-	try {
-		for (;;) {
-			const { done, value } = await reader.read();
-			if (done) break;
-			text += value;
-			if (text.length > 3072) {
-				await reader.cancel();
-				return null;
-			}
-		}
-		const input = JSON.parse(text);
-		return publicBookmarkURL(input?.url);
-	} catch {
-		return null;
-	} finally {
-		reader.releaseLock();
-	}
-}
-
 export function makeHandler({
 	shell,
+	importShell,
 	client,
+	banner,
 	keys = getKeys,
-	analyze = analyzeBookmark,
 }) {
 	return async (request, env) => {
 		const url = new URL(request.url);
-		const routes = [path, `${path}/`, `${path}/client.js`, `${path}/analyze`];
+		const routes = [
+			path,
+			`${path}/`,
+			importPath,
+			`${importPath}/`,
+			`${path}/client.js`,
+			`${path}/banner.webp`,
+		];
 		if (!routes.includes(url.pathname)) return json({ error: "未找到" }, 404);
 		if (!(await isAdmin(request, env, keys)))
 			return json({ error: "仅管理员可访问" }, 403);
 
-		if (url.pathname === `${path}/analyze`) {
-			if (request.method !== "POST")
-				return json({ error: "请求方式不支持" }, 405);
-			if (
-				request.headers.get("Origin") !== url.origin ||
-				!/^application\/json(?:;|$)/i.test(
-					request.headers.get("Content-Type") ?? "",
-				)
-			)
-				return json({ error: "请从书签管理页发起分析" }, 403);
-
-			const link = await readURL(request);
-			if (!link)
-				return json(
-					{ state: "excluded", message: "只分析不含参数的公开 HTTPS 链接" },
-					400,
-				);
-			try {
-				return json(await analyze(link, env.AI));
-			} catch {
-				return json(
-					{ state: "error", message: "分析服务暂不可用，可稍后重试" },
-					503,
-				);
-			}
-		}
 		if (request.method !== "GET" && request.method !== "HEAD")
 			return json({ error: "请求方式不支持" }, 405);
-		if (url.pathname === path) {
+		if (url.pathname === path || url.pathname === importPath) {
 			return new Response(null, {
 				status: 308,
-				headers: { ...headers, Location: `${path}/` },
+				headers: { ...headers, Location: `${url.pathname}/` },
 			});
 		}
 		if (url.pathname === `${path}/client.js`) {
@@ -135,14 +93,20 @@ export function makeHandler({
 				},
 			});
 		}
+		if (url.pathname === `${path}/banner.webp`) {
+			return new Response(request.method === "HEAD" ? null : banner, {
+				headers: { ...headers, "Content-Type": "image/webp" },
+			});
+		}
 		const nonce = crypto.randomUUID().replaceAll("-", "");
+		const page = url.pathname === `${importPath}/` ? importShell : shell;
 		return new Response(
-			request.method === "HEAD" ? null : shell.replaceAll("__NONCE__", nonce),
+			request.method === "HEAD" ? null : page.replaceAll("__NONCE__", nonce),
 			{
 				headers: {
 					...headers,
 					"Content-Type": "text/html; charset=utf-8",
-					"Content-Security-Policy": `default-src 'none'; script-src 'nonce-${nonce}'; style-src 'nonce-${nonce}'; connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'`,
+					"Content-Security-Policy": `default-src 'none'; script-src 'nonce-${nonce}'; style-src 'nonce-${nonce}'; img-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'`,
 				},
 			},
 		);

@@ -12,5 +12,7 @@
 			"zone_name": "codefromkarl.xyz"
 		}
 	],
-	"ai": { "binding": "AI" }
+	"rules": [
+		{ "type": "Data", "globs": ["**/home-bg.webp"], "fallthrough": true }
+	]
 }

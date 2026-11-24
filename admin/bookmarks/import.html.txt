@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>更新书签表 · CodeFromKarl</title>
+	<style nonce="__NONCE__">
+		:root { color-scheme:light dark; font:16px/1.55 system-ui,"Noto Sans SC","Microsoft YaHei",sans-serif; }
+		body { margin:0; color:CanvasText; background:Canvas; }
+		main { width:min(calc(100% - 32px),35rem); margin:36px auto; }
+		button { min-height:42px; padding:6px 12px; font:inherit; cursor:pointer; }
+		button:disabled { cursor:wait; }
+		#status.error { color:light-dark(#a22c45,#ffc0cb); }
+	</style>
+	<script nonce="__NONCE__" type="module" src="../client.js"></script>
+</head>
+<body>
+	<main>
+		<a href="../">查看书签</a>
+		<h1>更新书签表</h1>
+		<p>选择整理好的 JSON 文件。每条书签需要名称、网址和一句用途，可附上类型和分类。文件只保存在当前浏览器，不上传。</p>
+		<p id="existing" hidden></p>
+		<button type="button" id="import" disabled>选择 JSON 文件</button>
+		<input id="file" type="file" accept="application/json,.json" hidden>
+		<p id="status" role="status"></p>
+	</main>
+</body>
+</html>

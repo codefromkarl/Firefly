@@ -1,30 +1,41 @@
-# 管理员书签归类
+# 私有书签表
 
-入口：`https://codefromkarl.xyz/admin/bookmarks/`。登录后导入 Chrome 书签管理器导出的 HTML；书签列表并排展示标题与来源、什么时候用、分类和状态。按标题、原目录、用途或站点搜索，也可以按分类和读取状态筛选。打开「详情」查看建议分类、用途、原文摘录和个人备注；未取到依据时会明确提示。重复导入不会覆盖已有结果和备注。
+展示页：`https://codefromkarl.xyz/admin/bookmarks/`。表格显示书签名、类型和一句用途，上方可按分类筛选。类型描述链接是什么（例如开源项目、资源目录、电子书），分类用来组织主题。展示页没有导入按钮，不读取目标网站，也不运行 AI。
 
-书签数据与分析结果保存在当前浏览器。换设备或清除站点数据不会保留它们；不要用共享浏览器配置处理私人书签。后台不加载公开站点的主题脚本或统计服务，也不在 GitHub Pages、公开导航、站内搜索和站点地图中发布。
+更新时，先在页面外整理好结果，再打开受同一管理员权限保护的 `/admin/bookmarks/import/`，选择 JSON 文件。
 
-勾选后才出现「分析所选」，按钮和确认框都显示去重后实际发送的公开链接数量。手动最多勾选 20 条；「更多操作」里的「批量分析待分析项」一次最多处理 100 个链接，也需先确认。可以暂停，已完成的结果会保存；下次批量只处理仍待分析的条目。仅发送符合条件的公开 HTTPS URL，不发整份文件、标题、目录或备注。含参数、私网、登录/邀请路径和非 HTTPS 链接只保留在本地；动态页面、PDF、登录墙或正文不足可能无可核实结果。Cloudflare Workers AI 接收公开正文，可能消耗账户 AI 用量；详情中的短摘需与读取到的正文匹配。
+导入文件是 JSON 数组，顺序即表格顺序。每条包含书签名、绝对网址和一句用途，可以附上类型和分类（分别最多 32 字）：
 
-## 首次部署
+```json
+[
+  {
+    "title": "Godot Asset Library",
+    "url": "https://godotengine.org/asset-library/asset",
+    "purpose": "按 Godot 版本和许可证查找可复用的插件与示例。",
+    "type": "资源目录",
+    "category": "游戏开发"
+  }
+]
+```
 
-生产主站仍使用 `wrangler.jsonc` 的独立 `firefly` Worker；本功能部署到 `firefly-bookmarks`，只认 `/admin/bookmarks` 和其页面、脚本、分析接口。不要改主站 Custom Domain 或 GitHub Pages 工作流。
+旧结果没有 `type` 或 `category` 也可导入，类型显示「未标注」，未填分类归为「未分类」。只有至少两组可切换时才显示筛选，刷新默认看全部。
 
-1. 用 `pnpm exec wrangler whoami` 确认正确的 Cloudflare 账户；授权过期，在交互终端执行 `pnpm exec wrangler login`。确认目标路由未被其他服务占用，并记录当前域名/路由状态。
-2. 在 Cloudflare Zero Trust → Access → Applications 添加一个 **Self-hosted** 应用，同一个应用添加 `codefromkarl.xyz/admin/bookmarks` 与 `codefromkarl.xyz/admin/bookmarks/*` 两个公开目的地，不配置整个根域、不配置 Bypass。Allow 规则只含管理员邮箱，登录方式可用邮件一次性验证码。[路径规则](https://developers.cloudflare.com/cloudflare-one/access-controls/policies/app-paths/)
-3. 获取此应用的 AUD 和团队地址。部署时以临时权限受限的 JSON 或批准的秘密管理方式提供三个绑定：`BOOKMARK_ACCESS_AUD`、`BOOKMARK_ACCESS_ISSUER`（完整的 `https://…cloudflareaccess.com`，无尾斜线）和 `BOOKMARK_ADMIN_EMAIL`。不要提交这些值或将令牌交给脚本。Worker 会独立校验签名、issuer、AUD 和邮箱；缺任一配置时保持关闭。[JWT 校验](https://developers.cloudflare.com/cloudflare-one/access-controls/applications/http-apps/authorization-cookie/validating-json/)
-4. 完成本地检查，再用同一身份配置部署：
-   ```bash
-   node --test admin/bookmarks/bookmarks.test.mjs
-   pnpm check
-   pnpm type-check
-   pnpm build
-   pnpm exec wrangler deploy --config wrangler.bookmarks.jsonc --dry-run
-   pnpm exec wrangler deploy --config wrangler.bookmarks.jsonc --secrets-file /path/to/protected/bookmark-bindings.json
-   ```
-   不需要公开 `workers.dev` 或 Preview URL。第一次真实模型验证先确认账户用量，用获准的公开样本，不导入整库。
-5. 分别确认未登录页面/脚本/分析接口被拒绝、管理员登录能打开并导入、另一邮箱不被允许。再验证公开首页、文章、RSS 和 Pagefind 仍可访问。
+一次最多 20,000 条、16 MB。Chrome 原始 HTML 和缺少用途的条目不能导入；任何一条出错都不会覆盖现有表格。确认替换后，完整新表保存在当前浏览器，不上传文件。非 HTTP(S) 地址和含用户名、密码的链接只展示名称。旧版从 Chrome 导入的原始书签保留在原 IndexedDB，不迁移、不删除，也不显示在结果表中。
 
-## 回退
+## 部署与验收
 
-只移除 `firefly-bookmarks` 的 `codefromkarl.xyz/admin/bookmarks*` Worker Route，回到主站原有 404 行为；保留浏览器里的书签数据和既有主站 Worker。若希望连 Access 登录入口也恢复为 404，再单独停用这个 Access 应用。不要修改公开站点和其他 Access 策略。
+主站仍使用 `wrangler.jsonc` 的独立 `firefly` Worker；这个页面只发布到 `firefly-bookmarks`，不改主站、自定义域名或 GitHub Pages 工作流。只保留展示页、独立更新页、客户端脚本和复用的博客横幅；不在公开导航、站点地图或搜索索引中发布。
+
+部署前确认目标账户、路由、现有 Worker 版本及回退入口。保留现有 Cloudflare Access 应用的两个保护路径 `codefromkarl.xyz/admin/bookmarks` 和 `codefromkarl.xyz/admin/bookmarks/*`、管理员名单及登录方式。不添加 Bypass。Worker 仍逐请求独立校验签名、issuer、AUD 和管理员邮箱：保留 `BOOKMARK_ACCESS_AUD`、`BOOKMARK_ACCESS_ISSUER` 和 `BOOKMARK_ADMIN_EMAIL` 三个生产秘密，缺任何配置时拒绝访问。[Cloudflare JWT 校验说明](https://developers.cloudflare.com/cloudflare-one/access-controls/applications/http-apps/authorization-cookie/validating-json/)
+
+```bash
+node --test admin/bookmarks/bookmarks.test.mjs
+pnpm check
+pnpm type-check
+pnpm build
+pnpm exec wrangler deploy --config wrangler.bookmarks.jsonc --dry-run
+```
+
+发布后核对未登录访问后台及其资源被拦截，管理员可在更新页保存结果，回到无导入按钮的展示页看到三列结果，并可切换分类；刷新后结果仍在；确认旧分析端点不可用、公开首页和搜索可访问。无需 Workers AI 绑定。
+
+如需回退，只将书签专用 Worker 回滚到此前版本；可重新查看旧版浏览器中的原始书签。不要切换主站域名或修改现有 Access 策略。
