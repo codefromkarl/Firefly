@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>书签归类 · Firefly 管理</title>
+	<style nonce="__NONCE__">
+		:root {
+			color-scheme:light;
+			--paper:#f2f6fa; --surface:#fff; --ink:#172a41; --muted:#4f6277;
+			--line:#d3dfe9; --accent:#235aa2; --accent-ink:#fff; --tint:#e8f2fd;
+			--error:#a22c45; --error-bg:#fcecf0; --scrim:rgb(19 35 54 / 36%);
+			font:16px/1.55 system-ui,"Noto Sans CJK SC","Microsoft YaHei",sans-serif;
+		}
+		* { box-sizing:border-box; }
+		body { margin:0; color:var(--ink); background:var(--paper); }
+		[hidden] { display:none !important; }
+		h1,h2,h3,p,dd { margin:0; }
+		.frame { width:min(100%,1160px); margin-inline:auto; padding-inline:clamp(16px,4vw,48px); }
+		.site-header { border-bottom:1px solid var(--line); background:var(--surface); }
+		.site-header .frame { min-height:56px; display:flex; justify-content:space-between; align-items:center; gap:12px; }
+		.brand { display:flex; align-items:center; gap:9px; font-size:.94rem; }
+		.brand span { padding-left:9px; border-left:1px solid var(--line); color:var(--muted); font-size:.83rem; }
+		.site-header a { color:var(--muted); font-size:.86rem; }
+		main { padding-block:clamp(24px,5vw,48px) 36px; }
+		.lead { display:flex; align-items:flex-end; justify-content:space-between; flex-wrap:wrap; gap:18px; margin-bottom:24px; }
+		h1 { font-size:clamp(30px,4.4vw,46px); line-height:1.12; letter-spacing:-.03em; }
+		.lead p { margin-top:8px; color:var(--muted); }
+		h2 { font-size:1.1rem; }
+		a { color:var(--accent); text-underline-offset:3px; }
+		button,input,select,textarea { font:inherit; }
+		button,select,summary { cursor:pointer; }
+		button {
+			min-height:42px; padding:6px 13px; border:1px solid var(--line); border-radius:8px;
+			font-size:.89rem; font-weight:650; color:var(--accent); background:var(--surface);
+		}
+		button:hover:not(:disabled) { background:var(--tint); }
+		button.primary { color:var(--accent-ink); background:var(--accent); border-color:var(--accent); }
+		button.primary:hover:not(:disabled) { filter:brightness(.91); }
+		button:disabled { color:var(--muted); background:var(--paper); cursor:not-allowed; font-weight:500; }
+		:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+		input:not([type="checkbox"]),select,textarea {
+			min-width:0; max-width:100%; min-height:42px; padding:7px 10px; border:1px solid var(--line);
+			border-radius:8px; color:var(--ink); background:var(--surface);
+		}
+		::placeholder { color:var(--muted); }
+		input[type="checkbox"] { width:18px; height:18px; margin:0; accent-color:var(--accent); }
+		.check { display:grid; place-items:center; min-height:42px; cursor:pointer; }
+		.toolbar,.list { border:1px solid var(--line); border-radius:12px; background:var(--surface); }
+		.toolbar { padding:14px 16px; }
+		.filters { display:grid; grid-template-columns:minmax(0,1fr) minmax(142px,.30fr) minmax(130px,.27fr); gap:12px; }
+		.filters label { display:grid; gap:4px; color:var(--muted); font-size:.82rem; }
+		.filters :is(input,select) { font-size:.92rem; width:100%; }
+		.list-top,.pagination,.selection-actions { display:flex; align-items:center; flex-wrap:wrap; gap:9px; }
+		.list-top { justify-content:space-between; margin:14px 0 9px; }
+		.list-top p,.pagination { color:var(--muted); font-size:.88rem; }
+		.more-actions { position:relative; }
+		.more-actions summary { display:flex; align-items:center; min-height:42px; padding-inline:4px; color:var(--accent); font-size:.89rem; }
+		.more-actions summary::after { content:""; width:6px; height:6px; border:solid currentColor; border-width:0 1.5px 1.5px 0; transform:rotate(45deg); margin:0 3px 4px 8px; }
+		.more-actions[open] > div { position:absolute; inset-inline-end:0; z-index:1; min-width:210px; padding:8px; border:1px solid var(--line); border-radius:9px; background:var(--surface); }
+		.more-actions button { width:100%; }
+		.selection {
+			display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px 14px;
+			margin-top:12px; padding:10px 12px; border:1px solid var(--line); border-radius:10px; background:var(--tint);
+		}
+		.selection p { font-size:.87rem; color:var(--muted); }
+		#progress { margin-block:12px; font-size:.88rem; color:var(--muted); }
+		#progress:empty,#noteStatus:empty { margin:0; }
+		#progress.error,#noteStatus.error { color:var(--error); }
+		.row-grid { display:grid; grid-template-columns:34px minmax(0,1.06fr) minmax(0,1fr) minmax(190px,.47fr); gap:12px; align-items:start; }
+		.list-head { padding:8px 16px; background:var(--paper); border-radius:11px 11px 0 0; color:var(--muted); font-size:.79rem; font-weight:650; }
+		#items { list-style:none; padding:0; margin:0; }
+		.item { padding:12px 16px; border-top:1px solid var(--line); overflow-wrap:anywhere; }
+		.item:has(input:checked) { background:var(--tint); }
+		.item:last-child { border-radius:0 0 11px 11px; }
+		.identity,.item-purpose,.review { min-width:0; }
+		.identity { padding-top:2px; }
+		.bookmark-title { color:var(--ink); font-weight:740; text-decoration:none; font-size:.96rem; }
+		a.bookmark-title:hover { color:var(--accent); text-decoration:underline; }
+		.meta,.item-message { color:var(--muted); font-size:.81rem; }
+		.meta { margin-top:3px; }
+		.item-purpose { padding-top:2px; font-size:.91rem; }
+		.item-purpose:empty { padding:0; }
+		.review { display:flex; flex-wrap:wrap; justify-content:flex-start; align-items:center; column-gap:6px; row-gap:4px; }
+		.badge { display:inline-block; width:fit-content; max-width:100%; padding:2px 7px; border-radius:5px; color:var(--accent); background:var(--tint); font-size:.76rem; }
+		.badge.neutral { color:var(--muted); background:var(--paper); }
+		.badge.error { color:var(--error); background:var(--error-bg); }
+		.detail-button { min-height:38px; padding:4px 9px; border-color:transparent; }
+		.empty,.no-matches { padding:24px; border-top:1px solid var(--line); color:var(--muted); }
+		.empty { display:flex; gap:16px; align-items:center; min-height:154px; border:1px dashed var(--line); border-radius:12px; background:var(--surface); }
+		.empty-icon { display:grid; place-items:center; flex:0 0 44px; width:44px; height:44px; border-radius:10px; background:var(--tint); color:var(--accent); }
+		.empty h2 { color:var(--ink); margin-bottom:4px; }
+		.empty p { font-size:.9rem; }
+		.pagination { margin-top:14px; justify-content:flex-end; }
+		.privacy { margin-top:15px; font-size:.8rem; color:var(--muted); }
+		dialog {
+			inset:0 0 0 auto; width:min(100%,490px); max-width:none; height:100%; max-height:none;
+			margin:0; padding:0; border:0; border-inline-start:1px solid var(--line); color:var(--ink); background:var(--surface);
+		}
+		dialog::backdrop { background:var(--scrim); }
+		.detail-head { position:sticky; top:0; z-index:1; display:flex; align-items:flex-start; justify-content:space-between; gap:14px; padding:20px 22px 15px; border-bottom:1px solid var(--line); background:var(--surface); }
+		.detail-head h2 { font-size:1.25rem; line-height:1.4; overflow-wrap:anywhere; }
+		.detail-head button { flex:none; }
+		.detail-content { padding:4px 22px 26px; overflow-wrap:anywhere; }
+		.detail-content section { padding-block:17px; border-bottom:1px solid var(--line); }
+		.detail-content section:last-child { border:0; }
+		.detail-content h3 { font-size:.95rem; }
+		.detail-content dl { margin:0; }
+		.detail-content dt { margin-top:10px; font-size:.8rem; color:var(--muted); }
+		.detail-content dd,.detail-content blockquote { margin-top:2px; }
+		.detail-content blockquote { margin-inline:0; padding:10px 12px; border-inline-start:3px solid var(--accent); background:var(--paper); }
+		.detail-content section > p { margin-top:5px; }
+		.detail-content textarea { width:100%; resize:vertical; margin:7px 0; }
+		#noteStatus { margin-top:8px; font-size:.83rem; color:var(--muted); }
+		@media(max-width:720px) {
+			.list-head { display:none; }
+			.item { grid-template-columns:30px minmax(0,1fr); gap:1px 9px; padding:10px 12px; }
+			.item:first-child { border-top:0; border-radius:11px 11px 0 0; }
+			.item :is(.item-purpose,.review) { grid-column:2; }
+			.review { margin-top:2px; }
+			.filters { grid-template-columns:1fr 1fr; gap:9px; }
+			.filters label:first-child { grid-column:1 / -1; }
+			.pagination { justify-content:space-between; }
+		}
+		@media(prefers-color-scheme:dark) {
+			:root {
+				color-scheme:dark;
+				--paper:#131e2b; --surface:#1b2a3b; --ink:#e7f0fc; --muted:#b4c4d7;
+				--line:#3b4e65; --accent:#a9cfff; --accent-ink:#172c45; --tint:#263f5a;
+				--error:#ffc0cb; --error-bg:#532d3b; --scrim:rgb(8 13 20 / 69%);
+			}
+		}
+	</style>
+	<script nonce="__NONCE__" type="module" src="./client.js"></script>
+</head>
+<body>
+	<header class="site-header">
+		<div class="frame"><div class="brand"><strong>Firefly</strong><span>管理</span></div><a href="/">返回网站</a></div>
+	</header>
+	<main class="frame">
+		<div class="lead">
+			<div><h1>书签归类</h1><p>看清链接什么时候用得上，也能回到原文核对。</p></div>
+			<button type="button" class="primary" id="import" disabled>导入 Chrome 书签</button>
+			<input type="file" id="file" accept=".html,.htm,text/html" hidden>
+		</div>
+		<section id="library" aria-label="我的书签" hidden>
+			<div class="toolbar">
+				<div class="filters">
+					<label>搜索<input id="search" type="search" placeholder="按标题、用途、目录或站点搜索"></label>
+					<label>分类<select id="category"><option value="">所有分类</option></select></label>
+					<label>状态<select id="state"><option value="">所有状态</option><option value="ready">已分析</option><option value="pending">待分析</option><option value="unavailable">未能读取</option><option value="error">分析失败</option><option value="excluded">不适用</option></select></label>
+				</div>
+			</div>
+			<div class="list-top">
+				<p id="resultsCount"></p>
+				<div class="selection-actions">
+					<button type="button" id="select">勾选本页可分析项</button>
+					<details class="more-actions">
+						<summary>更多操作</summary>
+						<div><button type="button" id="bulk">批量分析待分析项</button></div>
+					</details>
+				</div>
+			</div>
+			<div class="selection" id="selection" hidden>
+				<p id="selectionInfo"></p>
+				<div class="selection-actions">
+					<button type="button" id="clearSelection">清除选择</button>
+					<button type="button" class="primary" id="analyze" hidden></button>
+					<button type="button" id="pause" hidden>暂停</button>
+				</div>
+			</div>
+		</section>
+		<p id="progress" role="status"></p>
+		<section class="empty" id="empty" aria-labelledby="empty-title">
+			<span class="empty-icon" aria-hidden="true"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M6 4h12v17l-6-4-6 4z"/></svg></span>
+			<div><h2 id="empty-title">导入第一批书签</h2><p>在 Chrome 书签管理器中选择「导出书签」，再导入生成的 HTML。试跑可只导入一小批公开链接。</p></div>
+		</section>
+		<section class="list" id="list" aria-label="书签列表" hidden>
+			<div class="row-grid list-head" aria-hidden="true"><span></span><span>书签</span><span>什么时候用</span><span>归类与状态</span></div>
+			<ol id="items" aria-label="书签结果"></ol>
+		</section>
+		<div class="pagination" id="pagination" aria-label="分页" hidden>
+			<button type="button" id="previous">上一页</button><span id="count"></span><button type="button" id="next">下一页</button>
+		</div>
+		<p class="privacy">书签、目录和备注保存在当前浏览器，不修改 Chrome 原书签。只在你确认分析后，将对应公开网页的正文交给 Cloudflare AI。</p>
+	</main>
+	<dialog id="detail" aria-labelledby="detailTitle">
+		<div class="detail-head"><div><h2 id="detailTitle"></h2><p class="meta" id="detailMeta"></p></div><button type="button" id="closeDetail" autofocus>关闭</button></div>
+		<div class="detail-content">
+			<section aria-labelledby="analysis-heading">
+				<h3 id="analysis-heading">分析结果</h3>
+				<p class="item-message" id="detailState"></p>
+				<dl id="detailResult" hidden>
+					<dt>建议分类</dt><dd id="detailCategory"></dd>
+					<dt>什么时候用</dt><dd id="detailPurpose"></dd>
+					<dt>资源是什么</dt><dd id="detailSummary"></dd>
+				</dl>
+			</section>
+			<section aria-labelledby="source-heading">
+				<h3 id="source-heading">原文依据</h3>
+				<blockquote id="detailQuote" hidden></blockquote>
+				<p class="item-message" id="detailNoQuote" hidden></p>
+				<p><a id="detailSource" target="_blank" rel="noopener noreferrer" hidden>打开来源</a></p>
+			</section>
+			<section>
+				<h3><label for="note">我的收藏理由</label></h3>
+				<textarea rows="3" maxlength="500" id="note" placeholder="例如：排查 Godot 掉帧时参考"></textarea>
+				<button type="button" id="noteSave">保存备注</button>
+				<p id="noteStatus" role="status"></p>
+			</section>
+		</div>
+	</dialog>
+</body>
+</html>

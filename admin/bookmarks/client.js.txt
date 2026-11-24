@@ -1,0 +1,465 @@
+const PAGE_SIZE = 20;
+const BULK_LIMIT = 100;
+const MAX_RECORDS = 20_000;
+const els = Object.fromEntries(
+	["import", "file", "library", "search", "category", "state", "select", "selection", "selectionInfo", "clearSelection",
+		"analyze", "progress", "empty", "list", "items", "resultsCount", "pagination", "previous", "count", "next", "bulk", "pause",
+		"detail", "detailTitle", "detailMeta", "detailState", "detailResult", "detailCategory", "detailPurpose",
+		"detailSummary", "detailQuote", "detailNoQuote", "detailSource", "closeDetail", "note", "noteSave", "noteStatus",
+	].map((id) => [id, document.getElementById(id)]),
+);
+const stateName = { ready: "已分析", pending: "待分析", unavailable: "未能读取", error: "分析失败", excluded: "不适用" };
+const rows = new Map();
+const keys = new Map();
+const selected = new Set();
+let filtered = [];
+let page = 0;
+let busy = false;
+let analyzing = false;
+let pauseRequested = false;
+let pending = [];
+let detailId;
+let detailOpener;
+let savingNote = false;
+let db;
+
+function status(message, error = false) {
+	els.progress.textContent = message;
+	els.progress.classList.toggle("error", error);
+}
+
+async function database() {
+	return await new Promise((resolve, reject) => {
+		const request = indexedDB.open("firefly-admin-bookmarks", 1);
+		request.onupgradeneeded = () => request.result.createObjectStore("bookmarks", { keyPath: "id" });
+		request.onsuccess = () => resolve(request.result);
+		request.onerror = () => reject(request.error);
+		request.onblocked = () => reject(new Error("数据库被其他页面占用"));
+	});
+}
+
+function transact(mode, run) {
+	return new Promise((resolve, reject) => {
+		const tx = db.transaction("bookmarks", mode);
+		const result = run(tx.objectStore("bookmarks"));
+		tx.oncomplete = () => resolve(result?.result);
+		tx.onabort = () => reject(tx.error);
+	});
+}
+
+async function patchStored(ids, fields) {
+	const changed = [];
+	await transact("readwrite", (store) => {
+		for (const id of ids) {
+			const request = store.get(id);
+			request.onsuccess = () => {
+				if (!request.result) return;
+				const record = { ...request.result, ...fields };
+				store.put(record);
+				changed.push(record);
+			};
+		}
+	});
+	for (const record of changed) rows.set(record.id, record);
+}
+
+function parseChromeHTML(markup) {
+	// The template contents are inert; imported markup is never inserted into the page.
+	const template = document.createElement("template");
+	template.innerHTML = markup;
+	const root = template.content.querySelector("dl");
+	if (!root) throw new Error("这不是 Chrome 书签 HTML。请从书签管理器重新导出。");
+	const found = new Map();
+	const add = (anchor, folders) => {
+		const href = anchor.getAttribute("href")?.trim();
+		if (!href) return;
+		const title = anchor.textContent.trim().slice(0, 512) || href;
+		const id = JSON.stringify([href, folders]);
+		const canAnalyze = safeToSend(href);
+		found.set(id, {
+			id, href, title, folders, note: "",
+			state: canAnalyze ? "pending" : "excluded",
+			message: canAnalyze ? "" : "仅分析不含参数的公开 HTTPS 链接",
+		});
+		if (found.size > MAX_RECORDS) throw new Error("此文件超过 20,000 条。请拆成较小的书签文件。");
+	};
+	function visit(list, folders) {
+		if (folders.length > 64) throw new Error("书签目录嵌套过深，暂不能导入。");
+		let nextFolder = folders;
+		for (const child of list.children) {
+			if (child.tagName === "DL") {
+				visit(child, nextFolder);
+				nextFolder = folders;
+				continue;
+			}
+			if (child.tagName !== "DT") continue;
+			const group = child.querySelector(":scope > h3");
+			const anchor = child.querySelector(":scope > a");
+			const nested = child.querySelector(":scope > dl");
+			if (anchor) add(anchor, folders);
+			nextFolder = group ? [...folders, group.textContent.trim() || "未命名目录"] : folders;
+			if (nested) {
+				visit(nested, nextFolder);
+				nextFolder = folders;
+			}
+		}
+	}
+	visit(root, []);
+	if (!found.size) throw new Error("没有找到可导入的书签。");
+	return found;
+}
+
+function safeToSend(raw) {
+	try {
+		const url = new URL(raw);
+		const host = url.hostname.replace(/\.$/, "");
+		return raw.length <= 2048 && url.protocol === "https:" && !url.search && !url.username && !url.password && !url.port &&
+			/^[a-z0-9-]+(?:\.[a-z0-9-]+)+$/.test(host) && !/^[0-9.]+$/.test(host) &&
+			!/\.(?:local|localhost|internal|test|invalid|example|onion|arpa|home|lan|corp)$/.test(host) &&
+			!/(?:^|\/)(?:login|log-in|signin|sign-in|oauth|sso|invite|share|reset-password|magic-link)(?:[\/;.]|$)/i.test(decodeURIComponent(url.pathname));
+	} catch {
+		return false;
+	}
+}
+
+function analysisKey(href) {
+	const url = new URL(href);
+	url.hash = "";
+	url.hostname = url.hostname.replace(/\.$/, "");
+	return url.href;
+}
+
+function track(row) {
+	rows.set(row.id, row);
+	if (row.state === "excluded") return;
+	const url = analysisKey(row.href);
+	if (!keys.has(url)) keys.set(url, []);
+	keys.get(url).push(row.id);
+}
+
+function node(tag, label, className) {
+	const element = document.createElement(tag);
+	if (label) element.textContent = label;
+	if (className) element.className = className;
+	return element;
+}
+
+function sourceAddress(raw) {
+	try {
+		const url = new URL(raw);
+		if (["https:", "http:"].includes(url.protocol) && !url.username && !url.password) return url;
+	} catch {}
+	return null;
+}
+
+function sourceLabel(row, url) {
+	return [url?.hostname, row.folders.join(" › ")].filter(Boolean).join(" · ") || "无目录";
+}
+
+function renderDetail() {
+	if (!els.detail.open) return;
+	const row = rows.get(detailId);
+	const ready = row.state === "ready";
+	const quote = ready ? row.quote : "";
+	els.detailState.hidden = ready;
+	els.detailState.textContent = row.message || stateName[row.state];
+	els.detailResult.hidden = !ready;
+	els.detailCategory.textContent = ready ? row.category : "";
+	els.detailPurpose.textContent = ready ? row.purpose : "";
+	els.detailSummary.textContent = ready ? row.summary : "";
+	els.detailQuote.hidden = !quote;
+	els.detailQuote.textContent = quote || "";
+	els.detailNoQuote.hidden = !!quote;
+	els.detailNoQuote.textContent = row.state === "pending" ? "尚未分析，未读取原文。" : "无原文可核对。";
+	els.noteSave.disabled = busy || savingNote;
+}
+
+function openDetail(row, opener) {
+	detailId = row.id;
+	detailOpener = opener;
+	const url = sourceAddress(row.href);
+	els.detailTitle.textContent = row.title;
+	els.detailMeta.textContent = sourceLabel(row, url);
+	if (url) els.detailSource.href = url.href;
+	else els.detailSource.removeAttribute("href");
+	els.detailSource.hidden = !url;
+	els.note.value = row.note || "";
+	els.noteStatus.textContent = "";
+	els.noteStatus.classList.remove("error");
+	els.detail.showModal();
+	renderDetail();
+}
+
+els.closeDetail.onclick = () => els.detail.close();
+els.detail.addEventListener("close", () => {
+	if (els.detail.open) return;
+	(detailOpener?.isConnected ? detailOpener : els.search).focus();
+	detailId = detailOpener = undefined;
+});
+els.noteSave.onclick = async () => {
+	if (busy || savingNote || !detailId) return;
+	const id = detailId;
+	savingNote = true;
+	els.noteSave.disabled = true;
+	let ok = false;
+	try {
+		await patchStored([id], { note: els.note.value.trim() });
+		ok = true;
+	} catch {
+		// The original note stays unchanged if its transaction fails.
+	} finally {
+		savingNote = false;
+		if (els.detail.open && detailId === id) {
+			els.noteStatus.textContent = ok ? "已保存备注。" : "备注未保存，请稍后重试。";
+			els.noteStatus.classList.toggle("error", !ok);
+		}
+		if (ok) render();
+		else renderDetail();
+	}
+};
+
+function resultItem(row) {
+	const item = node("li", "", "item row-grid");
+	const check = node("input");
+	check.type = "checkbox";
+	check.checked = selected.has(row.id);
+	check.disabled = busy || row.state === "excluded" || row.state === "ready";
+	check.setAttribute("aria-label", "选择「" + row.title + "」");
+	check.onchange = () => {
+		if (check.checked && selected.size >= PAGE_SIZE) {
+			check.checked = false;
+			status("每批最多选 20 条书签，先分析或清除已选书签。");
+			return;
+		}
+		if (check.checked) selected.add(row.id);
+		else selected.delete(row.id);
+		renderCommands();
+	};
+	const checkArea = node("label", "", "check");
+	checkArea.append(check);
+	const url = sourceAddress(row.href);
+	const title = node(url ? "a" : "span", row.title, "bookmark-title");
+	if (url) {
+		title.href = url.href;
+		title.target = "_blank";
+		title.rel = "noopener noreferrer";
+	}
+	const identity = node("div", "", "identity");
+	identity.append(title, node("p", sourceLabel(row, url), "meta"));
+
+	const ready = row.state === "ready";
+	const purpose = node("p", ready ? row.purpose : row.message, ready ? "item-purpose" : "item-purpose item-message");
+	const review = node("div", "", "review");
+	if (ready && row.category) review.append(node("span", row.category, "badge"));
+	const tone = ["error", "unavailable"].includes(row.state) ? " error" : " neutral";
+	review.append(node("span", stateName[row.state], "badge" + tone));
+	const detail = node("button", "详情", "detail-button");
+	detail.type = "button";
+	detail.setAttribute("aria-label", "查看「" + row.title + "」详情");
+	detail.onclick = () => openDetail(rows.get(row.id), detail);
+	review.append(detail);
+	item.append(checkArea, identity, purpose, review);
+	return item;
+}
+
+function selectionPage() {
+	return filtered.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
+}
+
+function analysisLinks(ids) {
+	return [...new Set([...ids].map((id) => analysisKey(rows.get(id).href)))];
+}
+
+function renderCommands() {
+	els.select.disabled = busy || !selectionPage().some(({ id, state }) => !selected.has(id) && state !== "excluded" && state !== "ready") || selected.size >= PAGE_SIZE;
+	const linkCount = analysisLinks(selected).length;
+	els.selection.hidden = !selected.size && !analyzing;
+	els.selectionInfo.textContent = analyzing
+		? "正在处理公开链接，已完成的结果会保留。"
+		: "已选 " + selected.size + " 条书签" + (linkCount === selected.size ? "" : "（" + linkCount + " 个不同链接）") + " · 只分析可读取的公开网页";
+	els.analyze.hidden = !selected.size || analyzing;
+	els.analyze.disabled = busy;
+	els.analyze.textContent = "分析所选 " + linkCount + " 条";
+	els.clearSelection.hidden = !selected.size || analyzing;
+	els.clearSelection.disabled = busy;
+	els.bulk.disabled = busy || !pending.length;
+	els.pause.hidden = !analyzing;
+	els.pause.disabled = pauseRequested;
+	els.import.disabled = busy || !db;
+	els.import.classList.toggle("primary", rows.size === 0);
+}
+
+function filterRows() {
+	const category = els.category.value;
+	const candidates = new Map();
+	for (const row of rows.values()) {
+		if (row.state !== "pending") continue;
+		const url = analysisKey(row.href);
+		if (!candidates.has(url)) candidates.set(url, row.id);
+		if (candidates.size === BULK_LIMIT) break;
+	}
+	pending = [...candidates.values()];
+	const categories = [...new Set([...rows.values()].map((row) => row.category).filter(Boolean))].sort();
+	els.category.replaceChildren(new Option("所有分类", ""), ...categories.map((value) => new Option(value, value)));
+	if (categories.includes(category)) els.category.value = category;
+	const words = els.search.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+	filtered = [...rows.values()].filter((row) => {
+		if (els.category.value && row.category !== els.category.value) return false;
+		if (els.state.value && row.state !== els.state.value) return false;
+		if (!words.length) return true;
+		const searchable = [row.title, row.href, ...row.folders, row.category, row.purpose, row.summary, row.note].join(" ").toLowerCase();
+		return words.every((word) => searchable.includes(word));
+	});
+}
+
+function render() {
+	filterRows();
+	const pages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+	page = Math.max(0, Math.min(page, pages - 1));
+	els.library.hidden = rows.size === 0;
+	els.empty.hidden = rows.size > 0;
+	els.list.hidden = rows.size === 0;
+	els.pagination.hidden = pages <= 1;
+	els.items.replaceChildren(...(filtered.length
+		? selectionPage().map(resultItem)
+		: [node("li", "没有符合条件的书签。可换个关键词或清空筛选。", "no-matches")]));
+	els.resultsCount.textContent = filtered.length === rows.size ? "共 " + rows.size + " 条书签" : "找到 " + filtered.length + " / " + rows.size + " 条书签";
+	els.count.textContent = "第 " + (page + 1) + " / " + pages + " 页";
+	els.previous.disabled = page === 0;
+	els.next.disabled = page >= pages - 1;
+	renderCommands();
+	renderDetail();
+}
+
+els.import.onclick = () => els.file.click();
+els.file.onchange = async () => {
+	const [file] = els.file.files;
+	els.file.value = "";
+	if (!file || busy) return;
+	busy = true;
+	renderCommands();
+	status("正在读取书签文件…");
+	try {
+		if (file.size > 64 * 1024 * 1024) throw new Error("书签文件超过 64 MB，请分批导入。");
+		const incoming = parseChromeHTML(await file.text());
+		const additions = [...incoming.values()].filter((row) => !rows.has(row.id)).map((row) => {
+			if (row.state === "excluded") return row;
+			const known = keys.get(analysisKey(row.href))?.map((id) => rows.get(id)).find(({ state }) => state === "ready");
+			if (!known) return row;
+			const { state, category, purpose, summary, quote } = known;
+			return { ...row, state, category, purpose, summary, quote };
+		});
+		if (rows.size + additions.length > MAX_RECORDS) throw new Error("合并后超过 20,000 条，未写入新书签。");
+		await transact("readwrite", (store) => {
+			for (const row of additions) store.add(row);
+		});
+		for (const row of additions) track(row);
+		els.search.value = els.category.value = els.state.value = "";
+		page = 0;
+		status("导入 " + additions.length + " 条，跳过 " + (incoming.size - additions.length) + " 条已存在的书签。");
+	} catch (error) {
+		status("未完成导入：" + (error?.message || "无法写入本地存储"), true);
+	} finally {
+		busy = false;
+		render();
+	}
+};
+
+for (const [element, event] of [[els.search, "input"], [els.category, "change"], [els.state, "change"]]) {
+	element.addEventListener(event, () => { page = 0; render(); });
+}
+els.previous.onclick = () => { page -= 1; render(); };
+els.next.onclick = () => { page += 1; render(); };
+els.select.onclick = () => {
+	for (const row of selectionPage()) {
+		if (selected.size >= PAGE_SIZE) break;
+		if (row.state !== "ready" && row.state !== "excluded") selected.add(row.id);
+	}
+	render();
+};
+
+els.clearSelection.onclick = () => {
+	selected.clear();
+	render();
+	(els.select.disabled ? els.search : els.select).focus();
+};
+
+async function runBatch(ids) {
+	if (busy || !ids.length) return;
+	const batch = analysisLinks(ids);
+	if (!window.confirm("分析 " + batch.length + " 条公开链接？将读取网页正文并交给 Cloudflare AI，可能消耗账户的 AI 用量。")) return;
+	busy = true;
+	analyzing = true;
+	pauseRequested = false;
+	els.bulk.closest("details").open = false;
+	render();
+	els.pause.focus();
+	let completed = 0;
+	let failures = 0;
+	try {
+		for (const url of batch) {
+			if (pauseRequested) {
+				status("已暂停。处理 " + completed + " / " + batch.length + " 条，已完成的结果已保存。");
+				return;
+			}
+			status("正在分析 " + (completed + 1) + " / " + batch.length + " 条");
+			let result;
+			let stop = false;
+			try {
+				const response = await fetch("./analyze", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ url }),
+					redirect: "manual",
+					signal: AbortSignal.timeout(50_000),
+				});
+				if (response.type === "opaqueredirect" || [401, 403].includes(response.status)) {
+					status("管理员会话已失效。刷新页面重新登录，已完成的结果会保留。", true);
+					return;
+				}
+				stop = response.status === 429 || response.status >= 500;
+				result = await response.json();
+				if (!["ready", "unavailable", "excluded", "error"].includes(result.state)) throw new Error("Unexpected response");
+			} catch {
+				result = { state: "error", message: "分析请求未完成，可单独重试" };
+			}
+			const group = keys.get(url).filter((id) => rows.get(id).state !== "ready");
+			await patchStored(group, result);
+			for (const id of group) selected.delete(id);
+			completed += 1;
+			if (result.state !== "ready") failures += 1;
+			if (stop) {
+				status("分析服务暂不可用，剩余条目未发送。已完成的结果会保留。", true);
+				return;
+			}
+		}
+		status("处理 " + completed + " 条，生成用途 " + (completed - failures) + " 条，未生成 " + failures + " 条。");
+	} catch {
+		status("本地存储没有写入结果。已保存的条目不受影响。", true);
+	} finally {
+		const restoreFocus = document.activeElement === els.pause || document.activeElement === document.body;
+		busy = false;
+		analyzing = false;
+		render();
+		if (restoreFocus && !els.detail.open) els.search.focus();
+	}
+}
+els.analyze.onclick = () => runBatch([...selected]);
+els.bulk.onclick = () => runBatch(pending);
+els.pause.onclick = () => {
+	pauseRequested = true;
+	renderCommands();
+	status("当前这条处理完就暂停…");
+};
+window.addEventListener("pageshow", (event) => {
+	if (event.persisted) window.location.reload();
+});
+
+try {
+	els.import.disabled = true;
+	db = await database();
+	for (const row of await transact("readonly", (store) => store.getAll(undefined, MAX_RECORDS))) track(row);
+	render();
+} catch {
+	status("无法打开本地书签库。请确认浏览器允许当前网站存储数据。", true);
+}

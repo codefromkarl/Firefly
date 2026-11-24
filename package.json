@@ -61,6 +61,7 @@
     "glob": "^13.0.6",
     "gray-matter": "^4.0.3",
     "hastscript": "^9.0.1",
+    "jose": "^6.2.0",
     "katex": "^0.17.0",
     "l2d-widget": "^0.1.0",
     "mdast-util-to-string": "^4.0.0",
