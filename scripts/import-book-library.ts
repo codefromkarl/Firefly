@@ -21,6 +21,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { pinyin } from "pinyin-pro";
 import sharp from "sharp";
+import { BOOK_SHELF_VALUES, type BookShelf } from "../src/types/book";
 
 const PROJECT = path.resolve(import.meta.dirname, "..");
 const BOOKS_DIR = path.join(PROJECT, "src/content/books");
@@ -242,16 +243,38 @@ async function makePlaceholder(title: string): Promise<Buffer> {
 	let hash = 0;
 	for (const ch of title) hash = (hash * 31 + (ch.codePointAt(0) ?? 0)) % 360;
 	const hue = hash;
+	const glyphs = Array.from(title);
+	const fontSize = glyphs.length <= 9 ? 36 : 30;
+	const widthOf = (ch: string): number =>
+		ch.charCodeAt(0) <= 0x7f ? fontSize * 0.61 : fontSize;
+	const lines: string[] = [];
+	let line = "";
+	let lineWidth = 0;
+	for (const ch of glyphs) {
+		const width = widthOf(ch);
+		if (line && lineWidth + width > 386) {
+			lines.push(line.trim());
+			line = "";
+			lineWidth = 0;
+		}
+		line += ch;
+		lineWidth += width;
+	}
+	if (line.trim()) lines.push(line.trim());
+	const text = lines
+		.map(
+			(part, i) =>
+				`<tspan x="50%" y="${360 + (i - (lines.length - 1) / 2) * (fontSize + 14)}">${part.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;")}</tspan>`,
+		)
+		.join("");
 	const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${COVER_WIDTH}" height="720">
   <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
     <stop offset="0%" stop-color="hsl(${hue},38%,42%)"/>
     <stop offset="100%" stop-color="hsl(${(hue + 40) % 360},42%,26%)"/>
   </linearGradient></defs>
   <rect width="100%" height="100%" fill="url(#g)"/>
-  <text x="50%" y="50%" fill="rgba(255,255,255,.92)" font-size="34"
-        font-family="sans-serif" text-anchor="middle" dominant-baseline="middle">
-    ${title.replace(/[<>&]/g, "")}
-  </text>
+  <text x="50%" y="50%" fill="rgba(255,255,255,.92)" font-size="${fontSize}"
+        font-family="Noto Sans CJK SC,sans-serif" text-anchor="middle" dominant-baseline="middle">${text}</text>
 </svg>`;
 	return sharp(new Uint8Array(Buffer.from(svg)))
 		.webp({ quality: 82 })
@@ -413,6 +436,123 @@ function fetchDeviceCovers(
 	return { pulled, missing };
 }
 
+interface ManifestBook {
+	title: string;
+	authors: string[];
+	description: string;
+	shelf: BookShelf;
+	file: string;
+	cover?: "generated";
+}
+
+async function importManifest(
+	manifestPath: string,
+	source: string,
+	apply: boolean,
+) {
+	if (fs.statSync(manifestPath).size > 2 * 1024 * 1024)
+		throw new Error("清单超过 2 MB，请分批导入");
+	const raw: unknown = JSON.parse(fs.readFileSync(manifestPath, "utf-8"));
+	if (!Array.isArray(raw) || !raw.length || raw.length > 5000)
+		throw new Error("清单必须包含 1 至 5000 条书目");
+	const sourceRoot = fs.realpathSync(source);
+	const existing = new Map<string, string>();
+	const key = (title: string) =>
+		title.normalize("NFKC").replace(/\s+/g, "").toLocaleLowerCase("zh-CN");
+	for (const slug of fs.readdirSync(BOOKS_DIR)) {
+		const name = path.join(BOOKS_DIR, slug, "index.md");
+		if (!fs.existsSync(name)) continue;
+		const line = fs
+			.readFileSync(name, "utf-8")
+			.match(/^title:[ \t]*(.+)$/m)?.[1]
+			?.trim();
+		if (line) existing.set(key(line.replace(/^["']|["']$/g, "")), slug);
+	}
+	const slugs = new Set<string>();
+	const titles = new Set<string>();
+	let kept = 0;
+	const pending: Array<ManifestBook & { slug: string; sourcePath: string }> =
+		[];
+	for (const item of raw as ManifestBook[]) {
+		if (
+			!item ||
+			typeof item.title !== "string" ||
+			!item.title.trim() ||
+			!Array.isArray(item.authors) ||
+			!item.authors.length ||
+			item.authors.some((a) => typeof a !== "string" || !a.trim()) ||
+			typeof item.description !== "string" ||
+			!item.description.trim() ||
+			!BOOK_SHELF_VALUES.includes(item.shelf) ||
+			typeof item.file !== "string" ||
+			path.isAbsolute(item.file) ||
+			(item.cover !== undefined && item.cover !== "generated")
+		)
+			throw new Error("书目清单格式无效");
+		const slug = slugify(item.title);
+		const id = key(item.title);
+		if (!slug || slugs.has(slug) || titles.has(id))
+			throw new Error(`清单存在重复书名或 slug：${item.title}`);
+		slugs.add(slug);
+		titles.add(id);
+		const sourcePath = fs.realpathSync(path.resolve(sourceRoot, item.file));
+		const relative = path.relative(sourceRoot, sourcePath);
+		if (
+			!relative ||
+			relative === ".." ||
+			relative.startsWith(`..${path.sep}`) ||
+			!fs.statSync(sourcePath).isFile()
+		)
+			throw new Error(`书籍文件不在指定书单目录：${item.title}`);
+		const present = existing.get(id);
+		if (present) {
+			if (present !== slug)
+				throw new Error(
+					`已存在不同 slug 的同名条目：${item.title}（${present}）`,
+				);
+			kept++;
+			continue;
+		}
+		if (fs.existsSync(path.join(BOOKS_DIR, slug)))
+			throw new Error(`目标 slug 已占用：${slug}`);
+		pending.push({ ...item, slug, sourcePath });
+	}
+	for (const book of pending) {
+		const { slug, sourcePath, title } = book;
+		let coverBuf: Buffer | null = null;
+		let coverSource = "placeholder";
+		if (
+			book.cover !== "generated" &&
+			path.extname(sourcePath).toLowerCase() === ".epub"
+		) {
+			const cover = harvestEpub(sourcePath)?.coverEntry;
+			const image = cover ? unzipBuffer(sourcePath, cover) : null;
+			if (image) coverBuf = await toCoverWebp(image);
+			if (coverBuf) coverSource = "epub";
+		}
+		coverBuf ??= await makePlaceholder(title);
+		if (coverBuf.length < 1024) throw new Error(`${slug}: 封面文件异常小`);
+		if (apply) {
+			const dir = path.join(BOOKS_DIR, slug);
+			fs.mkdirSync(dir);
+			fs.writeFileSync(path.join(dir, "cover.webp"), coverBuf, { flag: "wx" });
+			fs.writeFileSync(
+				path.join(dir, "index.md"),
+				emitIndexMd({
+					...book,
+					status: "wishlist",
+					coverSource,
+				}),
+				{ flag: "wx" },
+			);
+		}
+		console.log(`  + ${slug} [${coverSource}]`);
+	}
+	console.log(
+		`清单：${raw.length} 条，${apply ? "已新增" : "计划新增"} ${pending.length} 条，已存在 ${kept} 条。`,
+	);
+}
+
 // ───────────────────── 主流程 ─────────────────────
 
 async function main(): Promise<void> {
@@ -429,6 +569,20 @@ async function main(): Promise<void> {
 	if (!fs.existsSync(source)) {
 		console.error(`✗ 源目录不存在: ${source}`);
 		process.exit(1);
+	}
+
+	const manifestIndex = args.indexOf("--manifest");
+	if (manifestIndex >= 0) {
+		const manifest = args[manifestIndex + 1];
+		if (
+			!manifest ||
+			manifest.startsWith("--") ||
+			only ||
+			args.includes("--fetch-covers")
+		)
+			throw new Error("请以 --manifest <清单路径> 指定完整书目清单");
+		await importManifest(manifest, source, apply);
+		return;
 	}
 
 	const overrides = loadOverrides();
