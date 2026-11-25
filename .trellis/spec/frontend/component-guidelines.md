@@ -201,7 +201,7 @@ panel in place of the configured Profile/Categories/Tags sidebar.
 
 | Condition | Required result |
 | --- | --- |
-| Direct contextual-page load | Custom sidebar visible; global sidebar hidden |
+| Direct contextual-page load | Detail shows the directory; the catalog has a flat domain selector. Global sidebar hidden |
 | Default page → contextual page | Swup replaces dynamic sidebar and hides global sidebar |
 | Contextual page → default page | Dynamic sidebar disappears and global sidebar returns |
 | Browser back/forward | Same result as direct navigation, with no stale directory |
@@ -246,7 +246,7 @@ reset-to-top path.
 <!-- Correct: Swup owns the page-specific sidebar lifecycle. -->
 <MainGridLayout>
   <BookSidebar slot="left-sidebar" books={books} />
-  <BookLibrary books={books} />
+  <BookLibrary books={bookCards} client:load />
 </MainGridLayout>
 ```
 
@@ -259,149 +259,19 @@ visit.scroll.reset = false;
 visit.meta.preserveWindowScroll = true;
 ```
 
-## Scenario: Present a Three-Section Book Detail
+## Public book cards and details
 
-### 1. Scope / Trigger
-
-Use this contract for the public book card, book directory, and detail page.
-
-### 2. Signatures
-
-- Detail route: `src/pages/books/[...slug].astro`.
-- Detail sidebar: `<BookSidebar books={books} />`.
-- Card: `<BookCard book={book} />`.
-- Ordered section IDs:
-  `book-introduction`, `why-read`, `classic-excerpts`.
-- Public content fields:
-  `introductions`, `readingReasons`, `endorsements`, `excerpts`.
-
-### 3. Contracts
-
-- The detail page renders exactly three first-level content sections and keeps
-  their order stable: whole-book introduction, places worth reading, classic
-  excerpts. The visible second label is “这本书值得看的地方”; avoid the
-  universal claim implied by “为什么需要看这本书”.
-- The sidebar page directory contains exactly those same three labels and
-  anchors. Do not derive it from unpublished Markdown headings.
-- Book cards use `introductions[0].text` as their preview and identify their
-  link as opening a book introduction. They do not consume unsourced
-  `whyRead`, or show `graphStage` or a knowledge-map badge.
-- The introduction section renders sourced official/publisher descriptions as
-  continuous prose under the visible “书籍简介” heading. Curated books render
-  three complementary paragraphs in source order; do not style these summaries
-  as quotation cards or add quotation marks. Deduplicate identical source URLs
-  and list the named external sources below the prose. The card preview still
-  uses only the first introduction.
-- The detail cover is evidence, not a decorative crop. Its container provides
-  a mobile book-like aspect ratio and a desktop minimum height; the image uses
-  `object-contain` with breathing room so the complete front cover remains
-  visible across source ratios. Do not use `object-cover` on the detail cover.
-- The why-read section renders two to four source-backed
-  `readingReasons`. Each card has an editorial navigation title, a distinct
-  reader-value `kind`, sourced text, visible attribution, and a
-  “查看依据来源” link. The supported kinds are `insight`, `scope`,
-  `perspective`, `readability`, `application`, and `boundary`.
-- Generic prestige praise such as “best writer” or “must-read classic” does
-  not qualify as a reading reason because it does not tell the reader what the
-  whole book provides. Preserve useful praise only in the optional
-  `endorsements` area below the reason cards; it remains inside the same
-  first-level section.
-- Translation markers belong in the visible attribution. Opening an external
-  source uses a normal anchor with `target="_blank"` and `rel="noreferrer"`;
-  the static page remains useful without JavaScript.
-- Let the source, quotation, attribution, and link carry the editorial
-  explanation. Do not add defensive copy about AI, the site's neutrality, or
-  how the reader should judge the book. Do not place generic uppercase English
-  eyebrows above the three Chinese section headings.
-- Render excerpts as semantic blockquotes with visible sources. Preserve source
-  order and do not turn the excerpt list into a carousel or hidden interaction.
-- If an excerpt has a public verification `url`, render a normal
-  “核对公开原文” anchor beside its source. Local-edition excerpts need no
-  artificial URL; their chapter/section locator remains visible.
-- When `excerpts` is empty, render a visible pending state that explains the
-  site will not use AI to invent quotations.
-- The public detail is static Astro output. Do not import `BookKnowledgeGraph`,
-  call `getGraphForBook`, add a graph client directive, or otherwise load
-  Cytoscape from the book route.
-- Historical graph components may remain in the repository for internal
-  reference, but they have no public-route ownership.
-- At desktop and mobile widths, the three sections remain readable in normal
-  document flow and page-root horizontal overflow is forbidden.
-- Swup directory switching preserves its established scroll behavior; normal
-  card navigation continues to reset to the top.
-
-### 4. Validation & Error Matrix
-
-| Condition | Required result |
-| --- | --- |
-| Detail route renders | Exactly three required sections and sidebar links exist |
-| Book has sourced introduction/reasons | Visible attribution and original-source links exist |
-| Cover aspect ratio differs from the container | Complete cover remains visible with optional empty background space |
-| Several introduction paragraphs use one URL | Prose renders in order and the source link appears once |
-| Reading reasons repeat a `kind` | Content sync/build fails |
-| Book has a generic prestige quote only | Editorial review fails; move it to `endorsements` and add concrete reasons |
-| Source is a translation | Translation marker is visible in the attribution |
-| Book has excerpts | Ordered blockquotes and their sources are visible |
-| Excerpt has a public verification URL | Visible “核对公开原文” link opens that URL |
-| Book has no excerpts | Honest pending/no-fabrication state is visible |
-| Detail has no JavaScript | All three sections remain readable |
-| Inspect loaded resources | No graph island or Cytoscape resource is present |
-| Viewport is 390px | Sections form one readable column and root `scrollWidth <= clientWidth` |
-| Switch book through directory | New title/anchors update and established scroll behavior is preserved |
-| Open detail from library card | Normal navigation resets to the top |
-
-### 5. Good / Base / Bad Cases
-
-- Good: the card previews the first sourced introduction; the detail explains
-  at least two distinct reader benefits with publisher/review evidence, keeps
-  prestige praise secondary, and ends with verified excerpts. The detail cover
-  is fully visible, while the introduction reads as prose with compact sources.
-- Base: a book without checked source text shows the explicit pending state.
-- Bad: crop a book cover with `object-cover`, render three summary paragraphs
-  as three oversized quotation cards, use “one of the greatest writers” as the
-  sole answer to why a book is worth reading, show an unlinked AI-written
-  recommendation, hide translation status, add process disclaimers to the
-  reading flow, mount a graph island, expose a graph-stage badge, render
-  Markdown notes as a fourth section, or invent an author quote.
-
-### 6. Tests Required
-
-Run scoped Biome, `pnpm check`, `pnpm type-check`, and `pnpm build`. Audit all
-generated book details for the exact three section IDs and absence of graph
-labels/runtime references, generic English eyebrows, and defensive AI/process
-copy. Assert every detail renders two to four reason cards with unique kinds,
-source links, and titles; endorsements, when present, remain visually
-secondary. Curated details also render three introduction paragraphs, one link
-per unique introduction URL, and at least three unique excerpt cards, while 17
-library cards continue to use only the first introduction preview. In a real
-browser, cover the narrowest and widest cover ratios at desktop and 390px,
-plus a page with three reasons and an endorsement, a local-edition excerpt
-page, a page with public excerpt links, the library filters, and Swup
-navigation. Assert the full cover edges are visible, sources are named, no
-Cytoscape request occurs, and there is no root overflow or console error.
-Treat screenshots as rendering readiness, not human visual acceptance.
-
-### 7. Wrong vs Correct
-
-```astro
-<!-- Wrong: unused graph data still creates a public runtime island. -->
-<BookKnowledgeGraph graph={graph} client:visible />
-<p>{book.data.whyRead}</p>
-<Image src={book.data.cover} class="h-full w-full object-cover" />
-
-<!-- Correct: structured book fields produce the complete public document. -->
-<section id="book-introduction">
-  <Image src={book.data.cover} class="h-full w-full object-contain" />
-  <h2>书籍简介</h2>
-  {book.data.introductions.map(renderIntroductionParagraph)}
-  {uniqueIntroductionSources.map(renderIntroductionSource)}
-</section>
-<section id="why-read">
-  {book.data.readingReasons.map(renderReadingReason)}
-  {book.data.endorsements.map(renderSecondaryEndorsement)}
-</section>
-<section id="classic-excerpts">{/* excerpts or honest pending state */}</section>
-```
+The public route is `src/pages/books/[...slug].astro`. `BookCard.svelte` links
+to that same stable URL from every matching field. Each card identifies the
+catalog description as self-written. Never use an internal graph or an
+AI-written cue for a public question. A checked question links to
+`#public-question`; that section distinguishes the original wording from the
+evidence of circulation. Omit unverifiable questions on cards and explain the
+absence once on the detail. On narrow screens keep the complete cover beside
+the book identity, not above the whole reading area. Keep published sections
+static; do not hydrate a graph or expose internal notes.
+See [content and configuration](./content-and-configuration.md) for the record
+contract and [state management](./state-management.md) for catalog QA.
 
 ## Accessibility
 

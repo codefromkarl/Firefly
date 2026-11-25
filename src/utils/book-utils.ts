@@ -1,5 +1,6 @@
 import { type CollectionEntry, getCollection } from "astro:content";
 import {
+	BOOK_SHELF_LABELS,
 	BOOK_SHELF_VALUES,
 	type BookCardData,
 	type BookDirectoryItem,
@@ -8,8 +9,18 @@ import {
 import { url } from "@/utils/url-utils";
 
 export async function getPublishedBooks(): Promise<CollectionEntry<"books">[]> {
-	const books = await getCollection("books", ({ data }) =>
-		import.meta.env.PROD ? data.draft !== true : true,
+	const entries = await getCollection("books");
+	const byId = new Map(entries.map((book) => [book.id, book]));
+	for (const { id, data } of entries) {
+		if (!data.listedWith) continue;
+		const main = byId.get(data.listedWith);
+		if (!main || main.data.listedWith)
+			throw new Error(
+				`Invalid direct catalog grouping: ${id} → ${data.listedWith}`,
+			);
+	}
+	const books = entries.filter(
+		({ data }) => !import.meta.env.PROD || !data.draft,
 	);
 
 	// 先按分类（侧栏分组顺序），再按书名，使网格与侧栏目录一致
@@ -52,6 +63,12 @@ export async function getGraphForBook(
 	return graph;
 }
 
+export function getBookDomains(book: CollectionEntry<"books">): string[] {
+	return book.data.domains.length
+		? book.data.domains
+		: [BOOK_SHELF_LABELS[book.data.shelf]];
+}
+
 export function getBookUrl(bookId: string): string {
 	return url(`/books/${bookId}/`);
 }
@@ -61,8 +78,10 @@ export function toBookDirectoryItems(
 ): BookDirectoryItem[] {
 	return books.map((book) => ({
 		id: book.id,
+		listedWith: book.data.listedWith,
 		title: book.data.title,
 		shelf: book.data.shelf,
+		domains: getBookDomains(book),
 		url: getBookUrl(book.id),
 	}));
 }
@@ -80,13 +99,16 @@ export function toBookCardData(
 ): BookCardData {
 	return {
 		id: book.id,
+		listedWith: book.data.listedWith,
 		title: book.data.title,
 		originalTitle: book.data.originalTitle,
 		authors: book.data.authors,
 		description: book.data.description,
 		status: book.data.status,
 		shelf: book.data.shelf,
+		domains: getBookDomains(book),
 		topics: book.data.topics,
+		question: book.data.question?.text,
 		coverUrl,
 		coverSource: book.data.coverSource,
 		url: getBookUrl(book.id),

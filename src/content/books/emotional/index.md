@@ -38,6 +38,15 @@ excerpts:
     source: "第4章《情绪与思维》"
 status: "wishlist"
 shelf: "psychology"
+domains: ["心理学", "神经科学"]
+question:
+  text: 情绪又会如何影响我们的想法、判断、动机和决定？
+  evidence: 公开书评和报刊评论都讨论情绪与理性判断的关系。
+  sources:
+  - title: 得到 · 《情绪：影响正确决策的变量》读者讨论
+    url: https://www.dedao.cn/ebook/reviews?id=EJmMZXq1b8qOpBlD69XAdP7LEGaKJWERyL3xRnme5vrVzo4QMZYgNyk2jNA5467K
+  - title: 上海证券报 · 应该接纳而非掌控情绪
+    url: https://paper.cnstock.com/html/2023-02/20/content_1727044.htm
 topics:
   - "情绪"
   - "决策"

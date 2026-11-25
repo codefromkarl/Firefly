@@ -25,6 +25,7 @@ import {
 	type BookGraphProvenance,
 	type BookGraphSourceRef,
 	type BookGraphStage,
+	type BookQuestion,
 	type BookReadingReason,
 	type BookShelf,
 	type BookSourceCitation,
@@ -62,10 +63,13 @@ type DynamicData = {
 };
 
 type BookData = {
+	listedWith?: string;
 	title: string;
 	originalTitle?: string;
 	authors: string[];
 	description: string;
+	domains: string[];
+	question?: BookQuestion;
 	introductions: BookSourceCitation[];
 	readingReasons: BookReadingReason[];
 	endorsements: BookSourceCitation[];
@@ -212,6 +216,29 @@ const bookSchema = ({ image }: SchemaContext): ZodType<BookData> =>
 			.default([]),
 		status: z.enum(BOOK_STATUS_VALUES),
 		shelf: z.enum(BOOK_SHELF_VALUES),
+		listedWith: z.string().min(1).optional(),
+		domains: z
+			.array(z.string().trim().min(1))
+			.refine((tags) => new Set(tags).size === tags.length)
+			.default([]),
+		question: z
+			.object({
+				evidence: z.string().trim().min(1),
+				text: z.string().trim().min(3).max(160),
+				sources: z
+					.array(
+						z.object({
+							title: z.string().trim().min(1),
+							url: z.url({ protocol: /^https?$/ }),
+						}),
+					)
+					.min(2)
+					.refine(
+						(refs) => new Set(refs.map((r) => r.url)).size === refs.length,
+						"Duplicate question source",
+					),
+			})
+			.optional(),
 		topics: z.array(z.string().min(1)).default([]),
 		language: z.string().min(2).default("zh-CN"),
 		isbn: z.string().min(10).optional(),

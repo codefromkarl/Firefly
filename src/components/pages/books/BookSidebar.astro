@@ -1,10 +1,7 @@
 ---
 import WidgetLayout from "@/components/common/WidgetLayout.astro";
-import {
-	BOOK_SHELF_LABELS,
-	BOOK_SHELF_VALUES,
-	type BookDirectoryItem,
-} from "@/types/book";
+import { type BookDirectoryItem } from "@/types/book";
+import { uniqueBookListings } from "@/utils/book-listings";
 import { url } from "@/utils/url-utils";
 
 import "@/styles/toc.css";
@@ -17,14 +14,18 @@ interface Props {
 const { books, currentBookId } = Astro.props;
 const isLibraryPage = !currentBookId;
 const libraryUrl = url("/books/");
-const shelves = BOOK_SHELF_VALUES.map((shelf) => ({
-	id: shelf,
-	label: BOOK_SHELF_LABELS[shelf],
-	books: books.filter((book) => book.shelf === shelf),
-})).filter((shelf) => shelf.books.length > 0);
+const shelves = [...new Set(books.flatMap((book) => book.domains))]
+	.sort((a, b) => a.localeCompare(b, "zh-CN"))
+	.map((label) => ({
+		id: label,
+		label,
+		books: uniqueBookListings(
+			books.filter((book) => book.domains.includes(label)),
+		),
+	}));
 const currentBook = books.find((book) => book.id === currentBookId);
 
-const pageSections = [{ href: "#book-overview", label: "内容概述" }];
+const pageSections = [{ href: "#book-overview", label: "概述" }];
 ---
 
 <WidgetLayout id="book-list-directory" name="书单目录">
@@ -45,16 +46,16 @@ const pageSections = [{ href: "#book-overview", label: "内容概述" }];
 				</svg>
 			</span>
 			<span class="toc-label toc-label-primary">全部书籍</span>
-			<span class="book-directory-count">{books.length}</span>
+			<span class="book-directory-count">{uniqueBookListings(books).length}</span>
 		</a>
 
 		{shelves.map((shelf) => (
 			<details
 				class:list={[
 					"book-shelf-group",
-					currentBook?.shelf === shelf.id && "book-shelf-current",
+					currentBook?.domains.includes(shelf.id) && "book-shelf-current",
 				]}
-				open={currentBook?.shelf === shelf.id}
+				open={currentBook?.domains.includes(shelf.id)}
 				data-book-shelf-group={shelf.id}
 			>
 				<summary class="book-shelf-summary">
@@ -75,7 +76,7 @@ const pageSections = [{ href: "#book-overview", label: "内容概述" }];
 								href={book.url}
 								class:list={[
 									"toc-item toc-level-1 book-directory-item",
-									isCurrent && "visible book-directory-current",
+									(isCurrent || book.id === currentBook?.listedWith) && "visible book-directory-current",
 								]}
 								aria-current={isCurrent ? "page" : undefined}
 								title={`《${book.title}》`}
@@ -207,12 +208,6 @@ const pageSections = [{ href: "#book-overview", label: "内容概述" }];
 
 	.book-shelf-group[open] > .book-shelf-summary .book-shelf-chevron {
 		transform: rotate(90deg);
-	}
-
-	.book-shelf-filtered > .book-shelf-summary {
-		background: color-mix(in oklab, var(--primary) 7%, transparent);
-		box-shadow: inset 0 0 0 1px
-			color-mix(in oklab, var(--primary) 28%, transparent);
 	}
 
 	.book-shelf-current > .book-shelf-summary {

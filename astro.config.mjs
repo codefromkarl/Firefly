@@ -72,6 +72,31 @@ export default defineConfig({
 
 	base: deploymentBase,
 	trailingSlash: "always",
+	// 静态预览也能从旧地图地址回到书单，不依赖托管平台的重写规则。
+	redirects: Object.fromEntries(
+		[
+			"",
+			"psychology/",
+			"biology/",
+			"mathematics/",
+			"physics/",
+			"literature/",
+			"history/",
+			"economics/",
+			"philosophy/",
+			"sociology/",
+			"art/",
+			"systems/",
+			"computing/",
+			"medicine/",
+			"politics/",
+			"anthropology/",
+			"geography/",
+			"linguistics/",
+			"education/",
+			"management/",
+		].map((suffix) => [`/knowledge-map/${suffix}`, "/books/"]),
+	),
 
 	// 字体配置 - 只加载实际使用的字体，跳过未引用的以加快构建
 	fonts: (() => {

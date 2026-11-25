@@ -4,6 +4,7 @@ authors: ["英]塞西尔·詹金斯"]
 description: "从财政与制度的视角解释中国帝制国家的形成、运转与延续。"
 status: "wishlist"
 shelf: "history"
+domains: ["历史学", "政治学", "经济学"]
 topics: []
 cover: "./cover.webp"
 coverSource: "epub"

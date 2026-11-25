@@ -4,6 +4,7 @@ authors: ["艾瑞克·伯恩"]
 description: "艾瑞克·伯恩以沟通分析讨论人际互动中反复出现的心理游戏及其隐含规则。"
 status: "wishlist"
 shelf: "psychology"
+domains: ["心理学", "社会学"]
 topics: []
 cover: "./cover.webp"
 coverSource: "epub"

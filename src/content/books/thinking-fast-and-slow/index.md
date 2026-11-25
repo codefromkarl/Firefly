@@ -40,6 +40,15 @@ excerpts:
     source: "第7章《字母“B”与数字“13”》"
 status: "wishlist"
 shelf: "psychology"
+domains: ["心理学", "经济学"]
+question:
+  text: 为什么人类很难具备统计型思维？
+  evidence: 原问法见第一处来源；另一作者或机构也讨论了同一议题。未取得全网传播排名。
+  sources:
+  - title: 清华大学经管学院 · 品读《思考，快与慢》
+    url: https://www.sem.tsinghua.edu.cn/info/1168/12225.htm
+  - title: 读者书评：不可靠的，也许是你的思考
+    url: https://book.douban.com/review/5517145/
 topics:
   - "认知科学"
   - "决策"

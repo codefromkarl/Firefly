@@ -43,6 +43,7 @@ excerpts:
     url: "https://time.com/4255854/little-prince-1943-history-2/"
 status: "read"
 shelf: "literature"
+domains: ["文学", "传记"]
 topics:
   - "回忆录"
   - "飞行"

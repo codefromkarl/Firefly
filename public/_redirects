@@ -3,3 +3,5 @@
 /friends /lab/ 301
 /about /lab/ 301
 /post/* /posts/:splat/ 301
+/knowledge-map /books/ 301
+/knowledge-map/* /books/ 301

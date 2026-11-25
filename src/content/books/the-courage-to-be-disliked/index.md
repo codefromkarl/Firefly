@@ -39,6 +39,15 @@ excerpts:
     source: "第四夜《要有被讨厌的勇气》"
 status: "wishlist"
 shelf: "psychology"
+domains: ["心理学"]
+question:
+  text: 要不要活在别人的期待中？
+  evidence: 原著以他人期待发问；读者用课题分离来讨论这一矛盾。
+  sources:
+  - title: 《被讨厌的勇气》书目与章节原题
+    url: https://book.douban.com/subject/36150914/
+  - title: 读者书评 · 什么是课题分离？
+    url: https://book.douban.com/review/14814385/
 topics:
   - "阿德勒心理学"
   - "人际关系"

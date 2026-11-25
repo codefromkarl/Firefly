@@ -4,6 +4,7 @@ authors: ["张汝伦"]
 description: "现代西方哲学的讲义，介绍主要流派与代表思想。"
 status: "wishlist"
 shelf: "philosophy"
+domains: ["历史学", "哲学"]
 topics: []
 cover: "./cover.webp"
 coverSource: "epub"

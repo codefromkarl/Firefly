@@ -36,6 +36,7 @@ excerpts:
     source: "《投资原则检查清单》"
 status: "wishlist"
 shelf: "economics"
+domains: ["心理学", "经济学", "管理学"]
 topics:
   - "投资"
   - "思维模型"

@@ -4,6 +4,7 @@ authors: ["米卡埃尔·洛奈"]
 description: "以人物、故事和问题串联数学史，展示日常现象里不容易察觉的数学结构。"
 status: "wishlist"
 shelf: "science"
+domains: ["数学"]
 topics: []
 cover: "./cover.webp"
 coverSource: "epub"

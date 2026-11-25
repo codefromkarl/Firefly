@@ -41,6 +41,15 @@ excerpts:
     url: "https://www.lepetitprince.com/en/"
 status: "read"
 shelf: "fiction"
+domains: ["文学", "小说"]
+question:
+  text: 你愿意被驯服吗？
+  evidence: 采样时，这篇书评在豆瓣热门书评列表显示 1234 个有用；这是书评反馈，不是提问得票或全网排名。
+  sources:
+  - title: 豆瓣书评：你愿意被驯服吗？
+    url: https://book.douban.com/review/1670814/
+  - title: 豆瓣读书 · 本书的热门书评
+    url: https://book.douban.com/subject/1213559/reviews
 topics:
   - "寓言"
   - "友谊"

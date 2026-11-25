@@ -4,6 +4,7 @@ authors: ["丁宁"]
 description: "西方美术史的讲义，按时代与流派介绍代表作品。"
 status: "wishlist"
 shelf: "art"
+domains: ["历史学", "艺术学"]
 topics: []
 cover: "./cover.webp"
 coverSource: "epub"

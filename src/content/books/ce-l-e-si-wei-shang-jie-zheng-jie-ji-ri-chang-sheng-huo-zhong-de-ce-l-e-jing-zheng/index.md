@@ -4,6 +4,7 @@ authors: ["阿维纳什·K. 迪克西特", "巴里·J. 奈尔伯夫"]
 description: "通过商业、政治和日常生活的实例解释如何预判对方的回应，并讨论囚徒困境与可信承诺。"
 status: "wishlist"
 shelf: "logic"
+domains: ["经济学", "数学", "管理学"]
 topics: []
 cover: "./cover.webp"
 coverSource: "epub"

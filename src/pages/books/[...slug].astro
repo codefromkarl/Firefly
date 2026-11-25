@@ -4,8 +4,12 @@ import type { MarkdownHeading } from "astro";
 import { Icon } from "astro-icon/components";
 import BookSidebar from "@/components/pages/books/BookSidebar.astro";
 import MainGridLayout from "@/layouts/MainGridLayout.astro";
-import { BOOK_SHELF_LABELS, BOOK_STATUS_LABELS } from "@/types/book";
-import { getPublishedBooks, toBookDirectoryItems } from "@/utils/book-utils";
+import { BOOK_STATUS_LABELS } from "@/types/book";
+import {
+	getBookDomains,
+	getPublishedBooks,
+	toBookDirectoryItems,
+} from "@/utils/book-utils";
 import { url } from "@/utils/url-utils";
 
 export async function getStaticPaths() {
@@ -18,7 +22,7 @@ export async function getStaticPaths() {
 
 const { book } = Astro.props;
 const headings: MarkdownHeading[] = [
-	{ depth: 2, slug: "book-overview", text: "内容概述" },
+	{ depth: 2, slug: "book-overview", text: "概述" },
 ];
 const directoryBooks = toBookDirectoryItems(await getPublishedBooks());
 // 封面源统一为 480px 宽，故不再生成更大的尺寸（放大只会模糊）
@@ -32,8 +36,11 @@ const absoluteCover = new URL(
 	optimizedCover.src,
 	Astro.site ?? Astro.url.origin,
 ).toString();
-const shelfUrl = `${url("/books/")}?shelf=${book.data.shelf}`;
-
+const domains = getBookDomains(book);
+const listingId = book.data.listedWith ?? book.id;
+const relatedEditions = directoryBooks.filter(
+	(b) => b.id !== book.id && (b.listedWith ?? b.id) === listingId,
+);
 const jsonLd = {
 	"@context": "https://schema.org",
 	"@type": "Book",
@@ -76,13 +83,13 @@ const jsonLd = {
 			aria-labelledby="book-overview-heading"
 			class="card-base overflow-hidden rounded-(--radius-large)"
 		>
-			<div class="grid gap-0 md:grid-cols-[minmax(13rem,0.7fr)_minmax(0,1.8fr)]">
-				<div class="relative aspect-2/3 overflow-hidden bg-(--btn-regular-bg) md:aspect-auto md:min-h-[32rem]">
+			<div class="book-spread grid gap-0 md:grid-cols-[minmax(13rem,0.7fr)_minmax(0,1.8fr)]">
+				<div class="book-jacket relative aspect-2/3 overflow-hidden bg-(--btn-regular-bg) md:aspect-auto md:min-h-[32rem]">
 					<Image
 						src={book.data.cover}
 						alt={`《${book.data.title}》封面`}
 						widths={[240, 360, 480]}
-						sizes="(max-width: 768px) 100vw, 32vw"
+						sizes="(max-width: 767px) 96px, 32vw"
 						format="webp"
 						quality={82}
 						loading="eager"
@@ -97,20 +104,17 @@ const jsonLd = {
 					)}
 				</div>
 
-				<div class="flex flex-col p-6 md:p-9">
+				<div class="book-info flex flex-col p-6 md:p-9">
+					<div class="identity">
 					<div class="flex flex-wrap gap-2">
 						<span
 							class="rounded-full bg-(--primary) px-3 py-1.5 text-xs font-semibold text-white dark:text-black/80"
 						>
 							{BOOK_STATUS_LABELS[book.data.status]}
 						</span>
-						<a
-							href={shelfUrl}
-							class="rounded-full bg-black/5 px-3 py-1.5 text-xs font-semibold text-neutral-600 transition hover:bg-black/10 dark:bg-white/10 dark:text-neutral-300 dark:hover:bg-white/20"
-							data-pagefind-filter={`book-shelf:${BOOK_SHELF_LABELS[book.data.shelf]}`}
-						>
-							{BOOK_SHELF_LABELS[book.data.shelf]}
-						</a>
+						{domains.map(domain => (
+							<a href={url("/books/") + "?domain=" + encodeURIComponent(domain)} class="rounded-full bg-(--btn-regular-bg) px-3 py-1.5 text-xs font-semibold text-(--btn-content)" data-pagefind-filter={`book-domain:${domain}`}>{domain}</a>
+						))}
 					</div>
 
 					<h1
@@ -127,18 +131,36 @@ const jsonLd = {
 						{book.data.authors.join("、")}
 					</p>
 
+					</div>
+					<div class="book-notes">
+					<section class="mt-7 border-l-2 border-(--primary) pl-4" aria-labelledby="public-question">
+						<h2 id="public-question" class="scroll-mt-24 text-sm font-semibold text-(--btn-content)">问题</h2>
+						{book.data.question ? <>
+							<p class="mt-2 text-xl font-semibold text-neutral-900 dark:text-neutral-100">{book.data.question.text}</p>
+							<p class="mt-2 text-sm text-(--content-meta)">{book.data.question.evidence}</p>
+							<ul class="mt-3 space-y-1 text-sm text-(--btn-content)">
+								{book.data.question.sources.map((ref, i) => <li>{i ? "传播线索" : "问题原文"}：<a class="underline" href={ref.url}>{ref.title}</a></li>)}
+							</ul>
+						</> : <p class="mt-2 text-sm text-(--content-meta)">尚无足够证据确认哪条问题被广泛讨论。</p>}
+					</section>
 					<div class="mt-7">
 						<h2 class="text-lg font-bold text-neutral-900 dark:text-neutral-100">
-							内容概述
+							概述
 						</h2>
 						<p class="mt-3 text-base leading-8 text-neutral-700 dark:text-neutral-200">
 							{book.data.description}
 						</p>
 						<p class="mt-2 text-xs text-neutral-400">
-							内容概述（自撰），非出版方原文
+							本站撰写，非出版方原文。
 						</p>
 					</div>
 
+					{relatedEditions.length > 0 && (
+						<nav aria-label="同书版本或收录" class="mt-6 text-sm text-(--content-meta)">
+							<span>同书版本或收录：</span>
+							{relatedEditions.map(edition=><a href={edition.url} class="text-(--btn-content) underline">{edition.title}</a>)}
+						</nav>
+					)}
 					{book.data.topics.length > 0 && (
 						<div class="mt-6 flex flex-wrap gap-2">
 							{book.data.topics.map((topic: string) => (
@@ -164,8 +186,21 @@ const jsonLd = {
 							</span>
 						)}
 					</div>
+					</div>
 				</div>
 			</div>
 		</section>
 	</article>
 </MainGridLayout>
+
+<style>
+	@media (max-width: 767px) {
+		.book-spread { grid-template-columns: clamp(4.5rem, 22vw, 6rem) minmax(0,1fr); padding: 1.15rem; gap: 0 1rem; align-items: start; }
+		.book-info { display: contents; }
+		.book-jacket { border-radius: .35rem; }
+		.book-jacket :global(img) { padding: 0; }
+		.identity h1 { font-size: 1.55rem; margin-top: .65rem; }
+		.identity p { margin-top: .4rem; }
+		.book-notes { grid-column: 1/-1; }
+	}
+</style>

@@ -40,6 +40,15 @@ excerpts:
     source: "第13章《容错空间》"
 status: "wishlist"
 shelf: "economics"
+domains: ["心理学", "经济学"]
+question:
+  text: 心理学怎样影响我们和金钱的关系
+  evidence: 采样时，这篇书评在豆瓣热门书评列表显示 15 个有用；这是书评反馈，不是提问得票或全网排名。
+  sources:
+  - title: 豆瓣书评：心理学怎样影响我们和金钱的关系
+    url: https://book.douban.com/review/13673795/
+  - title: 豆瓣读书 · 本书的热门书评
+    url: https://book.douban.com/subject/38175889/reviews
 topics:
   - "财富"
   - "心理学"

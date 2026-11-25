@@ -4,6 +4,7 @@ authors: ["蒋勋"]
 description: "蒋勋的西方美术史，以通俗笔法讲述从史前到现代的美术演变。"
 status: "wishlist"
 shelf: "art"
+domains: ["历史学", "艺术学"]
 topics: []
 cover: "./cover.webp"
 coverSource: "device"

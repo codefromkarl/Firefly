@@ -43,6 +43,15 @@ excerpts:
     source: "第16章《压力管理》"
 status: "wishlist"
 shelf: "science"
+domains: ["心理学", "生物学", "医学"]
+question:
+  text: 為什麼斑馬不會得胃潰瘍?
+  evidence: 原问法见第一处来源；另一作者或机构也讨论了同一议题。未取得全网传播排名。
+  sources:
+  - title: 中山医学大学图书馆 · 此书中文译名
+    url: https://igrid.csmu.edu.tw/detail/125382/
+  - title: 读者书评：人为什么老会得溃疡？
+    url: https://book.douban.com/review/3033408/
 topics:
   - "压力"
   - "健康"

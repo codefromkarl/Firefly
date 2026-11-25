@@ -41,6 +41,15 @@ excerpts:
     url: "https://www.happinesshypothesis.com/happiness-hypothesis-intro.pdf"
 status: "reading"
 shelf: "psychology"
+domains: ["心理学"]
+question:
+  text: What paths lead to happiness?
+  evidence: 保留作者官网上的英文问法。热门书评分别从生活条件、主动选择和象与骑象人的协调讨论幸福的来源。
+  sources:
+  - title: Jonathan Haidt · The Happiness Hypothesis
+    url: https://www.jonathanhaidt.com/books/happiness-hypothesis
+  - title: 豆瓣读书 ·《象与骑象人》热门书评
+    url: https://book.douban.com/subject/3116096/reviews
 topics:
   - "幸福"
   - "社会心理学"

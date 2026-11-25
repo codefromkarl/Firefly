@@ -4,6 +4,7 @@ authors: ["李泽厚"]
 description: "李泽厚关于中国古代思想的研究，讨论儒、墨、道、法诸家的脉络。"
 status: "wishlist"
 shelf: "philosophy"
+domains: ["历史学", "哲学"]
 topics: []
 cover: "./cover.webp"
 coverSource: "placeholder"

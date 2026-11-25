@@ -32,7 +32,11 @@ its self-written description, or the list/filter behaviour of `/books/`.
 
 - Book source: `src/content/books/<slug>/index.{md,mdx}`.
 - Cover source: `src/content/books/<slug>/cover.webp`.
-- List route: `/books/`.
+- Public catalog: `/books/`. Each published book appears once in the full list
+  and in every matching flat `domains` tag. Device `shelf` remains a separate
+  inventory fact. Imported entries without domains fall back to their shelf label.
+- Optional `question` holds a transcribed public question and its evidence URLs;
+  no verified source means no question is published. Reading status is unchanged.
 - Detail route: `/books/<slug>/`.
 - Required fields: `title`, `authors` (≥1), `description`, `status`, `shelf`,
   `cover`.
@@ -59,10 +63,11 @@ its self-written description, or the list/filter behaviour of `/books/`.
 
 **Library entries**
 
+- Optional `listedWith` points directly to the representative entry for verified editions or a volume included in a set. Deduplicate **after** filtering; every edition keeps its own description, URL and evidence. Do not infer identity from similar names.
 - The directory slug is the stable ID for the content entry and public URL.
 - Every entry carries a `description`: a self-written one-sentence content
   overview. Both the list card and the detail page render it and mark it
-  `内容概述（自撰）`; it must never be presented as publisher copy or as a
+  `概述`; it must never be presented as publisher copy or as a
   sourced quotation.
 - `introductions`, `readingReasons`, `endorsements`, `excerpts` and `topics` are
   **curated** fields. A lightweight imported entry omits them all — `[]` is
@@ -235,7 +240,7 @@ Assert that `/books/` and every non-draft `/books/<slug>/` page are emitted,
 every detail contains exactly `book-overview` and no retired section ID, and no
 public book output includes graph labels or graph runtime references. Also
 assert that every entry has a readable `cover.webp`, every `shelf` is one of the
-fourteen values, every entry renders the `内容概述（自撰）` marker, no public
+fourteen values, every entry renders the `概述` marker, no public
 consumer references `whyRead` or `reviews`, and no entry uses a retired shelf
 value. For curated entries additionally assert the introduction/reason rules
 above; reject missing source text, generic praise used as a reason, and invalid
@@ -247,7 +252,7 @@ no duplicate directory exists for one work; every generated slug matches
 `/^[a-z0-9]+(?:-[a-z0-9]+)*$/`.
 
 In a real browser, cover the list page and a detail page at desktop and 390px
-widths; assert the fourteen sidebar groups, both filters writing to the URL,
+widths; assert flat multi-domain membership, legacy shelf links, filters writing to the URL,
 zero root horizontal overflow, zero console errors, no Cytoscape request, and
 working Swup navigation (a second navigation, not only first load).
 
@@ -340,6 +345,7 @@ graph relationships. It does not authorize mounting graph UI on public routes.
 
 ### 3. Contracts
 
+- Optional `listedWith` points directly to the representative entry for verified editions or a volume included in a set. Deduplicate **after** filtering; every edition keeps its own description, URL and evidence. Do not infer identity from similar names.
 - The directory slug is the stable ID for both entries and the public URL.
 - Every book has exactly one `shelf` from `BOOK_SHELF_VALUES`; `topics` remains
   a non-empty multi-value list. Directory grouping uses `shelf`, while

@@ -260,7 +260,16 @@ export const BOOK_COVER_SOURCE_VALUES = [
 ] as const;
 export type BookCoverSource = (typeof BOOK_COVER_SOURCE_VALUES)[number];
 
+export interface BookQuestion {
+	evidence: string;
+	text: string;
+	sources: { title: string; url: string }[];
+}
+
 export interface BookCardData {
+	listedWith?: string;
+	domains: string[];
+	question?: string;
 	id: string;
 	title: string;
 	originalTitle?: string;
@@ -275,6 +284,8 @@ export interface BookCardData {
 }
 
 export interface BookDirectoryItem {
+	listedWith?: string;
+	domains: string[];
 	id: string;
 	title: string;
 	shelf: BookShelf;

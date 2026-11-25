@@ -4,6 +4,7 @@ authors: ["梁晓声"]
 description: "梁晓声从作家视角观察当代中国不同社会阶层及其生活处境。"
 status: "wishlist"
 shelf: "society"
+domains: ["社会学", "政治学"]
 topics: []
 cover: "./cover.webp"
 coverSource: "epub"

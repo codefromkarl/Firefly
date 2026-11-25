@@ -39,6 +39,15 @@ excerpts:
     source: "第9章《建立合作关系》"
 status: "wishlist"
 shelf: "biography"
+domains: ["管理学", "传记"]
+question:
+  text: 那沃尔顿为什么会选在小镇上发展呢？
+  evidence: 读者以这一路线发问，财经报道也把它作为比较不同零售扩张模式的案例。
+  sources:
+  - title: 读者书评 · 沃尔玛创始人的商业哲学
+    url: https://book.douban.com/review/12445040/
+  - title: 经济观察网 · 零售业扩张与沃尔玛的小镇战略
+    url: https://www.eeo.com.cn/2024/0518/661935.shtml
 topics:
   - "商业"
   - "零售"

@@ -1,8 +1,8 @@
 ---
 import { getImage } from "astro:assets";
 import BookLibrary from "@/components/pages/books/BookLibrary.svelte";
-import BookSidebar from "@/components/pages/books/BookSidebar.astro";
 import MainGridLayout from "@/layouts/MainGridLayout.astro";
+import { uniqueBookListings } from "@/utils/book-listings";
 import {
 	getPublishedBooks,
 	toBookCardData,
@@ -10,7 +10,7 @@ import {
 } from "@/utils/book-utils";
 
 const books = await getPublishedBooks();
-const directoryBooks = toBookDirectoryItems(books);
+const directoryBooks = uniqueBookListings(toBookDirectoryItems(books));
 const bookCards = await Promise.all(
 	books.map(async (book) => {
 		const cover = await getImage({
@@ -22,13 +22,31 @@ const bookCards = await Promise.all(
 		return toBookCardData(book, cover.src);
 	}),
 );
+bookCards.sort(
+	(a, b) => Number(Boolean(b.question)) - Number(Boolean(a.question)),
+);
 ---
 
 <MainGridLayout
 	title="书单"
-	description="正在阅读、计划阅读和已经读过的书，以及每本书的类别与内容概述"
+	description="按学科领域浏览藏书，查看每本书的描述、公开讨论的问题及其出处。"
 >
-	<BookSidebar slot="left-sidebar" books={directoryBooks} />
+	<!-- The flat domain selector replaces the global sidebar on this route. -->
+	<span slot="left-sidebar" hidden></span>
 
 	<BookLibrary books={bookCards} client:load />
+	<noscript>
+		<details class="card-base p-5"><summary>全部书籍（{directoryBooks.length} 本）</summary>
+			<ul>{directoryBooks.map(book => <li><a href={book.url}>{book.title}</a></li>)}</ul>
+		</details>
+	</noscript>
 </MainGridLayout>
+
+<style is:global>
+	/* The shelf is its own masthead; keep the shared Swup shell and navbar. */
+	body.enable-banner:has(#reading-guide) { --banner-height: 9rem !important; --banner-height-extend: 0px; }
+	body.enable-banner:has(#reading-guide) #wallpaper-wrapper { visibility: hidden; }
+	body.enable-banner:has(#reading-guide) #top-row { height: 4.5rem; }
+	#main-grid:has(#reading-guide) #left-sidebar-dynamic { display:none; }
+	#main-grid:has(#reading-guide) > :is(div:has(> #swup-container), .footer) { grid-column: 1 / -1; }
+</style>

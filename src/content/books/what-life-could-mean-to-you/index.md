@@ -40,6 +40,15 @@ excerpts:
     source: "第三章《自卑感和优越感》"
 status: "wishlist"
 shelf: "psychology"
+domains: ["心理学"]
+question:
+  text: 一个人应该如何超越自卑？
+  evidence: 两位读者都把如何回应自卑感作为书评重点；这不是对心理疗效的判断。
+  sources:
+  - title: 读者书评 · 打破“五岁定终身”的魔咒
+    url: https://book.douban.com/review/5574074/
+  - title: 另一篇读者书评 · 正确认识自卑
+    url: https://book.douban.com/review/9710869/
 topics:
   - "个体心理学"
   - "自卑"

@@ -37,6 +37,15 @@ excerpts:
     source: "第四篇《华彩人生篇章》"
 status: "wishlist"
 shelf: "biography"
+domains: ["管理学", "传记"]
+question:
+  text: 褚时健成功的秘诀到底是什么？
+  evidence: 不同读者从逆境、经营和做事方式解读他的成功，原问来自第一篇书评。
+  sources:
+  - title: 豆瓣书评 · “一代橙王”褚时健成功的秘诀到底是什么？
+    url: https://book.douban.com/review/10069603/
+  - title: 另一位读者评褚时健的匠人精神
+    url: https://book.douban.com/review/10066231/
 topics:
   - "传记"
   - "企业经营"

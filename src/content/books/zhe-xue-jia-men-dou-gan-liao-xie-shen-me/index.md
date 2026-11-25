@@ -4,6 +4,7 @@ authors: ["林欣浩 [林欣浩]"]
 description: "以通俗笔法讲述西方哲学史与哲学家的故事。"
 status: "wishlist"
 shelf: "philosophy"
+domains: ["哲学"]
 topics: []
 cover: "./cover.webp"
 coverSource: "epub"

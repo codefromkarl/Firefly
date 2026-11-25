@@ -38,6 +38,7 @@ excerpts:
     source: "第一部分《价格与市场》"
 status: "wishlist"
 shelf: "economics"
+domains: ["经济学"]
 topics:
   - "经济学"
   - "市场"

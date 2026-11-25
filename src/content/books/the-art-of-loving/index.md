@@ -40,6 +40,15 @@ excerpts:
     source: "第四章《爱的实践》"
 status: "wishlist"
 shelf: "psychology"
+domains: ["心理学", "哲学"]
+question:
+  text: 爱是一门艺术吗？
+  evidence: 两位书评作者都把爱是否是一种需要学习的能力作为讨论重点。
+  sources:
+  - title: 豆瓣书评：爱是一门艺术，需要知识和努力
+    url: https://book.douban.com/review/17835166/
+  - title: 魏小河 · 我们到底该如何去爱？
+    url: https://www.thepaper.cn/newsDetail_forward_19311701
 topics:
   - "爱"
   - "心理学"

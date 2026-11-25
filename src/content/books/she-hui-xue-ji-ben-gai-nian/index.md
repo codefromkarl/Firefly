@@ -4,6 +4,7 @@ authors: ["安东尼·吉登斯"]
 description: "吉登斯的社会学概念读本，逐个解释社会学的基本范畴。"
 status: "wishlist"
 shelf: "society"
+domains: ["社会学"]
 topics: []
 cover: "./cover.webp"
 coverSource: "placeholder"

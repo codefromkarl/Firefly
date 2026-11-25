@@ -38,6 +38,15 @@ excerpts:
     source: "第三章《学习幸福》"
 status: "wishlist"
 shelf: "psychology"
+domains: ["经济学", "管理学"]
+question:
+  text: 如何过上富有又幸福的一生
+  evidence: 采样时，这篇书评在豆瓣热门书评列表显示 346 个有用；这是书评反馈，不是提问得票或全网排名。
+  sources:
+  - title: 豆瓣书评：如何过上富有又幸福的一生
+    url: https://book.douban.com/review/14199527/
+  - title: 豆瓣读书 · 本书的热门书评
+    url: https://book.douban.com/subject/35876121/reviews
 topics:
   - "财富"
   - "个人成长"

@@ -1,324 +1,134 @@
 <script lang="ts">
 import { onMount } from "svelte";
-import type { BookCardData, BookShelf, BookStatus } from "@/types/book";
 import {
 	BOOK_SHELF_LABELS,
 	BOOK_SHELF_VALUES,
 	BOOK_STATUS_LABELS,
 	BOOK_STATUS_VALUES,
+	type BookCardData,
+	type BookShelf,
+	type BookStatus,
 } from "@/types/book";
+import { uniqueBookListings } from "@/utils/book-listings";
+import { replaceBookUrl } from "@/utils/book-navigation";
 import BookCard from "./BookCard.svelte";
 
-interface Props {
-	books: BookCardData[];
-}
-
-const { books }: Props = $props();
-
+let { books }: { books: BookCardData[] } = $props();
+let domain = $state("");
 let query = $state("");
-let activeShelf = $state<"all" | BookShelf>("all");
-let activeStatus = $state<"all" | BookStatus>("all");
-/** 首屏只渲染一部分：160+ 本一次性铺开会把页面拉到上百屏 */
-const PAGE_SIZE = 48;
-let visibleCount = $state(PAGE_SIZE);
-
-const shelves = $derived(
-	BOOK_SHELF_VALUES.filter((shelf) =>
-		books.some((book) => book.shelf === shelf),
+let status = $state<BookStatus | "">("");
+let legacy = $state<BookShelf | "">("");
+let limit = $state(48);
+const domains = $derived(
+	[...new Set(books.flatMap((b) => b.domains))].sort((a, b) =>
+		a.localeCompare(b, "zh-CN"),
 	),
 );
-
-const normalizedQuery = $derived(query.trim().toLocaleLowerCase("zh-CN"));
-
-const filteredBooks = $derived(
-	books.filter((book) => {
-		const matchesQuery =
-			!normalizedQuery ||
-			[
-				book.title,
-				book.originalTitle ?? "",
-				...book.authors,
-				book.description,
-				...book.topics,
-			]
-				.join(" ")
-				.toLocaleLowerCase("zh-CN")
-				.includes(normalizedQuery);
-		const matchesShelf = activeShelf === "all" || book.shelf === activeShelf;
-		const matchesStatus =
-			activeStatus === "all" || book.status === activeStatus;
-
-		return matchesQuery && matchesShelf && matchesStatus;
-	}),
+const term = $derived(query.trim().toLocaleLowerCase("zh-CN"));
+const total = $derived(uniqueBookListings(books).length);
+const matches = $derived(
+	uniqueBookListings(
+		books.filter(
+			(b) =>
+				(!domain || b.domains.includes(domain)) &&
+				(!legacy || b.shelf === legacy) &&
+				(!status || b.status === status) &&
+				(!term ||
+					[
+						b.title,
+						b.originalTitle,
+						...b.authors,
+						b.description,
+						b.question,
+						...b.domains,
+						...b.topics,
+					]
+						.join(" ")
+						.toLocaleLowerCase("zh-CN")
+						.includes(term)),
+		),
+	),
 );
-
-/** 实际渲染的切片；筛选条件变化时 visibleCount 会被重置 */
-const displayedBooks = $derived(filteredBooks.slice(0, visibleCount));
-const hasMore = $derived(filteredBooks.length > displayedBooks.length);
-
-const activeFilterLabels = $derived.by(() => {
-	const labels: string[] = [];
-	if (activeShelf !== "all") labels.push(BOOK_SHELF_LABELS[activeShelf]);
-	if (activeStatus !== "all") labels.push(BOOK_STATUS_LABELS[activeStatus]);
-	if (query.trim()) labels.push(`关键词：${query.trim()}`);
-	return labels;
-});
-
-function isBookShelf(value: string | null): value is BookShelf {
-	return BOOK_SHELF_VALUES.includes(value as BookShelf);
+function restore() {
+	const p = new URL(location.href).searchParams;
+	domain = domains.find((d) => d === p.get("domain")) ?? "";
+	status = BOOK_STATUS_VALUES.find((s) => s === p.get("status")) ?? "";
+	legacy =
+		BOOK_SHELF_VALUES.find(
+			(s) =>
+				s ===
+				(p.get("shelf") ?? (p.get("view") === "free" ? p.get("genre") : null)),
+		) ?? "";
+	query = p.get("q") ?? "";
+	limit = 48;
 }
-
-function isBookStatus(value: string | null): value is BookStatus {
-	return BOOK_STATUS_VALUES.includes(value as BookStatus);
+function sync() {
+	const u = new URL(location.href);
+	for (const k of ["view", "level", "field", "genre", "topic"])
+		u.searchParams.delete(k);
+	for (const [k, v] of Object.entries({
+		domain,
+		status,
+		shelf: legacy,
+		q: query.trim(),
+	})) {
+		if (v) u.searchParams.set(k, v);
+		else u.searchParams.delete(k);
+	}
+	limit = 48;
+	replaceBookUrl(u);
 }
-
-function readFiltersFromUrl() {
-	const params = new URL(window.location.href).searchParams;
-	const shelf = params.get("shelf");
-	const status = params.get("status");
-
-	query = params.get("q") ?? "";
-	activeShelf = isBookShelf(shelf) ? shelf : "all";
-	activeStatus = isBookStatus(status) ? status : "all";
+function choose(d: string) {
+	domain = d;
+	legacy = "";
+	sync();
 }
-
-function updateDirectoryState() {
-	const hasFilters = Boolean(
-		query.trim() || activeShelf !== "all" || activeStatus !== "all",
-	);
-	document
-		.querySelectorAll<HTMLAnchorElement>("[data-book-library-root]")
-		.forEach((link) => {
-			link.classList.toggle("book-directory-root-active", !hasFilters);
-		});
-
-	document
-		.querySelectorAll<HTMLDetailsElement>("[data-book-shelf-group]")
-		.forEach((group) => {
-			const isFilteredShelf =
-				activeShelf !== "all" && group.dataset.bookShelfGroup === activeShelf;
-			group.classList.toggle("book-shelf-filtered", isFilteredShelf);
-			if (isFilteredShelf) group.open = true;
-		});
-}
-
-function writeFiltersToUrl() {
-	const current = new URL(window.location.href);
-	if (query.trim()) current.searchParams.set("q", query.trim());
-	else current.searchParams.delete("q");
-	if (activeShelf !== "all") current.searchParams.set("shelf", activeShelf);
-	else current.searchParams.delete("shelf");
-	if (activeStatus !== "all") current.searchParams.set("status", activeStatus);
-	else current.searchParams.delete("status");
-	current.searchParams.delete("topic"); // 已退役的筛选维度，清理旧链接
-
-	history.replaceState(history.state, "", current);
-	updateDirectoryState();
-}
-
-/** 筛选条件一变就回到第一页，否则用户会落在「已加载到一半」的中间态 */
-function resetPaging() {
-	visibleCount = PAGE_SIZE;
-}
-
-function handleQueryInput(event: Event) {
-	query = (event.currentTarget as HTMLInputElement).value;
-	resetPaging();
-	writeFiltersToUrl();
-}
-
-function handleShelfChange(event: Event) {
-	activeShelf = (event.currentTarget as HTMLSelectElement).value as
-		| "all"
-		| BookShelf;
-	resetPaging();
-	writeFiltersToUrl();
-}
-
-function handleStatusChange(event: Event) {
-	activeStatus = (event.currentTarget as HTMLSelectElement).value as
-		| "all"
-		| BookStatus;
-	resetPaging();
-	writeFiltersToUrl();
-}
-
-function clearFilters() {
+function clear() {
+	domain = "";
 	query = "";
-	activeShelf = "all";
-	activeStatus = "all";
-	resetPaging();
-	writeFiltersToUrl();
+	legacy = "";
+	status = "";
+	sync();
 }
-
 onMount(() => {
-	readFiltersFromUrl();
-	writeFiltersToUrl();
-
-	const handlePopState = () => {
-		readFiltersFromUrl();
-		resetPaging();
-		writeFiltersToUrl();
+	restore();
+	const path = location.pathname;
+	const pop = () => {
+		if (location.pathname === path) restore();
 	};
-	window.addEventListener("popstate", handlePopState);
-
-	return () => {
-		window.removeEventListener("popstate", handlePopState);
-	};
+	window.addEventListener("popstate", pop);
+	return () => window.removeEventListener("popstate", pop);
 });
 </script>
-
-<section aria-labelledby="book-library-heading">
-	<div class="card-base mb-6 rounded-(--radius-large) p-5 md:p-6">
-		<div class="flex flex-col gap-4">
-			<div>
-				<label
-					for="book-search"
-					class="mb-2 block text-sm font-semibold text-neutral-700 dark:text-neutral-200"
-				>
-					搜索书单
-				</label>
-				<div class="relative">
-					<svg
-						class="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-neutral-400"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						aria-hidden="true"
-					>
-						<circle cx="11" cy="11" r="7"></circle>
-						<path d="m20 20-3.5-3.5"></path>
-					</svg>
-					<input
-						id="book-search"
-						type="search"
-						value={query}
-						oninput={handleQueryInput}
-						placeholder="搜索书名、作者或主题"
-						class="min-h-[44px] w-full rounded-xl border border-(--line-divider) bg-(--card-bg) py-3 pl-10 pr-4 text-sm text-neutral-900 outline-none transition placeholder:text-neutral-400 focus:border-(--primary) focus:ring-2 focus:ring-(--primary)/20 dark:text-neutral-100"
-					/>
-				</div>
-			</div>
-
-			<div class="grid gap-4 md:grid-cols-2">
-				<div>
-					<label
-						for="book-shelf-filter"
-						class="mb-2 block text-sm font-semibold text-neutral-700 dark:text-neutral-200"
-					>
-						主分类
-					</label>
-					<select
-						id="book-shelf-filter"
-						value={activeShelf}
-						onchange={handleShelfChange}
-						class="min-h-[44px] w-full rounded-xl border border-(--line-divider) bg-(--card-bg) px-3 py-3 text-sm text-neutral-700 outline-none focus:border-(--primary) dark:text-neutral-200"
-					>
-						<option value="all">全部分类</option>
-						{#each shelves as shelf}
-							<option value={shelf}>{BOOK_SHELF_LABELS[shelf]}</option>
-						{/each}
-					</select>
-				</div>
-
-				<div>
-					<label
-						for="book-status-filter"
-						class="mb-2 block text-sm font-semibold text-neutral-700 dark:text-neutral-200"
-					>
-						阅读状态
-					</label>
-					<select
-						id="book-status-filter"
-						value={activeStatus}
-						onchange={handleStatusChange}
-						class="min-h-[44px] w-full rounded-xl border border-(--line-divider) bg-(--card-bg) px-3 py-3 text-sm text-neutral-700 outline-none focus:border-(--primary) dark:text-neutral-200"
-					>
-						<option value="all">全部状态</option>
-						{#each BOOK_STATUS_VALUES as status}
-							<option value={status}>{BOOK_STATUS_LABELS[status]}</option>
-						{/each}
-					</select>
-				</div>
-
-			</div>
-
-			{#if activeFilterLabels.length > 0}
-				<div class="flex flex-wrap items-center gap-2" aria-label="当前筛选条件">
-					<span class="text-xs font-semibold text-neutral-500 dark:text-neutral-400">
-						当前筛选
-					</span>
-					{#each activeFilterLabels as label}
-						<span
-							class="rounded-full bg-(--primary)/10 px-2.5 py-1 text-xs font-medium text-(--primary)"
-						>
-							{label}
-						</span>
-					{/each}
-				</div>
-			{/if}
+<section id="reading-guide" class="text-neutral-900 dark:text-neutral-100">
+	<header><p class="kicker">Karl 的书架</p><h2>书单</h2><p class="lede">按领域找书。附有问题原文与传播线索的书目优先显示。</p></header>
+	<div class="paper">
+		<nav class="domains" aria-label="学科领域">
+			<button aria-pressed={!domain&&!legacy} onclick={()=>choose("")}>全部 <small>{total}</small></button>
+			{#each domains as d}<button aria-pressed={domain===d} onclick={()=>choose(d)}>{d}</button>{/each}
+		</nav>
+		<div class="tools">
+			<label>搜索书单<input id="book-search" type="search" placeholder="书名、作者、问题或标签" bind:value={query} oninput={sync}/></label>
+			<label>阅读状态<select id="book-status-filter" bind:value={status} onchange={sync}><option value="">全部状态</option>{#each BOOK_STATUS_VALUES as s}<option value={s}>{BOOK_STATUS_LABELS[s]}</option>{/each}</select></label>
 		</div>
+		<div class="results"><h3 aria-live="polite">{domain||(legacy?BOOK_SHELF_LABELS[legacy]:"全部书籍")} <small>· {matches.length} 本</small></h3>
+			{#if query||domain||legacy||status}<button onclick={clear}>清除筛选</button>{/if}
+		</div>
+		{#each matches.slice(0,limit) as b,i (b.id)}<BookCard book={b} onDomain={choose} priority={i===0}/>{:else}<p class="empty">没有匹配的书籍。换个关键词，或清除筛选后再试。</p>{/each}
+		{#if matches.length>limit}<button class="more" onclick={()=>limit+=48}>加载更多（已显示 {limit} / {matches.length}）</button>{/if}
 	</div>
-
-	<div class="mb-4 flex items-center justify-between gap-4">
-		<div>
-			<h2 id="book-library-heading" class="text-xl font-bold text-neutral-900 dark:text-neutral-100">
-				我的藏书
-			</h2>
-			<p class="mt-1 text-sm text-neutral-500 dark:text-neutral-400" aria-live="polite">
-				显示 {filteredBooks.length} / {books.length} 本 · 简介为自撰内容概述
-			</p>
-		</div>
-		{#if activeFilterLabels.length > 0}
-			<button
-				type="button"
-				onclick={clearFilters}
-				class="rounded-xl bg-(--btn-regular-bg) px-4 py-2 text-sm font-medium text-(--btn-content) transition hover:bg-(--btn-regular-bg-hover) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--primary)"
-			>
-				清除筛选
-			</button>
-		{/if}
-	</div>
-
-	{#if filteredBooks.length > 0}
-		<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 xl:grid-cols-3">
-			{#each displayedBooks as book, index (book.id)}
-				<BookCard {book} priority={index === 0} />
-			{/each}
-		</div>
-		{#if hasMore}
-			<div class="mt-8 flex flex-col items-center gap-2">
-				<button
-					type="button"
-					onclick={() => (visibleCount += PAGE_SIZE)}
-					class="min-h-[44px] rounded-xl bg-(--btn-regular-bg) px-6 py-3 text-sm font-medium text-(--btn-content) transition hover:bg-(--btn-regular-bg-hover) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--primary)"
-				>
-					加载更多
-				</button>
-				<p class="text-xs text-neutral-400">
-					已显示 {displayedBooks.length} / {filteredBooks.length} 本
-				</p>
-			</div>
-		{/if}
-	{:else}
-		<div class="card-base rounded-(--radius-large) px-6 py-16 text-center">
-			<div
-				class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-(--btn-regular-bg) text-2xl"
-				aria-hidden="true"
-			>
-				⌕
-			</div>
-			<h3 class="text-lg font-semibold text-neutral-800 dark:text-neutral-100">没有匹配的书籍</h3>
-			<p class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
-				换一个关键词或清除筛选后再试。
-			</p>
-			<button
-				type="button"
-				onclick={clearFilters}
-				class="mt-5 rounded-xl bg-(--primary) px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--primary) dark:text-black/80"
-			>
-				查看全部书籍
-			</button>
-		</div>
-	{/if}
 </section>
+<style>
+	#reading-guide{max-width:66rem;margin:auto;padding:0 .35rem}
+	header{padding:1.4rem 0}.kicker{color:var(--btn-content);font-size:.82rem;font-weight:600}
+	h2{font:650 clamp(2.3rem,5vw,3.4rem)/1.35 "Noto Serif SC","Songti SC",serif}.lede,.results small{color:var(--content-meta)}
+	.paper{background:var(--card-bg);border-radius:var(--radius-large);padding:clamp(1rem,3vw,2.3rem)}
+	.domains{display:flex;flex-wrap:wrap;gap:.2rem .4rem}.domains button{padding:.42rem .75rem;border-radius:.4rem;font-size:.94rem}
+	button{cursor:pointer}.domains button[aria-pressed=true],.more{background:var(--btn-regular-bg);color:var(--btn-content);font-weight:650}
+	.tools{display:flex;gap:1rem;margin:1rem 0 1.4rem;border-top:1px solid var(--line-divider);padding-top:1rem}
+	.tools label{display:grid;gap:.35rem;font-size:.82rem;color:var(--content-meta)}.tools label:first-child{flex:1;min-width:0}
+	input,select{width:100%;min-height:44px;border:1px solid var(--meta-divider);border-radius:.45rem;padding:.4rem .6rem;background:var(--card-bg);color:inherit;font-size:.95rem}
+	.results{display:flex;justify-content:space-between;align-items:center;padding-bottom:.8rem}.results h3{font-weight:650}.results button{font-size:.86rem;color:var(--btn-content)}
+	.more{display:block;margin:1rem auto 0;padding:.7rem 1.2rem;border-radius:.5rem}.empty{padding:2rem 0;color:var(--content-meta)}
+	@media(max-width:600px){header{padding:.5rem 0 1rem}.tools{gap:.5rem}.domains{gap:0}.domains button{font-size:.85rem;padding:.35rem .55rem;min-height:44px}}
+</style>

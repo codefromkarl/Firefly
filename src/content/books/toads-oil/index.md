@@ -40,6 +40,15 @@ excerpts:
     source: "《姿三四郎》"
 status: "wishlist"
 shelf: "biography"
+domains: ["文学", "艺术学", "传记"]
+question:
+  text: 为何取这样的书名？
+  evidence: 两篇文章都讨论了黑泽明以蛤蟆照镜比喻面对自己的人生，以及他为何写自传。
+  sources:
+  - title: 黑泽明自传中译本出版 · 自比蛤蟆，直面人生
+    url: https://ent.sina.com.cn/x/2006-11-09/09001320005.html
+  - title: 中国作家网 · 黑泽明诞辰110周年
+    url: https://www.chinawriter.com.cn/n1/2020/0324/c404005-31645933.html
 topics:
   - "回忆录"
   - "电影"

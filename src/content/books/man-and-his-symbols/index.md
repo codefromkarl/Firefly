@@ -38,6 +38,7 @@ excerpts:
     source: "第三章《个体化的过程·阴影的呈现》"
 status: "wishlist"
 shelf: "psychology"
+domains: ["心理学"]
 topics:
   - "心理学"
   - "无意识"
